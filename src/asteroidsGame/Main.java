@@ -17,7 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        primaryStage.setTitle("My First JavaFX GUI");
+        primaryStage.setTitle("Group 10 Asteroids Game");
 
 //Scene 1
         Label label1= new Label("This is the first scene");
@@ -35,8 +35,8 @@ public class Main extends Application {
         layout2.getChildren().addAll(label2, button2);
         scene2= new Scene(layout2,300,250);
 
-
         primaryStage.setScene(scene1);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
