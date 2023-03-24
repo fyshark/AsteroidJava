@@ -1,4 +1,4 @@
-package com.example.asteroidgame;
+package asteroidsGame;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
