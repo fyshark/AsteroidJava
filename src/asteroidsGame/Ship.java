@@ -1,4 +1,4 @@
-package com.example.asteroidgame;
+package asteroidsGame;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
