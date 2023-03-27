@@ -104,7 +104,7 @@ public class Main extends Application {
         GridPane.setConstraints(closeGame, 0, 3);
         GridPane.setConstraints(leaderboardButton, 0, 4);
         GridPane.setConstraints(restartGame, 0, 5);
-        gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame);
+        gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, leaderboardButton, restartGame);
         pauseScene = new Scene(gridPauseScene, stageWidth, stageHeight);
 
         mainMenu.setOnAction(e -> {
