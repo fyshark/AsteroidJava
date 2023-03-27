@@ -104,7 +104,7 @@ public class MainMenu {
 
         playGame.setOnMouseExited(new EventHandler() {
             public void handle(Event event) {
-                sc.setCursor(Cursor.DEFAULT); //Change cursor to crosshair
+                sc.setCursor(Cursor.DEFAULT); //Change cursor to default
             }
         });
 
@@ -117,7 +117,7 @@ public class MainMenu {
 
         highScores.setOnMouseExited(new EventHandler() {
             public void handle(Event event) {
-                sc.setCursor(Cursor.DEFAULT); //Change cursor to crosshair
+                sc.setCursor(Cursor.DEFAULT); //Change cursor to default
             }
         });
 
