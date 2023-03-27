@@ -99,6 +99,11 @@ public class Main extends Application {
         gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, restartGame);
         pauseScene = new Scene(gridPauseScene, stageWidth, stageHeight);
 
+        mainMenu.setOnAction(e -> {
+            new MainMenu(primaryStage);
+        });
+
+
         //Will have to be changed to main menu when implemented
         primaryStage.setScene(gameScene);
 
