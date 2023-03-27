@@ -1,23 +1,26 @@
 package asteroidsGame;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.stage.Screen;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.stage.Stage;
+import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
+import javafx.scene.control.ListView;
 
 public class Main extends Application {
 
-    Scene gameScene, pauseScene;
+    Scene gameScene, pauseScene, leaderboardScene;
     double stageWidth, stageHeight;
 
     @Override
@@ -81,7 +84,7 @@ public class Main extends Application {
         // restartGame will restart the application ... not yet built
         // mainMenu will bring you back to the starting screen... not yet built
 
-        resume.setOnAction(event -> primaryStage.setScene(gameScene));
+        resume.setOnAction(e -> primaryStage.setScene(gameScene));
         closeGame.setOnAction(event -> primaryStage.close());
         restartGame.setOnAction(event ->   {
             player.resetPosition();
@@ -89,20 +92,41 @@ public class Main extends Application {
             primaryStage.show();
         });
 
+        // Button leaderboardButton
+        Button leaderboardButton = new Button("Leaderboard");
+        leaderboardButton.setOnAction(e -> primaryStage.setScene(leaderboardScene));
+
         //Potential option for scene
         GridPane gridPauseScene = new GridPane();
         GridPane.setConstraints(pauseSceneTitle, 0, 0);
         GridPane.setConstraints(resume,0, 1);
         GridPane.setConstraints(mainMenu, 0, 2);
         GridPane.setConstraints(closeGame, 0, 3);
-        GridPane.setConstraints(restartGame, 0, 4);
-        gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, restartGame);
+        GridPane.setConstraints(leaderboardButton, 0, 4);
+        GridPane.setConstraints(restartGame, 0, 5);
+        gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame);
         pauseScene = new Scene(gridPauseScene, stageWidth, stageHeight);
 
         mainMenu.setOnAction(e -> {
             new MainMenu(primaryStage);
         });
 
+        // Leaderboard Scene
+        Label leaderboardTitle = new Label("Leaderboard");
+        ListView<String> leaderboardList = new ListView<>();
+        ObservableList<String> scoresList = FXCollections.observableArrayList(
+                "Player1: 1000",
+                "Player2: 900",
+                "Player3: 800"
+        );
+        leaderboardList.setItems(scoresList);
+
+        Button backToPause = new Button("Back to Pause Menu");
+        backToPause.setOnAction(e -> primaryStage.setScene(pauseScene));
+
+        VBox leaderboardLayout = new VBox(10);
+        leaderboardLayout.getChildren().addAll(leaderboardTitle, leaderboardList, backToPause);
+        leaderboardScene = new Scene(leaderboardLayout, stageWidth, stageHeight);
 
         //Will have to be changed to main menu when implemented
         primaryStage.setScene(gameScene);
