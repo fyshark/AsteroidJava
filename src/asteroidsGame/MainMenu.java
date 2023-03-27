@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
 
 public class MainMenu {
 
@@ -43,9 +44,9 @@ public class MainMenu {
         Scene highScoresScene = new Scene(highScoresPane, width, height);
 
         // create buttons
-        javafx.scene.control.Button[] buttons = generateButtons(mainPageScene);
-        javafx.scene.control.Button playGame = buttons[0];
-        javafx.scene.control.Button highScores = buttons[1];
+        Button[] buttons = generateButtons(mainPageScene);
+        Button playGame = buttons[0];
+        Button highScores = buttons[1];
 
 
         playGame.setOnAction(e -> {
@@ -84,10 +85,10 @@ public class MainMenu {
         s.show();
     }
 
-    private javafx.scene.control.Button[] generateButtons(Scene sc) {
+    private Button[] generateButtons(Scene sc) {
         // create a button
-        javafx.scene.control.Button playGame = new javafx.scene.control.Button("Play Game");
-        javafx.scene.control.Button highScores = new javafx.scene.control.Button("High Scores");
+        Button playGame = new Button("Play Game");
+        Button highScores = new Button("High Scores");
 
         playGame.setTextFill(Color.WHITE);
         highScores.setTextFill(Color.WHITE);
@@ -121,7 +122,7 @@ public class MainMenu {
             }
         });
 
-        return new javafx.scene.control.Button[]{playGame, highScores};
+        return new Button[]{playGame, highScores};
     }
 }
 
