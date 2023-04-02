@@ -1,6 +1,8 @@
 package asteroidsGame;
 
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -8,7 +10,9 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -17,8 +21,9 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 
 public class MainMenu {
+    Scene mainPageScene;
 
-    MainMenu(Stage s) {
+    MainMenu(Stage primaryStage, Scene gameScene) {
         int width = (int) Screen.getPrimary().getBounds().getWidth();
         int height = (int) Screen.getPrimary().getBounds().getHeight();
 
@@ -26,8 +31,10 @@ public class MainMenu {
         Pane r = new Pane();
         Pane playGamePane = new Pane();
         Pane highScoresPane = new Pane();
+        Button backToPause = new Button("Back to Main Menu");
+        backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
 
-        playGamePane.getChildren().add(new Label("playGame"));
+        playGamePane.getChildren().addAll(new Label("playGame"), backToPause);
         highScoresPane.getChildren().add(new Label("highScores"));
 
         // create a label
@@ -39,7 +46,7 @@ public class MainMenu {
         r.setStyle("-fx-background-color: black");
 
         // create scenes
-        Scene mainPageScene = new Scene(r, width, height);
+        mainPageScene = new Scene(r, width, height);
         Scene palyGameScene = new Scene(playGamePane, width, height);
         Scene highScoresScene = new Scene(highScoresPane, width, height);
 
@@ -48,19 +55,35 @@ public class MainMenu {
         Button playGame = buttons[0];
         Button highScores = buttons[1];
 
+        // Leaderboard Scene
+        Label leaderboardTitle = new Label("Leaderboard");
+        ListView<String> leaderboardList = new ListView<>();
+        ObservableList<String> scoresList = FXCollections.observableArrayList(
+                "Player1: 1000",
+                "Player2: 900",
+                "Player3: 800"
+        );
+        leaderboardList.setItems(scoresList);
+
+        backToPause = new Button("Back to Main Menu");
+        backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
+
+        VBox leaderboardLayout = new VBox(10);
+        leaderboardLayout.getChildren().addAll(leaderboardTitle, leaderboardList, backToPause);
+        Scene leaderboardScene = new Scene(leaderboardLayout, width, height);
 
         playGame.setOnAction(e -> {
-            s.setScene(palyGameScene);
+            primaryStage.setScene(gameScene);
         });
 
         highScores.setOnAction(e -> {
-            s.setScene(highScoresScene);
+            primaryStage.setScene(leaderboardScene);
         });
 
         r.getChildren().addAll(buttons);
 
         // set the scene
-        s.setScene(mainPageScene);
+        primaryStage.setScene(mainPageScene);
 
         playGame.setLayoutX(width / 2d);
         highScores.setLayoutX(width / 2d);
@@ -82,7 +105,7 @@ public class MainMenu {
             gameName.setLayoutY(newValue.doubleValue() / 2 - (gameName.heightProperty().getValue() / 2 + 100));
         });
 
-        s.show();
+        primaryStage.show();
     }
 
     private Button[] generateButtons(Scene sc) {

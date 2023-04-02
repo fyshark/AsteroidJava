@@ -20,7 +20,7 @@ import javafx.scene.control.ListView;
 
 public class Main extends Application {
 
-    Scene gameScene, pauseScene, leaderboardScene;
+    Scene gameScene, pauseScene;
     double stageWidth, stageHeight;
 
     @Override
@@ -92,44 +92,22 @@ public class Main extends Application {
             primaryStage.show();
         });
 
-        // Button leaderboardButton
-        Button leaderboardButton = new Button("Leaderboard");
-        leaderboardButton.setOnAction(e -> primaryStage.setScene(leaderboardScene));
-
         //Potential option for scene
         GridPane gridPauseScene = new GridPane();
         GridPane.setConstraints(pauseSceneTitle, 0, 0);
         GridPane.setConstraints(resume,0, 1);
         GridPane.setConstraints(mainMenu, 0, 2);
         GridPane.setConstraints(closeGame, 0, 3);
-        GridPane.setConstraints(leaderboardButton, 0, 4);
         GridPane.setConstraints(restartGame, 0, 5);
-        gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, leaderboardButton, restartGame);
+        gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, restartGame);
         pauseScene = new Scene(gridPauseScene, stageWidth, stageHeight);
 
-        mainMenu.setOnAction(e -> {
-            new MainMenu(primaryStage);
-        });
-
-        // Leaderboard Scene
-        Label leaderboardTitle = new Label("Leaderboard");
-        ListView<String> leaderboardList = new ListView<>();
-        ObservableList<String> scoresList = FXCollections.observableArrayList(
-                "Player1: 1000",
-                "Player2: 900",
-                "Player3: 800"
-        );
-        leaderboardList.setItems(scoresList);
-
-        Button backToPause = new Button("Back to Pause Menu");
-        backToPause.setOnAction(e -> primaryStage.setScene(pauseScene));
-
-        VBox leaderboardLayout = new VBox(10);
-        leaderboardLayout.getChildren().addAll(leaderboardTitle, leaderboardList, backToPause);
-        leaderboardScene = new Scene(leaderboardLayout, stageWidth, stageHeight);
+        mainMenu.setOnAction(e -> new MainMenu(primaryStage,gameScene));
 
         //Will have to be changed to main menu when implemented
-        primaryStage.setScene(gameScene);
+//        primaryStage.setScene(gameScene);
+
+        new MainMenu(primaryStage, gameScene);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
