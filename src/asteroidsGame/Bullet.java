@@ -2,6 +2,7 @@ package asteroidsGame;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 
 public class Bullet extends Rectangle {
     private Point2D velocity; // Bullet velocity
@@ -12,6 +13,8 @@ public class Bullet extends Rectangle {
         setHeight(10); // Bullet height
         setTranslateX(x); // x-coordinate of the bullet
         setTranslateY(y); // y-coordinate of the bullet
+        setFill(Color.WHITE);
+
 
         double speed = 2; // Bullet speed
         double changeX = Math.cos(Math.toRadians(direction)) * speed;

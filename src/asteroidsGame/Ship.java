@@ -2,6 +2,7 @@ package asteroidsGame;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
+import javafx.scene.paint.Color;
 
 public class Ship {
     int defaultPlayerX; // the default x-coordinate of the player's ship
@@ -27,6 +28,7 @@ public class Ship {
 
         // create the polygon shape for the player's ship
         this.player = new Polygon(-10, -10, 20, 0, -10, 10);
+        this.player.setFill(Color.WHITE);
         this.player.setTranslateX(x);
         this.player.setTranslateY(y);
 

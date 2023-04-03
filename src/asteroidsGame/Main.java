@@ -51,16 +51,13 @@ public class Main extends Application {
 
         //Game Scene
         Button pause = new Button("Pause");
-        HBox pauseHBox = new HBox();
-        pauseHBox.setPadding(new Insets(10, 10, 10, 10));
 
-        final Pane spacer = new Pane();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        spacer.setMinSize(10, 1);
+        Pane gamePane = new Pane();
+        gamePane.setStyle("-fx-background-color: black;");
         pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-        pauseHBox.getChildren().addAll(spacer, pause);
         pause.setOnAction(e -> primaryStage.setScene(pauseScene));
-        gameScene= new Scene(pauseHBox, stageWidth, stageHeight);
+        gamePane.getChildren().addAll(pause);
+        gameScene= new Scene(gamePane, stageWidth, stageHeight);
 
         // we create int positions X and Y that we will use to create our ship.
         // when we create a class for ship we call in an x and y position,
@@ -72,7 +69,7 @@ public class Main extends Application {
 
         // Instantiating a Ship called player that we can manipulate and adding it to the game scene.
         Ship player = new Ship (playerX,playerY);
-        spacer.getChildren().add(player.getCharacter());
+        gamePane.getChildren().add(player.getCharacter());
 
         //Pause Scene
         Label pauseSceneTitle = new Label("Pause Menu");
@@ -124,7 +121,7 @@ public class Main extends Application {
                 bullets.forEach(Bullet::move);
                 bullets.removeIf(bullet -> {
                     if (!bullet.isAlive()) {
-                        spacer.getChildren().remove(bullet);
+                        gamePane.getChildren().remove(bullet);
                         return true;
                     }
                     return false;
@@ -152,7 +149,7 @@ public class Main extends Application {
                     Bullet bullet = player.shoot();
                     if (bullet != null) {
                         bullets.add(bullet);
-                        spacer.getChildren().add(bullet);
+                        gamePane.getChildren().add(bullet);
                     }
                     break;
             }
