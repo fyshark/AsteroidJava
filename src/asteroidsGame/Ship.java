@@ -2,6 +2,7 @@ package asteroidsGame;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
+import javafx.scene.paint.Color;
 
 public class Ship {
     int defaultPlayerX; // the default x-coordinate of the player's ship
@@ -11,6 +12,8 @@ public class Ship {
     private Polygon player; // the shape of the player's ship
     private Point2D movement; // the current movement vector of the player's ship
 
+    private long lastBulletTime; // Add a field to store the last bullet time
+    private static final long SHOOT_CD = 250 * 1000000; // 250 ms
     public Ship(int x, int y) {
 
         // constructor to create the player's ship
@@ -25,12 +28,15 @@ public class Ship {
 
         // create the polygon shape for the player's ship
         this.player = new Polygon(-10, -10, 20, 0, -10, 10);
+        this.player.setFill(Color.WHITE);
         this.player.setTranslateX(x);
         this.player.setTranslateY(y);
 
         // the initial rotation of the ship is set to -90 degrees. This means that our triangle ship is facing up.
         this.player.setRotate(-90);
         this.movement = new Point2D(0, 0); // initial movement vector is set to (0,0). Our ship is not going anywhere just yet.
+        //Initial bullet firing time
+        this.lastBulletTime = 0;
     }
     public Polygon getCharacter() {
         return player; // returns the shape of the player's ship to the scene we call it on
@@ -80,5 +86,21 @@ public class Ship {
         // moves the player's ship based on its current movement vector
         this.player.setTranslateX(this.player.getTranslateX() + this.movement.getX());
         this.player.setTranslateY(this.player.getTranslateY() + this.movement.getY());
+    }
+    public Bullet shoot() {
+        long currentTime = System.nanoTime();
+        if (currentTime - lastBulletTime < SHOOT_CD) {
+            return null; // If the CD is not enough, don't create a bullet
+        }
+
+        lastBulletTime = currentTime;
+
+        //    Get the position and direction of the bullet
+        double bulletX = player.getTranslateX();
+        double bulletY = player.getTranslateY() + player.getBoundsInLocal().getHeight() / 2;
+        double bulletDirection = player.getRotate();
+
+        Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection);
+        return bullet;
     }
 }

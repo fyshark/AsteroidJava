@@ -18,10 +18,15 @@ import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends Application {
 
     Scene gameScene, pauseScene;
-    double stageWidth, stageHeight;
+    static double stageWidth, stageHeight;
+    // Add a list of bullets
+    private final List<Bullet> bullets = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -46,16 +51,13 @@ public class Main extends Application {
 
         //Game Scene
         Button pause = new Button("Pause");
-        HBox pauseHBox = new HBox();
-        pauseHBox.setPadding(new Insets(10, 10, 10, 10));
 
-        final Pane spacer = new Pane();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        spacer.setMinSize(10, 1);
+        Pane gamePane = new Pane();
+        gamePane.setStyle("-fx-background-color: black;");
         pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-        pauseHBox.getChildren().addAll(spacer, pause);
         pause.setOnAction(e -> primaryStage.setScene(pauseScene));
-        gameScene= new Scene(pauseHBox, stageWidth, stageHeight);
+        gamePane.getChildren().addAll(pause);
+        gameScene= new Scene(gamePane, stageWidth, stageHeight);
 
         // we create int positions X and Y that we will use to create our ship.
         // when we create a class for ship we call in an x and y position,
@@ -67,7 +69,7 @@ public class Main extends Application {
 
         // Instantiating a Ship called player that we can manipulate and adding it to the game scene.
         Ship player = new Ship (playerX,playerY);
-        spacer.getChildren().add(player.getCharacter());
+        gamePane.getChildren().add(player.getCharacter());
 
         //Pause Scene
         Label pauseSceneTitle = new Label("Pause Menu");
@@ -113,6 +115,17 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 player.move();
+
+                // Add bullet movement handling
+                //move method is called on each Bullet object in the bullets list
+                bullets.forEach(Bullet::move);
+                bullets.removeIf(bullet -> {
+                    if (!bullet.isAlive()) {
+                        gamePane.getChildren().remove(bullet);
+                        return true;
+                    }
+                    return false;
+                });
                 // update screen to reflect new position
             }
         };
@@ -131,6 +144,13 @@ public class Main extends Application {
                     break;
                 case DOWN:
                     player.decelerate();
+                    break;
+                case Z: // Update case for z key
+                    Bullet bullet = player.shoot();
+                    if (bullet != null) {
+                        bullets.add(bullet);
+                        gamePane.getChildren().add(bullet);
+                    }
                     break;
             }
         });
