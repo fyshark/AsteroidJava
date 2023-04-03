@@ -18,10 +18,15 @@ import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends Application {
 
     Scene gameScene, pauseScene;
-    double stageWidth, stageHeight;
+    static double stageWidth, stageHeight;
+    // Add a list of bullets
+    private final List<Bullet> bullets = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -113,6 +118,17 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 player.move();
+
+                // Add bullet movement handling
+                //move method is called on each Bullet object in the bullets list
+                bullets.forEach(Bullet::move);
+                bullets.removeIf(bullet -> {
+                    if (!bullet.isAlive()) {
+                        spacer.getChildren().remove(bullet);
+                        return true;
+                    }
+                    return false;
+                });
                 // update screen to reflect new position
             }
         };
@@ -131,6 +147,13 @@ public class Main extends Application {
                     break;
                 case DOWN:
                     player.decelerate();
+                    break;
+                case Z: // Update case for z key
+                    Bullet bullet = player.shoot();
+                    if (bullet != null) {
+                        bullets.add(bullet);
+                        spacer.getChildren().add(bullet);
+                    }
                     break;
             }
         });
