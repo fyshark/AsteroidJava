@@ -1,15 +1,18 @@
 package asteroidsGame;
 
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
@@ -18,17 +21,23 @@ import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.ListView;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
 
+    //two scene objects being used displayed in primary stage
     Scene gameScene, pauseScene;
+
+    //This gets the stagewidth and height. Change according to screen size
     static double stageWidth, stageHeight;
+
+
     // Add a list of bullets
     private final List<Bullet> bullets = new ArrayList<>();
 
-    //test comment
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -40,6 +49,7 @@ public class Main extends Application {
         primaryStage.setWidth(stageWidth);
         primaryStage.setHeight(stageHeight);
 
+        //These are listeners. Depend on if its resized of not
         primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
             stageWidth = (double) newVal;
             primaryStage.setWidth(stageWidth);
@@ -52,11 +62,11 @@ public class Main extends Application {
 
         //Game Scene
         Button pause = new Button("Pause");
-
+   //So we are setting it to have a black colour
         Pane gamePane = new Pane();
         gamePane.setStyle("-fx-background-color: black;");
-        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-        pause.setOnAction(e -> primaryStage.setScene(pauseScene));
+        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the miniumum size of the button
+        pause.setOnAction(e -> primaryStage.setScene(pauseScene)); //So this method is used to hanndle the pause button will call the scene change object
         gamePane.getChildren().addAll(pause);
         gameScene= new Scene(gamePane, stageWidth, stageHeight);
 
@@ -67,20 +77,31 @@ public class Main extends Application {
         int playerX, playerY;
         playerX = (int) (stageWidth/2);
         playerY = (int)(stageHeight/2);
+        Ship player = new Ship(playerX, playerY);
 
-        // Instantiating a Ship called player that we can manipulate and adding it to the game scene.
-        Ship player = new Ship (playerX,playerY);
-        gamePane.getChildren().add(player.getCharacter());
 
+        pauseScene = new Scene(new BorderPane(), stageWidth, stageHeight);
+
+
+        // Create the VBox layout container just to center everything
+        VBox buttonContainer = new VBox();
+        buttonContainer.setSpacing(10); // Set the spacing between buttons
         //Pause Scene
         Label pauseSceneTitle = new Label("Pause Menu");
 
-        //Will have to make each of these scenes
         Button resume = new Button("Resume");
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
         Button restartGame = new Button("Restart Game");
 
+        buttonContainer.setSpacing(10);
+        buttonContainer.getChildren().addAll(pauseSceneTitle,mainMenu,resume,closeGame,restartGame);
+
+        buttonContainer.setAlignment(Pos.CENTER); // Center the VBox
+
+        pauseScene.setRoot(buttonContainer); // Set the VBox as the root of the scene
+        buttonContainer.setStyle("-fx-background-color: black;");
+        pauseSceneTitle.setTextFill(Color.WHITE);
         // Some simple functionality for the buttons
         // resume will return back to the primary scene (gameScene)
         // closeGame will close the application/stage for the game
@@ -90,25 +111,16 @@ public class Main extends Application {
         resume.setOnAction(e -> primaryStage.setScene(gameScene));
         closeGame.setOnAction(event -> primaryStage.close());
         restartGame.setOnAction(event ->   {
+            //primaryStage.setScene(mainMenu.getScene(NameofPlayer));
             player.resetPosition();
             primaryStage.setScene(gameScene);
             primaryStage.show();
         });
 
-        //Potential option for scene
-        GridPane gridPauseScene = new GridPane();
-        GridPane.setConstraints(pauseSceneTitle, 0, 0);
-        GridPane.setConstraints(resume,0, 1);
-        GridPane.setConstraints(mainMenu, 0, 2);
-        GridPane.setConstraints(closeGame, 0, 3);
-        GridPane.setConstraints(restartGame, 0, 5);
-        gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, restartGame);
-        pauseScene = new Scene(gridPauseScene, stageWidth, stageHeight);
-
         mainMenu.setOnAction(e -> new MainMenu(primaryStage,gameScene));
 
         //Will have to be changed to main menu when implemented
-//        primaryStage.setScene(gameScene);
+        primaryStage.setScene(gameScene);
 
         new MainMenu(primaryStage, gameScene);
 
@@ -163,4 +175,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }
