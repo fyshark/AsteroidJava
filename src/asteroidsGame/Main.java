@@ -28,6 +28,7 @@ public class Main extends Application {
     // Add a list of bullets
     private final List<Bullet> bullets = new ArrayList<>();
 
+    //test comment
     @Override
     public void start(Stage primaryStage) {
 
