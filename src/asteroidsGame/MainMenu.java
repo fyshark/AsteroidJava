@@ -1,15 +1,15 @@
 package asteroidsGame;
 
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -20,11 +20,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
-import java.util.List;
-import java.util.ArrayList;
-import javafx.collections.ListChangeListener;
-import javafx.collections.FXCollections;
 
 
 public class MainMenu {
@@ -123,7 +118,29 @@ public class MainMenu {
        VBox leaderboardLayout = new VBox(10);
        leaderboardLayout.getChildren().addAll(leaderboardTitle, leaderboardList, backToPause);
        Scene leaderboardScene = new Scene(leaderboardLayout, width, height);
+       // Create a VBox to hold the control description
+       Button Controls=new Button("Control Description");
 
+       VBox ControlDescription = new VBox();
+       ControlDescription.setPadding(new Insets(10, 10, 10, 10));
+       ControlDescription.setSpacing(10);
+
+       // Create a label to hold the paragraph
+       Label paragraph = new Label("Find the controls below " +
+               "Press the left arrows on your computer to turn left." +
+               " Press the right arrows on your computer to turn right." +
+               " Press the up key to allow the ship to accelarate." +
+               "Press the down key to alow your ship to decelerate. " +
+               "Press Z to shoot your bullets");
+       // Add the label to the VBox
+       ControlDescription.getChildren().add(paragraph);
+
+       // Create a scene and add the VBox to it
+       Scene scene = new Scene(ControlDescription, 400, 200);
+
+       // Set the stage's title and scene, then show it
+       primaryStage.setTitle("Controls Explanation");
+       primaryStage.setScene(scene);
 
        playGame.setOnAction(e -> {
            primaryStage.setScene(gameScene);
