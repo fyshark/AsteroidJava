@@ -1,15 +1,23 @@
 package asteroidsGame;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Stage;
+import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
+import javafx.scene.control.ListView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +27,6 @@ public class Main extends Application {
     static double stageWidth, stageHeight;
     // Add a list of bullets
     private final List<Bullet> bullets = new ArrayList<>();
-    private final List<Asteroid> asteroids = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -63,22 +70,13 @@ public class Main extends Application {
         Player player = new Player(playerX,playerY);
         gamePane.getChildren().add(player.getCharacter());
 
-        int alienX = 0;
-        int alienY = 0;
+        int alienX, alienY;
+        alienX = (int)(stageWidth/4);
+        alienY = (int)(stageHeight/4);
         Alien alien = new Alien(alienX, alienY);
         gamePane.getChildren().add(alien.getCharacter());
 
-
-        // create an instance of Asteroid class
-        for (int i = 0; i < 10; i++) {
-            double size = Math.random() * 20 + 60; // random size between 60 and 80
-            double speed = Math.random() * 1; // random speed between 1
-            int x = (int) (Math.random() * stageWidth + playerX/2);
-            int y = (int) (Math.random() * stageHeight + playerY/2);
-            Asteroid asteroid = new Asteroid(size, speed, x, y);
-            gamePane.getChildren().add(asteroid.getAsteroid());
-            asteroids.add(asteroid); // add asteroid to the asteroids array
-        }
+        alien.accelerate(player.getPlayerX(), player.getPlayerY());
 
         //Pause Scene
         Label pauseSceneTitle = new Label("Pause Menu");
@@ -124,42 +122,11 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 player.move();
-                alien.followPlayer(player);
+                alien.move();
 
-                asteroids.forEach(asteroid -> {
-                    asteroid.move();
-                    if (player.crash(asteroid)) {
-                        stop();
-                    }
-                });
-
-                // Getting null pointers if we remove the items from the array completely
-                // these are temporary arrays used to detect whether a bullet has collided
-                // with an asteroid
-
-                List<Asteroid> asteroidsToRemove = new ArrayList<>();
-                List<Bullet> bulletsToRemove = new ArrayList<>();
-
-                for (Bullet bullet : bullets) {
-                    bullet.move();
-                    for (Asteroid asteroid : asteroids) {
-                        if (asteroid.collide(bullet)) {
-                            gamePane.getChildren().removeAll(asteroid.getAsteroid(), bullet);
-                            asteroidsToRemove.add(asteroid);
-                            bulletsToRemove.add(bullet);
-                        }
-                    }
-                }
-
-                for (Bullet bullet : bullets) {
-                    bullet.move();
-                    if (alien.collide(bullet)) {
-                        gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
-                        bulletsToRemove.add(bullet);
-                    }
-                }
-                asteroids.removeAll(asteroidsToRemove);
-
+                // Add bullet movement handling
+                //move method is called on each Bullet object in the bullets list
+                bullets.forEach(Bullet::move);
                 bullets.removeIf(bullet -> {
                     if (!bullet.isAlive()) {
                         gamePane.getChildren().remove(bullet);
@@ -167,9 +134,9 @@ public class Main extends Application {
                     }
                     return false;
                 });
+                // update screen to reflect new position
             }
         };
-
         timer.start();
 
         gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
