@@ -1,10 +1,9 @@
 package asteroidsGame;
 
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 
-public class Alien extends Ship {
+public class Alien extends BaseShip {
         public Alien(int x, int y) {
 
             super(createAlienPolygon(), x, y);

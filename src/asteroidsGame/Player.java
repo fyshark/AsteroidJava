@@ -5,7 +5,7 @@ import javafx.scene.shape.Polygon;
 
 
 
-public class Player extends Ship {
+public class Player extends BaseShip {
 
     public Player(int x, int y) {
 
@@ -19,4 +19,5 @@ public class Player extends Ship {
         polygon.setRotate(-90);
         return polygon;
     }
+
 }

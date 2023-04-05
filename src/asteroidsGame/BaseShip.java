@@ -2,9 +2,8 @@ package asteroidsGame;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
-import javafx.scene.paint.Color;
 
-public class Ship {
+public abstract class BaseShip {
     int defaultShipX; // the default x-coordinate of the player's ship
     int defaultShipY; // the default y-coordinate of the player's ship
 
@@ -15,7 +14,8 @@ public class Ship {
 
     private long lastBulletTime; // Add a field to store the last bullet time
     private static final long SHOOT_CD = 250 * 1000000; // 250 ms
-    public Ship(Polygon polygon, int x, int y) {
+
+    public BaseShip(Polygon polygon, int x, int y) {
 
         // constructor to create the player's ship
         // takes x and y coordinates as parameters which determines where the ship is loaded into our scene.
@@ -34,11 +34,12 @@ public class Ship {
         //Initial bullet firing time
         this.lastBulletTime = 0;
     }
+
     public Polygon getCharacter() {
         return this.ship; // returns the shape of the player's ship to the scene we call it on
     }
 
-    public  void resetPosition(){
+    public void resetPosition() {
         // resets the player's ship to its default position and speed
         this.ship.setTranslateX(defaultShipX);
         this.ship.setTranslateY(defaultShipY);
@@ -48,14 +49,15 @@ public class Ship {
 
     public void turnLeft() {
         // turns the player's ship to the left by 30 degrees
-        this.ship.setRotate(this.ship.getRotate() - 30);}
+        this.ship.setRotate(this.ship.getRotate() - 30);
+    }
 
     public void turnRight() {
         // turns the player's ship to the right by 30 degrees
         this.ship.setRotate(this.ship.getRotate() + 30);
     }
 
-    public void accelerate(){
+    public void accelerate() {
         // accelerates the player's ship in the direction it is facing
         double acceleration = 0.18; // the rate of acceleration
         double maxSpeed = 8.0; // the maximum speed the ship can travel
@@ -84,7 +86,25 @@ public class Ship {
         // moves the player's ship based on its current movement vector
         this.ship.setTranslateX(this.ship.getTranslateX() + this.movement.getX());
         this.ship.setTranslateY(this.ship.getTranslateY() + this.movement.getY());
+
+        // The conditions below checks that the ship stays on screen.
+        if (this.ship.getTranslateX() < 0) {
+            this.ship.setTranslateX(this.ship.getTranslateX() + Main.stageWidth);
+        }
+
+        if (this.ship.getTranslateX() > Main.stageWidth) {
+            this.ship.setTranslateX(this.ship.getTranslateX() % Main.stageWidth);
+        }
+
+        if (this.ship.getTranslateY() < 0) {
+            this.ship.setTranslateY(this.ship.getTranslateY() + Main.stageHeight);
+        }
+
+        if (this.ship.getTranslateY() > Main.stageHeight) {
+            this.ship.setTranslateY(this.ship.getTranslateY() % Main.stageHeight);
+        }
     }
+
     public Bullet shoot() {
         long currentTime = System.nanoTime();
         if (currentTime - lastBulletTime < SHOOT_CD) {
@@ -94,11 +114,14 @@ public class Ship {
         lastBulletTime = currentTime;
 
         //    Get the position and direction of the bullet
-        double bulletX = ship.getTranslateX();
-        double bulletY = ship.getTranslateY() + ship.getBoundsInLocal().getHeight() / 2;
+        //    Adjusting the position of bullets fired from the tip of the ship
+        double bulletX = ship.getTranslateX() + Bullet.BULLET_WIDTH / 2d;
+        double bulletY = ship.getTranslateY();
+
         double bulletDirection = ship.getRotate();
 
         Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection);
         return bullet;
     }
+
 }
