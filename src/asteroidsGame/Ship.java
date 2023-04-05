@@ -34,11 +34,12 @@ public class Ship {
         //Initial bullet firing time
         this.lastBulletTime = 0;
     }
+
     public Polygon getCharacter() {
         return this.ship; // returns the shape of the player's ship to the scene we call it on
     }
 
-    public  void resetPosition(){
+    public void resetPosition(){
         // resets the player's ship to its default position and speed
         this.ship.setTranslateX(defaultShipX);
         this.ship.setTranslateY(defaultShipY);
@@ -48,7 +49,8 @@ public class Ship {
 
     public void turnLeft() {
         // turns the player's ship to the left by 30 degrees
-        this.ship.setRotate(this.ship.getRotate() - 30);}
+        this.ship.setRotate(this.ship.getRotate() - 30);
+    }
 
     public void turnRight() {
         // turns the player's ship to the right by 30 degrees
@@ -85,6 +87,7 @@ public class Ship {
         this.ship.setTranslateX(this.ship.getTranslateX() + this.movement.getX());
         this.ship.setTranslateY(this.ship.getTranslateY() + this.movement.getY());
     }
+
     public Bullet shoot() {
         long currentTime = System.nanoTime();
         if (currentTime - lastBulletTime < SHOOT_CD) {
@@ -93,7 +96,7 @@ public class Ship {
 
         lastBulletTime = currentTime;
 
-        //    Get the position and direction of the bullet
+        // Get the position and direction of the bullet
         double bulletX = ship.getTranslateX();
         double bulletY = ship.getTranslateY() + ship.getBoundsInLocal().getHeight() / 2;
         double bulletDirection = ship.getRotate();
