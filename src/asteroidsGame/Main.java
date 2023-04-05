@@ -1,6 +1,7 @@
 package asteroidsGame;
 
 import javafx.application.Application;
+//import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,14 +13,19 @@ import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
+//import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
-import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
+//import javafx.geometry.Insets;
+//import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
-import javafx.scene.control.ListView;
+//import javafx.scene.control.ListView;
+
+//import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -62,13 +68,23 @@ public class Main extends Application {
 
         //Game Scene
         Button pause = new Button("Pause");
-   //So we are setting it to have a black colour
+         //So we are setting it to have a black colour
         Pane gamePane = new Pane();
         gamePane.setStyle("-fx-background-color: black;");
-        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the miniumum size of the button
-        pause.setOnAction(e -> primaryStage.setScene(pauseScene)); //So this method is used to hanndle the pause button will call the scene change object
+        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the minimum size of the button
+        pause.setOnAction(e -> primaryStage.setScene(pauseScene)); //So this method is used to handle the pause button will call the scene change object
         gamePane.getChildren().addAll(pause);
         gameScene= new Scene(gamePane, stageWidth, stageHeight);
+        HBox pauseHBox = new HBox();
+        pauseHBox.setPadding(new Insets(10, 10, 10, 10));
+
+        final Pane spacer = new Pane();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        spacer.setMinSize(10, 1);
+        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        pauseHBox.getChildren().addAll(spacer, pause);
+        pause.setOnAction(e -> primaryStage.setScene(pauseScene));
+        gameScene= new Scene(pauseHBox, stageWidth, stageHeight);
 
         // we create int positions X and Y that we will use to create our ship.
         // when we create a class for ship we call in an x and y position,
@@ -89,6 +105,7 @@ public class Main extends Application {
         //Pause Scene
         Label pauseSceneTitle = new Label("Pause Menu");
 
+        //Will have to make each of these scenes
         Button resume = new Button("Resume");
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
@@ -175,5 +192,4 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }
