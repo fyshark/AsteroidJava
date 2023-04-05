@@ -32,10 +32,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Group 10 Asteroids Game");
-        primaryStage.setMaximized(true);
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         stageWidth = screenSize.getWidth();
         stageHeight = screenSize.getHeight();
+        System.out.println(stageWidth/2);
         primaryStage.setWidth(stageWidth);
         primaryStage.setHeight(stageHeight);
 
@@ -64,12 +64,18 @@ public class Main extends Application {
         // by default these positions are going to be dead in the center.
 
         int playerX, playerY;
-        playerX = (int) (stageWidth/2);
+        playerX = (int)(stageWidth/2);
         playerY = (int)(stageHeight/2);
 
-        // Instantiating a Ship called player that we can manipulate and adding it to the game scene.
-        Ship player = new Ship (playerX,playerY);
+        // Instantiating a Player called player that we can manipulate and adding it to the game scene.
+        Player player = new Player(playerX,playerY);
         gamePane.getChildren().add(player.getCharacter());
+
+        int alienX, alienY;
+        alienX = (int)(stageWidth/4);
+        alienY = (int)(stageHeight/4);
+        Ship alien = new Alien(alienX, alienY);
+        gamePane.getChildren().add(alien.getCharacter());
 
         //Pause Scene
         Label pauseSceneTitle = new Label("Pause Menu");
@@ -115,6 +121,7 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 player.move();
+                alien.move();
 
                 // Add bullet movement handling
                 //move method is called on each Bullet object in the bullets list
