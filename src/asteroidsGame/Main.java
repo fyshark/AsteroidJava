@@ -12,17 +12,12 @@ import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
-//import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
-//import javafx.scene.control.ListView;
-
-//import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import javafx.scene.control.ListView;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -66,20 +61,15 @@ public class Main extends Application {
          //So we are setting it to have a black colour
         Pane gamePane = new Pane();
         gamePane.setStyle("-fx-background-color: black;");
-        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the minimum size of the button
-        pause.setOnAction(e -> primaryStage.setScene(pauseScene)); //So this method is used to handle the pause button will call the scene change object
+        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the minimum size of the button//So this method is used to handle the pause button will call the scene change object
         gamePane.getChildren().addAll(pause);
-        gameScene= new Scene(gamePane, stageWidth, stageHeight);
-        HBox pauseHBox = new HBox();
-        pauseHBox.setPadding(new Insets(10, 10, 10, 10));
+        Scene gameScene = new Scene(gamePane, stageWidth, stageHeight);
 
         final Pane spacer = new Pane();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         spacer.setMinSize(10, 1);
         pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-        pauseHBox.getChildren().addAll(spacer, pause);
         pause.setOnAction(e -> primaryStage.setScene(pauseScene));
-        gameScene= new Scene(pauseHBox, stageWidth, stageHeight);
 
         // we create int positions X and Y that we will use to create our ship.
         // when we create a class for ship we call in an x and y position,
@@ -103,7 +93,6 @@ public class Main extends Application {
         VBox buttonContainer = new VBox();
         buttonContainer.setSpacing(10); // Set the spacing between buttons
         //Pause Scene
-        //Pause Scene
         Label pauseSceneTitle = new Label("Pause Menu");
 
         //Will have to make each of these scenes
@@ -116,10 +105,40 @@ public class Main extends Application {
         buttonContainer.getChildren().addAll(pauseSceneTitle,mainMenu,resume,closeGame,restartGame);
 
         buttonContainer.setAlignment(Pos.CENTER); // Center the VBox
+        //Center it within the VBbox
 
-        pauseScene.setRoot(buttonContainer); // Set the VBox as the root of the scene
+//        pauseScene.setRoot(buttonContainer); // Set the VBox as the root of the scene
+        Pane pausePane = new Pane();
+        pausePane.setStyle("-fx-background-color: black;");
+        pausePane.getChildren().addAll(buttonContainer);
         buttonContainer.setStyle("-fx-background-color: black;");
         pauseSceneTitle.setTextFill(Color.WHITE);
+        buttonContainer.setStyle("-fx-background-color: black;");
+     //This is not resizable
+//        buttonContainer.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+//            buttonContainer.setLayoutX((pausePane.getWidth() - newVal.getWidth()) / 2);
+//            buttonContainer.setLayoutY((pausePane.getHeight() - newVal.getHeight()) / 2);
+//        });
+        //This will be changed everytime the page is resized.
+        buttonContainer.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            double x = (pausePane.getWidth() - newVal.getWidth()) / 2;
+            double y = (pausePane.getHeight() - newVal.getHeight()) / 2;
+            buttonContainer.relocate(x, y);
+        });
+        pausePane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double x = (pausePane.getWidth() -buttonContainer.getLayoutBounds().getWidth()) / 2;
+            double y = (pausePane.getHeight() - buttonContainer.getLayoutBounds().getHeight()) / 2;
+            buttonContainer.relocate(x, y);
+        });
+        //This is for resizable to get height
+        pausePane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            double x = (pausePane.getWidth() - buttonContainer.getLayoutBounds().getWidth()) / 2;
+            double y = (pausePane.getHeight() - buttonContainer.getLayoutBounds().getHeight()) / 2;
+            buttonContainer.relocate(x, y);
+        });
+        pauseScene = new Scene(pausePane, screenSize.getWidth(), screenSize.getHeight());
+     //   Scene pauseScene = new Scene(buttonContainer, stageWidth, stageHeight);
+
         // Some simple functionality for the buttons
         // resume will return back to the primary scene (gameScene)
         // closeGame will close the application/stage for the game
@@ -133,23 +152,22 @@ public class Main extends Application {
             primaryStage.setScene(gameScene);
             primaryStage.show();
         });
+        pause.setOnAction(e -> primaryStage.setScene(pauseScene));
 
         //Potential option for scene
-        GridPane gridPauseScene = new GridPane();
-        GridPane.setConstraints(pauseSceneTitle, 0, 0);
-        GridPane.setConstraints(resume,0, 1);
-        GridPane.setConstraints(mainMenu, 0, 2);
-        GridPane.setConstraints(closeGame, 0, 3);
-        GridPane.setConstraints(restartGame, 0, 5);
-        gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, restartGame);
-        pauseScene = new Scene(gridPauseScene, stageWidth, stageHeight);
+//        GridPane gridPauseScene = new GridPane();
+//        GridPane.setConstraints(pauseSceneTitle, 0, 0);
+//        GridPane.setConstraints(resume,0, 1);
+//        GridPane.setConstraints(mainMenu, 0, 2);
+//        GridPane.setConstraints(closeGame, 0, 3);
+//        GridPane.setConstraints(restartGame, 0, 5);
+     //   gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, restartGame);
+      //  pauseScene = new Scene(gridPauseScene, stageWidth, stageHeight);
 
         mainMenu.setOnAction(e -> new MainMenu(primaryStage,gameScene));
 
         //Will have to be changed to main menu when implemented
-//        primaryStage.setScene(gameScene);
-
-        new MainMenu(primaryStage, gameScene);
+        primaryStage.setScene(gameScene);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
