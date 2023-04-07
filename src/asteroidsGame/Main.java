@@ -24,9 +24,6 @@ import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main extends Application {
 
@@ -63,24 +60,30 @@ public class Main extends Application {
 
         //Game Scene
         Button pause = new Button("Pause");
+        pause.setStyle("-fx-background-color: white;");
          //So we are setting it to have a black colour
         Pane gamePane = new Pane();
         gamePane.setStyle("-fx-background-color: black;");
-        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the minimum size of the button//So this method is used to handle the pause button will call the scene change object
         // Should Set the position of the pause button!
 //        pause.setTranslateX(stageWidth - pause.getWidth() - 50); // 20 is the margin from the right edge
 //        pause.setTranslateY(20); // 20 is the margin from the top edge
         pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the minimum size of the button
-        pause.setOnAction(e -> primaryStage.setScene(pauseScene)); //So this method is used to handle the pause button will call the scene change object
+        //So this method is used to handle the pause button will call the scene change object
         gamePane.getChildren().addAll(pause);
-        Scene gameScene = new Scene(gamePane, stageWidth, stageHeight);
+        pause.setLayoutX(gamePane.getWidth() - 100);
+        pause.setLayoutY(20);
+        pause.setOnAction(e -> primaryStage.setScene(pauseScene));
+        gameScene = new Scene(gamePane, stageWidth, stageHeight);
+        HBox pauseHBox = new HBox();
+        pauseHBox.setPadding(new Insets(10, 10, 10, 10));
 
         final Pane spacer = new Pane();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         spacer.setMinSize(10, 1);
         pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        pauseHBox.getChildren().addAll(spacer, pause);
         pause.setOnAction(e -> primaryStage.setScene(pauseScene));
-
+        pauseScene= new Scene(pauseHBox, stageWidth, stageHeight);
         // we create int positions X and Y that we will use to create our ship.
         // when we create a class for ship we call in an x and y position,
         // by default these positions are going to be dead in the center.
@@ -103,7 +106,7 @@ public class Main extends Application {
         VBox buttonContainer = new VBox();
         buttonContainer.setSpacing(10); // Set the spacing between buttons
         //Pause Scene
-        Label pauseSceneTitle = new Label("Pause Menu");
+        Label pauseSceneTit = new Label("Pause Menu");
 
         //Will have to make each of these scenes
         Button resume = new Button("Resume");
@@ -112,18 +115,16 @@ public class Main extends Application {
         Button restartGame = new Button("Restart Game");
 
         buttonContainer.setSpacing(10);
-        buttonContainer.getChildren().addAll(pauseSceneTitle,mainMenu,resume,closeGame,restartGame);
+        buttonContainer.getChildren().addAll(pauseSceneTit,mainMenu,resume,closeGame,restartGame);
 
         buttonContainer.setAlignment(Pos.CENTER); // Center the VBox
         //Center it within the VBbox
-   //     pauseScene.setRoot(buttonContainer); // Set the VBox as the root of the scene
-//        pauseScene.setRoot(buttonContainer); // Set the VBox as the root of the scene
-//        pauseScene.setRoot(buttonContainer); // Set the VBox as the root of the scene
+        pauseScene.setRoot(buttonContainer); // Set the VBox as the root of the scene
         Pane pausePane = new Pane();
         pausePane.setStyle("-fx-background-color: black;");
         pausePane.getChildren().addAll(buttonContainer);
         buttonContainer.setStyle("-fx-background-color: black;");
-        pauseSceneTitle.setTextFill(Color.WHITE);
+        pauseSceneTit.setTextFill(Color.WHITE);
         // Some simple functionality for the buttons
         // resume will return back to the primary scene (gameScene)
         // closeGame will close the application/stage for the game
