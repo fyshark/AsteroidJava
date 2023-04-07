@@ -17,7 +17,7 @@ public class Bullet extends Rectangle {
         setFill(Color.WHITE);
 
 
-        double speed = 2; // Bullet speed
+        double speed = 5; // Bullet speed
         double changeX = Math.cos(Math.toRadians(direction)) * speed;
         double changeY = Math.sin(Math.toRadians(direction)) * speed;
         velocity = new Point2D(changeX, changeY);
