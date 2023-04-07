@@ -69,21 +69,11 @@ public class Main extends Application {
 //        pause.setTranslateY(20); // 20 is the margin from the top edge
         pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the minimum size of the button
         //So this method is used to handle the pause button will call the scene change object
-        gamePane.getChildren().addAll(pause);
+        gamePane.getChildren().add(pause);
+        gameScene = new Scene(gamePane, stageWidth, stageHeight);
         pause.setLayoutX(gamePane.getWidth() - 100);
         pause.setLayoutY(20);
-        pause.setOnAction(e -> primaryStage.setScene(pauseScene));
-        gameScene = new Scene(gamePane, stageWidth, stageHeight);
-        HBox pauseHBox = new HBox();
-        pauseHBox.setPadding(new Insets(10, 10, 10, 10));
 
-        final Pane spacer = new Pane();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        spacer.setMinSize(10, 1);
-        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-        pauseHBox.getChildren().addAll(spacer, pause);
-        pause.setOnAction(e -> primaryStage.setScene(pauseScene));
-        pauseScene= new Scene(pauseHBox, stageWidth, stageHeight);
         // we create int positions X and Y that we will use to create our ship.
         // when we create a class for ship we call in an x and y position,
         // by default these positions are going to be dead in the center.
@@ -117,14 +107,15 @@ public class Main extends Application {
         buttonContainer.setSpacing(10);
         buttonContainer.getChildren().addAll(pauseSceneTit,mainMenu,resume,closeGame,restartGame);
 
-        buttonContainer.setAlignment(Pos.CENTER); // Center the VBox
+        buttonContainer.setAlignment(Pos.CENTER);
+
+
         //Center it within the VBbox
-        pauseScene.setRoot(buttonContainer); // Set the VBox as the root of the scene
         Pane pausePane = new Pane();
         pausePane.setStyle("-fx-background-color: black;");
         pausePane.getChildren().addAll(buttonContainer);
-        buttonContainer.setStyle("-fx-background-color: black;");
         pauseSceneTit.setTextFill(Color.WHITE);
+
         // Some simple functionality for the buttons
         // resume will return back to the primary scene (gameScene)
         // closeGame will close the application/stage for the game
@@ -138,6 +129,7 @@ public class Main extends Application {
             primaryStage.setScene(gameScene);
             primaryStage.show();
         });
+
         pause.setOnAction(e -> primaryStage.setScene(pauseScene));
 
         //Potential option for scene
