@@ -76,7 +76,7 @@ public class Main extends Application {
         Alien alien = new Alien(alienX, alienY);
         gamePane.getChildren().add(alien.getCharacter());
 
-        alien.accelerate(player.getPlayerX(), player.getPlayerY());
+        // alien.accelerate(player.getPlayerX(), player.getPlayerY());
 
         //Pause Scene
         Label pauseSceneTitle = new Label("Pause Menu");

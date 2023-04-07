@@ -45,7 +45,7 @@ public class Alien extends Ship {
         polygon.setFill(Color.WHITE);
         return polygon;
     }
-
+/*
     @Override
     public void accelerate(double playerX, double playerY) {
         super.accelerate();
@@ -66,5 +66,5 @@ public class Alien extends Ship {
             // We're then updating the movement vector to be the new vector we just calculated in which has a magnitude of at most maxSpeed.
             movement = movement.normalize().multiply(maxSpeed);
         }
-    }
+    } */
 }
