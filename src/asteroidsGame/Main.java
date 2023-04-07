@@ -1,7 +1,6 @@
 package asteroidsGame;
 
 import javafx.application.Application;
-//import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,8 +15,6 @@ import javafx.geometry.Rectangle2D;
 //import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
-//import javafx.geometry.Insets;
-//import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
@@ -38,8 +35,6 @@ public class Main extends Application {
 
     //This gets the stagewidth and height. Change according to screen size
     static double stageWidth, stageHeight;
-
-
     // Add a list of bullets
     private final List<Bullet> bullets = new ArrayList<>();
 
@@ -48,10 +43,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Group 10 Asteroids Game");
-        primaryStage.setMaximized(true);
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         stageWidth = screenSize.getWidth();
         stageHeight = screenSize.getHeight();
+        System.out.println(stageWidth/2);
         primaryStage.setWidth(stageWidth);
         primaryStage.setHeight(stageHeight);
 
@@ -91,17 +86,23 @@ public class Main extends Application {
         // by default these positions are going to be dead in the center.
 
         int playerX, playerY;
-        playerX = (int) (stageWidth/2);
+        playerX = (int)(stageWidth/2);
         playerY = (int)(stageHeight/2);
-        Ship player = new Ship(playerX, playerY);
 
+        // Instantiating a Player called player that we can manipulate and adding it to the game scene.
+        Player player = new Player(playerX,playerY);
+        gamePane.getChildren().add(player.getCharacter());
 
-        pauseScene = new Scene(new BorderPane(), stageWidth, stageHeight);
-
+        int alienX, alienY;
+        alienX = (int)(stageWidth/4);
+        alienY = (int)(stageHeight/4);
+        BaseShip alien = new Alien(alienX, alienY);
+        gamePane.getChildren().add(alien.getCharacter());
 
         // Create the VBox layout container just to center everything
         VBox buttonContainer = new VBox();
         buttonContainer.setSpacing(10); // Set the spacing between buttons
+        //Pause Scene
         //Pause Scene
         Label pauseSceneTitle = new Label("Pause Menu");
 
@@ -128,16 +129,25 @@ public class Main extends Application {
         resume.setOnAction(e -> primaryStage.setScene(gameScene));
         closeGame.setOnAction(event -> primaryStage.close());
         restartGame.setOnAction(event ->   {
-            //primaryStage.setScene(mainMenu.getScene(NameofPlayer));
             player.resetPosition();
             primaryStage.setScene(gameScene);
             primaryStage.show();
         });
 
+        //Potential option for scene
+        GridPane gridPauseScene = new GridPane();
+        GridPane.setConstraints(pauseSceneTitle, 0, 0);
+        GridPane.setConstraints(resume,0, 1);
+        GridPane.setConstraints(mainMenu, 0, 2);
+        GridPane.setConstraints(closeGame, 0, 3);
+        GridPane.setConstraints(restartGame, 0, 5);
+        gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, restartGame);
+        pauseScene = new Scene(gridPauseScene, stageWidth, stageHeight);
+
         mainMenu.setOnAction(e -> new MainMenu(primaryStage,gameScene));
 
         //Will have to be changed to main menu when implemented
-        primaryStage.setScene(gameScene);
+//        primaryStage.setScene(gameScene);
 
         new MainMenu(primaryStage, gameScene);
 
@@ -145,6 +155,7 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 player.move();
+                alien.move();
 
                 // Add bullet movement handling
                 //move method is called on each Bullet object in the bullets list
