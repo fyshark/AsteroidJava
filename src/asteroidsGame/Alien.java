@@ -6,7 +6,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import java.util.Random;
 
-public class Alien extends Ship {
+public class Alien extends BaseShip {
 
     private double playerX;
     private double playerY;

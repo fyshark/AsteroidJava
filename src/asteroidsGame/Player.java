@@ -3,9 +3,11 @@ package asteroidsGame;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-public class Player extends Ship {
-    public Polygon player;
 
+
+public class Player extends BaseShip {
+
+    public Polygon player;
     public Player(int x, int y) {
 
         super(createPlayerPolygon(), x, y);
