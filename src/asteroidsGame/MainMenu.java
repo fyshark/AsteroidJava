@@ -50,7 +50,7 @@ public class MainMenu {
        highScoresPane.getChildren().add(new Label("highScores"));
        InputnamePane.getChildren().add(new Label("Player"));
        ControlsPane.getChildren().add(new Label("Controls"));
-r.setStyle("-fx-background-color: black");
+
        VBox OpeningPage = new VBox();
        OpeningPage.setSpacing(10);
       // OpeningPage.setStyle("-fx-background-color: black");
@@ -78,6 +78,7 @@ r.setStyle("-fx-background-color: black");
        }
        OpeningPage.setAlignment(Pos.CENTER);
 // add the VBox to the root node and create the scene
+       r.setStyle("-fx-background-color: black");
        r.getChildren().add(OpeningPage);
        //This is to center the container box in the middle of the Pane.
        //This is not resizable
@@ -117,8 +118,8 @@ r.setStyle("-fx-background-color: black");
        name.setEditable(true);
        //This creates a button to submit the name to the leaderboard
        Button submitbutton=new Button("Submit");
-
-       InputNames.getChildren().addAll(name,submitbutton,backToPause);
+       Button Backitup = new Button("Back to Main Menu");
+       InputNames.getChildren().addAll(name,submitbutton,Backitup);
        InputNames.setAlignment(Pos.CENTER); // Center the VBox
        InputNames.setStyle("-fx-background-color: black");
        Scene inputname = new Scene(InputNames, width, height);
@@ -138,7 +139,8 @@ r.setStyle("-fx-background-color: black");
                "Player2: 900",
                "Player3: 800"
        );
-       leaderContainer.getChildren().addAll(leaderboardTitle, leaderboardList, backToPause);
+       Button BacktoMain = new Button("Back to Main Menu");
+       leaderContainer.getChildren().addAll(leaderboardTitle, leaderboardList,BacktoMain);
        leaderContainer.setAlignment(Pos.CENTER); // Center the VBox
 
        //This just adds the name to the leaderboard here
@@ -154,15 +156,8 @@ r.setStyle("-fx-background-color: black");
            primaryStage.setScene(inputname);
        });
 
-       backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
+       Scene leaderboardScene = new Scene(leaderContainer, width, height);
 
-       VBox leaderLayout = new VBox(10);
-       leaderLayout.getChildren().addAll(leaderboardTitle, leaderboardList, backToPause);
-       //Scene leaderScene = new Scene(leaderLayout, width, height);
-
-       VBox leaderboardLayout = new VBox(10);
-       leaderboardLayout.getChildren().addAll(leaderboardTitle, leaderboardList, backToPause);
-       Scene leaderboardScene = new Scene(leaderboardLayout, width, height);
 
         // Create a VBox to hold the control description
         VBox ControlDescription = new VBox();
@@ -185,12 +180,19 @@ r.setStyle("-fx-background-color: black");
 //       paragraph.setWrapText(true);
         // Add the label to the VBox
         paragraph.setTextFill(Color.WHITE);
-        ControlDescription.getChildren().add(paragraph);
+       Button BackMain = new Button("Back to Main Menu");
+        ControlDescription.getChildren().addAll(paragraph,BackMain);
         ControlDescription.setAlignment(Pos.CENTER);
         // Create a scene and add the VBox to it
         Scene ControlsScene = new Scene(ControlDescription, 400, 200);
 
-        playGame.setOnAction(e -> {
+//Setonactions here
+       Backitup.setOnAction(e -> primaryStage.setScene(mainPageScene));
+       BacktoMain.setOnAction(e -> primaryStage.setScene(mainPageScene));
+       BackMain.setOnAction(e -> primaryStage.setScene(mainPageScene));
+
+
+       playGame.setOnAction(e -> {
             primaryStage.setScene(gameScene);
         });
         controls.setOnAction(e -> primaryStage.setScene(ControlsScene));
