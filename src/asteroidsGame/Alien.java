@@ -2,11 +2,20 @@ package asteroidsGame;
 
 import javafx.scene.shape.Polygon;
 import javafx.scene.paint.Color;
+import java.util.Random;
 
 public class Alien extends BaseShip {
-        public Alien(int x, int y) {
+
+    public Alien(int x, int y) {
 
             super(createAlienPolygon(), x, y);
+
+            Random rnd = new Random();
+
+            int accelerationAmount = 1 + rnd.nextInt(10);
+            for (int i = 0; i < accelerationAmount; i++) {
+                accelerate();
+            }
         }
 
     private static Polygon createAlienPolygon() {

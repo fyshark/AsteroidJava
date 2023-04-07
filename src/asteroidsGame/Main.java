@@ -28,7 +28,6 @@ public class Main extends Application {
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         stageWidth = screenSize.getWidth();
         stageHeight = screenSize.getHeight();
-        System.out.println(stageWidth/2);
         primaryStage.setWidth(stageWidth);
         primaryStage.setHeight(stageHeight);
 
@@ -67,7 +66,7 @@ public class Main extends Application {
         int alienX, alienY;
         alienX = (int)(stageWidth/4);
         alienY = (int)(stageHeight/4);
-        BaseShip alien = new Alien(alienX, alienY);
+        Alien alien = new Alien(alienX, alienY);
         gamePane.getChildren().add(alien.getCharacter());
 
         //Pause Scene
