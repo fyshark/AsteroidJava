@@ -124,7 +124,7 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 player.move();
-                alien.move();
+                alien.followPlayer(player);
 
                 asteroids.forEach(asteroid -> {
                     asteroid.move();
@@ -151,6 +151,13 @@ public class Main extends Application {
                     }
                 }
 
+                for (Bullet bullet : bullets) {
+                    bullet.move();
+                    if (alien.collide(bullet)) {
+                        gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
+                        bulletsToRemove.add(bullet);
+                    }
+                }
                 asteroids.removeAll(asteroidsToRemove);
 
                 bullets.removeIf(bullet -> {
