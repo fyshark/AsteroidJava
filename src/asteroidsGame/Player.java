@@ -2,7 +2,7 @@ package asteroidsGame;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-
+import javafx.scene.shape.Shape;
 
 
 public class Player extends BaseShip {
@@ -18,6 +18,11 @@ public class Player extends BaseShip {
         polygon.setFill(Color.WHITE);
         polygon.setRotate(-90);
         return polygon;
+    }
+
+    public boolean crash(Asteroid asteroid) {
+        Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
+        return collisionArea.getBoundsInLocal().getWidth() != -1;
     }
 
 }
