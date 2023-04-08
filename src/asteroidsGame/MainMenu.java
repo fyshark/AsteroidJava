@@ -1,5 +1,6 @@
 package asteroidsGame;
 
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,8 +35,7 @@ public class MainMenu {
         Button backToPause = new Button("Back to Main Menu");
         backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
 
-        playGamePane.getChildren().addAll(new Label("playGame"), backToPause);
-        highScoresPane.getChildren().add(new Label("highScores"));
+        playGamePane.getChildren().addAll(backToPause);
 
         // create a label
         Label gameName = new Label("ASTROIDS");
@@ -85,14 +85,12 @@ public class MainMenu {
         // set the scene
         primaryStage.setScene(mainPageScene);
 
-        playGame.setLayoutX(width / 2d);
-        highScores.setLayoutX(width / 2d);
-        gameName.setLayoutX(width / 2d);
-
-
         playGame.setLayoutY(height / 2f + 100);
         highScores.setLayoutY(height / 2f + 180);
         gameName.setLayoutY(height / 2f - 100);
+
+        centerElements(width, gameName, playGame, highScores);
+
 
         mainPageScene.widthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             playGame.setLayoutX(newValue.doubleValue() / 2 - (playGame.widthProperty().getValue() / 2));
@@ -106,6 +104,32 @@ public class MainMenu {
         });
 
         primaryStage.show();
+    }
+
+    private static void centerElements(int width, Label gameName, Button playGame, Button highScores) {
+        gameName.widthProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                                Object newVal) {
+                gameName.setLayoutX(width / 2d - (double) newVal / 2d);
+            }
+        });
+
+        playGame.widthProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                                Object newVal) {
+                playGame.setLayoutX(width / 2d - (double) newVal / 2d);
+            }
+        });
+
+        highScores.widthProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                                Object newVal) {
+                highScores.setLayoutX(width / 2d - (double) newVal / 2d);
+            }
+        });
     }
 
     private Button[] generateButtons(Scene sc) {
