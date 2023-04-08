@@ -2,6 +2,8 @@ package asteroidsGame;
 
 import javafx.scene.shape.Polygon;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
+
 import java.util.Random;
 
 public class Alien extends BaseShip {

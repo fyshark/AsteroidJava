@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,11 +63,11 @@ public class Main extends Application {
         Player player = new Player(playerX,playerY);
         gamePane.getChildren().add(player.getCharacter());
 
-        int alienX, alienY;
-        alienX = (int)(stageWidth/4);
-        alienY = (int)(stageHeight/4);
+        int alienX = 0;
+        int alienY = 0;
         Alien alien = new Alien(alienX, alienY);
         gamePane.getChildren().add(alien.getCharacter());
+
 
         // create an instance of Asteroid class
         for (int i = 0; i < 10; i++) {
