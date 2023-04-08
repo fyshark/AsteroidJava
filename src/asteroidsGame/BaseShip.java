@@ -124,4 +124,8 @@ public abstract class BaseShip {
         return bullet;
     }
 
+    public Point2D getPosition() {
+        return new Point2D(this.ship.getTranslateX(), this.ship.getTranslateY());
+    }
+
 }

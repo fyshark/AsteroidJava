@@ -25,12 +25,4 @@ public class Player extends BaseShip {
         Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
         return collisionArea.getBoundsInLocal().getWidth() != -1;
     }
-
-    public double getPlayerX() {
-        return player.getTranslateX();
-    }
-
-    public double getPlayerY() {
-        return player.getTranslateY();
-    }
 }
