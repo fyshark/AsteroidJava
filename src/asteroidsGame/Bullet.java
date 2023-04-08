@@ -39,6 +39,12 @@ public class Bullet extends Rectangle {
     public boolean isAlive() {
         return isAlive;
     }
+
+    public Rectangle getHitbox() {
+
+        return new Rectangle(getTranslateX(), getTranslateY(), getWidth(), getHeight());
+    }
+
 }
 
 
