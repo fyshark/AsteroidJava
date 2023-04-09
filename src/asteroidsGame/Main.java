@@ -41,6 +41,8 @@ public class Main extends Application {
     private final List<Asteroid> asteroids = new ArrayList<>();
     //flag for an alien on the screen
     Boolean alienAdded = true;
+//lives
+    private int lives=3;
 
     private final AtomicInteger points = new AtomicInteger(0);
     @Override
@@ -86,7 +88,14 @@ public class Main extends Application {
         HBox hBox = new HBox(pointsLabel, region);
         pointcard.getChildren().add(hBox);
         pointcard.setAlignment(Pos.CENTER_LEFT);
-        gamePane.getChildren().addAll(pause,pointcard);
+
+        Label livesLabel = new Label("Lives: " + lives);
+        livesLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 50));
+        livesLabel.setTextFill(Color.WHITE);
+        livesLabel.setLayoutX(50);
+        livesLabel.setLayoutY(50);
+
+        gamePane.getChildren().addAll(pause,pointcard,livesLabel);
         gameScene = new Scene(gamePane, stageWidth, stageHeight);
         pause.setLayoutX(gamePane.getWidth() - 100);
         pause.setLayoutY(20);
@@ -294,6 +303,7 @@ public class Main extends Application {
                     }
                 }
                 pointsLabel.setText("Points: " + points.get());
+                livesLabel.setText("Lives: " + lives);
             }
         };
 
