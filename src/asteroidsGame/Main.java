@@ -77,7 +77,7 @@ public class Main extends Application {
         //So this method is used to handle the pause button will call the scene change object
        //This is for the points
         Label pointsLabel = new Label("Points: 0");
-        pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 80));
+        pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 50));
         pointsLabel.setTextFill(Color.WHITE);
 
         VBox pointcard=new VBox();
