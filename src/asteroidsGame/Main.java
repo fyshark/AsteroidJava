@@ -26,7 +26,8 @@ import javafx.scene.text.FontWeight;
 //import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
+//This is for the points
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main extends Application {
 
@@ -41,7 +42,7 @@ public class Main extends Application {
     //flag for an alien on the screen
     Boolean alienAdded = true;
 
-
+    private final AtomicInteger points = new AtomicInteger(0);
     @Override
     public void start(Stage primaryStage) {
 
@@ -74,7 +75,18 @@ public class Main extends Application {
 //        pause.setTranslateY(20); // 20 is the margin from the top edge
         pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the minimum size of the button
         //So this method is used to handle the pause button will call the scene change object
-        gamePane.getChildren().add(pause);
+       //This is for the points
+        Label pointsLabel = new Label("Points: 0");
+        pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 80));
+        pointsLabel.setTextFill(Color.WHITE);
+
+        VBox pointcard=new VBox();
+        Region region = new Region();
+        HBox.setHgrow(region, javafx.scene.layout.Priority.ALWAYS);
+        HBox hBox = new HBox(pointsLabel, region);
+        pointcard.getChildren().add(hBox);
+        pointcard.setAlignment(Pos.CENTER_LEFT);
+        gamePane.getChildren().addAll(pause,pointcard);
         gameScene = new Scene(gamePane, stageWidth, stageHeight);
         pause.setLayoutX(gamePane.getWidth() - 100);
         pause.setLayoutY(20);
@@ -244,6 +256,7 @@ public class Main extends Application {
                             gamePane.getChildren().removeAll(asteroid.getAsteroid(), bullet);
                             asteroidsToRemove.add(asteroid);
                             bulletsToRemove.add(bullet);
+                            points.addAndGet(100);
                         }
                     }
 
@@ -251,6 +264,7 @@ public class Main extends Application {
                     if (alienAdded && alien.collide(bullet)) {
                         gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
                         bulletsToRemove.add(bullet);
+                        points.addAndGet(500);
                         alienAdded = false;
                     }
 
@@ -279,6 +293,7 @@ public class Main extends Application {
                         gamePane.getChildren().add(bullet);
                     }
                 }
+                pointsLabel.setText("Points: " + points.get());
             }
         };
 
