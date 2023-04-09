@@ -1,7 +1,6 @@
 package asteroidsGame;
 
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -100,5 +99,3 @@ public class Bullet extends Rectangle {
     }
 
 }
-
-

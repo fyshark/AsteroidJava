@@ -163,10 +163,10 @@ public class Main extends Application {
                         alienAdded = false;
                     }
 
-                    //if a player collides with a bullet the game is stopped
-                    if (player.collide(bullet)) {
-                        stop();
-                    }
+                    // WIP if a player collides with a bullet the game is stopped
+                    //if (player.collide(bullet)) {
+                    //    stop();
+                    //}
 
                 }
 
