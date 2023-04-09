@@ -80,12 +80,7 @@ public class MainMenu {
 // add the VBox to the root node and create the scene
        r.setStyle("-fx-background-color: black");
        r.getChildren().add(OpeningPage);
-       //This is to center the container box in the middle of the Pane.
-       //This is not resizable
-//       OpeningPage.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
-//           OpeningPage.setLayoutX((r.getWidth() - newVal.getWidth()) / 2);
-//           OpeningPage.setLayoutY((r.getHeight() - newVal.getHeight()) / 2);
-//       });
+
        OpeningPage.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
            double x = (r.getWidth() - newVal.getWidth()) / 2;
            double y = (r.getHeight() - newVal.getHeight()) / 2;
@@ -114,7 +109,7 @@ public class MainMenu {
        TextField name = new TextField();
        name.setText("Players name");
        name.setPrefHeight(25);
-       name.setPrefWidth(50);
+       name.setPrefWidth(30);
        name.setEditable(true);
        //This creates a button to submit the name to the leaderboard
        Button submitbutton=new Button("Submit");

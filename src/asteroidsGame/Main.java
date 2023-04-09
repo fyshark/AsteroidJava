@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
@@ -19,6 +20,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
 //import javafx.scene.control.ListView;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 //import java.awt.*;
 import java.util.ArrayList;
@@ -94,28 +97,52 @@ public class Main extends Application {
 
         // Create the VBox layout container just to center everything
         VBox buttonContainer = new VBox();
-        buttonContainer.setSpacing(10); // Set the spacing between buttons
         //Pause Scene
         Label pauseSceneTit = new Label("Pause Menu");
-
+        pauseSceneTit.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 100));
         //Will have to make each of these scenes
         Button resume = new Button("Resume");
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
         Button restartGame = new Button("Restart Game");
 
-        buttonContainer.setSpacing(10);
+        buttonContainer.setSpacing(10); // Set the spacing between buttons
+        buttonContainer.setAlignment(Pos.CENTER);
         buttonContainer.getChildren().addAll(pauseSceneTit,mainMenu,resume,closeGame,restartGame);
 
-        buttonContainer.setAlignment(Pos.CENTER);
-
-
+// set the alignment of the VBox and the buttons
         //Center it within the VBbox
+
+        for (Node node : buttonContainer.getChildren()) {
+            if (node instanceof Button) {
+                ((Button) node).setAlignment(Pos.CENTER);
+                ((Button) node).setStyle("-fx-font-size: 16pt; -fx-pref-width: 200px;");
+            }
+        }
+
         Pane pausePane = new Pane();
         pausePane.setStyle("-fx-background-color: black;");
         pausePane.getChildren().addAll(buttonContainer);
         pauseSceneTit.setTextFill(Color.WHITE);
+        pauseScene=new Scene(pausePane, stageWidth, stageHeight);
 
+        buttonContainer.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            double x = (pausePane.getWidth() - newVal.getWidth()) / 2;
+            double y = (pausePane.getHeight() - newVal.getHeight()) / 2;
+            buttonContainer.relocate(x, y);
+        });
+//This is for it to be resizable
+        pausePane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double x = (pausePane.getWidth() - buttonContainer.getLayoutBounds().getWidth()) / 2;
+            double y = (pausePane.getHeight() - buttonContainer.getLayoutBounds().getHeight()) / 2;
+            buttonContainer.relocate(x, y);
+        });
+        //This is for resizable to get height
+        pausePane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            double x = (pausePane.getWidth() - buttonContainer.getLayoutBounds().getWidth()) / 2;
+            double y = (pausePane.getHeight() - buttonContainer.getLayoutBounds().getHeight()) / 2;
+            buttonContainer.relocate(x, y);
+        });
         // Some simple functionality for the buttons
         // resume will return back to the primary scene (gameScene)
         // closeGame will close the application/stage for the game
