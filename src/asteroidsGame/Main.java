@@ -283,6 +283,11 @@ public class Main extends Application {
                     //}
 
                 }
+               // if (lives<0){
+//                    Stoping();
+//                    Restarting();
+//
+//                }
 
                 asteroids.removeAll(asteroidsToRemove);
 
@@ -305,8 +310,19 @@ public class Main extends Application {
                 pointsLabel.setText("Points: " + points.get());
                 livesLabel.setText("Lives: " + lives);
             }
+//            public void Restarting(){
+//                // reset the game state
+//                bullets.clear();
+//                asteroids.clear();
+//                lives = 3;
+//                points.set(0);
+//                timer.start();
+//
+//            }
+//            public void Stoping(){
+//                timer.stop();
+//            }
         };
-
         timer.start();
 
         gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
