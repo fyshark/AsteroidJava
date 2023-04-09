@@ -20,6 +20,8 @@ public class Main extends Application {
     // Add a list of bullets
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Asteroid> asteroids = new ArrayList<>();
+    //flag for an alien on the screen
+    Boolean alienAdded = true;
 
     @Override
     public void start(Stage primaryStage) {
@@ -63,11 +65,11 @@ public class Main extends Application {
         Player player = new Player(playerX,playerY);
         gamePane.getChildren().add(player.getCharacter());
 
+        //instantiating an Alien called alien that is added to the game scene
         int alienX = 0;
         int alienY = 0;
         Alien alien = new Alien(alienX, alienY);
         gamePane.getChildren().add(alien.getCharacter());
-
 
         // create an instance of Asteroid class
         for (int i = 0; i < 10; i++) {
@@ -115,21 +117,25 @@ public class Main extends Application {
 
         mainMenu.setOnAction(e -> new MainMenu(primaryStage,gameScene));
 
-        //Will have to be changed to main menu when implemented
-//        primaryStage.setScene(gameScene);
-
         new MainMenu(primaryStage, gameScene);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 player.move();
+                //alien follows the player around the screen at a slow pace
                 alien.followPlayer(player);
 
                 asteroids.forEach(asteroid -> {
                     asteroid.move();
                     if (player.crash(asteroid)) {
                         stop();
+                    }
+
+                    //if alien is on screen and it crashes into an asteroid, it's removed
+                    if (alienAdded && alien.crash(asteroid)) {
+                        gamePane.getChildren().remove(alien.getCharacter());
+                        alienAdded = false;
                     }
                 });
 
@@ -149,15 +155,21 @@ public class Main extends Application {
                             bulletsToRemove.add(bullet);
                         }
                     }
-                }
 
-                for (Bullet bullet : bullets) {
-                    bullet.move();
-                    if (alien.collide(bullet)) {
+                    //if an alien is on screen and it collides with a bullet it is removed
+                    if (alienAdded && alien.collide(bullet)) {
                         gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
                         bulletsToRemove.add(bullet);
+                        alienAdded = false;
                     }
+
+                    //if a player collides with a bullet the game is stopped
+                    if (player.collide(bullet)) {
+                        stop();
+                    }
+
                 }
+
                 asteroids.removeAll(asteroidsToRemove);
 
                 bullets.removeIf(bullet -> {
@@ -167,6 +179,15 @@ public class Main extends Application {
                     }
                     return false;
                 });
+
+                //if there is an alien on screen it will shoot the player
+                if (alienAdded) {
+                    Bullet bullet = alien.shoot();
+                    if (bullet != null) {
+                        bullets.add(bullet);
+                        gamePane.getChildren().add(bullet);
+                    }
+                }
             }
         };
 
