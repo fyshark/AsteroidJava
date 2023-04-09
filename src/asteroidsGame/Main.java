@@ -117,10 +117,11 @@ public class Main extends Application {
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
         Button restartGame = new Button("Restart Game");
+        Button controls=new Button("Controls");
 
         buttonContainer.setSpacing(10); // Set the spacing between buttons
         buttonContainer.setAlignment(Pos.CENTER);
-        buttonContainer.getChildren().addAll(pauseSceneTit,mainMenu,resume,closeGame,restartGame);
+        buttonContainer.getChildren().addAll(pauseSceneTit,mainMenu,resume,closeGame,restartGame,controls);
 
 // set the alignment of the VBox and the buttons
         //Center it within the VBbox
@@ -169,15 +170,40 @@ public class Main extends Application {
             primaryStage.show();
         });
 
-        //Potential option for scene
-//        GridPane gridPauseScene = new GridPane();
-//        GridPane.setConstraints(pauseSceneTitle, 0, 0);
-//        GridPane.setConstraints(resume,0, 1);
-//        GridPane.setConstraints(mainMenu, 0, 2);
-//        GridPane.setConstraints(closeGame, 0, 3);
-//        GridPane.setConstraints(restartGame, 0, 5);
-     //   gridPauseScene.getChildren().addAll(pauseSceneTitle, resume, mainMenu, closeGame, restartGame);
-      //  pauseScene = new Scene(gridPauseScene, stageWidth, stageHeight);
+        Pane InputnamePane=new Pane();
+        Pane ControlsPane=new Pane();
+        InputnamePane.getChildren().add(new Label("Player"));
+        ControlsPane.getChildren().add(new Label("Controls"));
+
+        VBox ControlDescription = new VBox();
+        ControlDescription.setPadding(new Insets(10, 10, 10, 10));
+        ControlDescription.setSpacing(10);
+        ControlDescription.setStyle("-fx-background-color: black");
+        Label header=new Label("Description of Controls");
+        header.setTextFill(Color.WHITE);
+        Font myFont=new Font("Arial",30);
+        header.setFont(myFont);
+        header.setUnderline(true);
+        ControlDescription.getChildren().add(header);
+        // Create a label to hold the paragraph
+        Label paragraph = new Label("Find the controls below \n" +
+                "Press the left arrows on your computer to turn left.\n" +
+                " Press the right arrows on your computer to turn right.\n" +
+                " Press the up key to allow the ship to accelerate.\n" +
+                "Press the down key to allow your ship to decelerate.\n " +
+                "Press Z to shoot your bullets \n");
+//       paragraph.setWrapText(true);
+        // Add the label to the VBox
+        paragraph.setTextFill(Color.WHITE);
+        Button BackGame = new Button("Back to Game");
+        ControlDescription.getChildren().addAll(paragraph,BackGame);
+        ControlDescription.setAlignment(Pos.CENTER);
+        // Create a scene and add the VBox to it
+        Scene ControlsScene = new Scene(ControlDescription, 400, 200);
+
+        BackGame.setOnAction(e -> primaryStage.setScene(gameScene));
+
+        controls.setOnAction(e -> primaryStage.setScene(ControlsScene));
         pause.setOnAction(e -> primaryStage.setScene(pauseScene));
 
         mainMenu.setOnAction(e -> new MainMenu(primaryStage,gameScene));

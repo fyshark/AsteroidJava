@@ -41,17 +41,18 @@ public class MainMenu {
        Pane r = new Pane();
        Pane playGamePane = new Pane();
        Pane highScoresPane = new Pane();
-       Pane InputnamePane=new Pane();
-       Pane ControlsPane=new Pane();
        Button backToPause = new Button("Back to Main Menu");
        backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
 
-        playGamePane.getChildren().addAll(backToPause);
-
        playGamePane.getChildren().addAll(new Label("playGame"), backToPause);
-       highScoresPane.getChildren().add(new Label("highScores"));
-       InputnamePane.getChildren().add(new Label("Player"));
-       ControlsPane.getChildren().add(new Label("Controls"));
+//       highScoresPane.getChildren().add(new Label("highScores"));
+
+
+
+       // create scenes
+       mainPageScene = new Scene(r, width, height);
+       Scene palyGameScene = new Scene(playGamePane, width, height);
+       Scene highScoresScene = new Scene(highScoresPane, width, height);
 
        VBox OpeningPage = new VBox();
        OpeningPage.setSpacing(10);
@@ -63,11 +64,6 @@ public class MainMenu {
 
         r.getChildren().add(gameName);
         r.setStyle("-fx-background-color: black");
-
-        // create scenes
-        mainPageScene = new Scene(r, width, height);
-        Scene palyGameScene = new Scene(playGamePane, width, height);
-        Scene highScoresScene = new Scene(highScoresPane, width, height);
 
         // create buttons
         Button[] buttons = generateButtons(mainPageScene);
@@ -83,42 +79,14 @@ public class MainMenu {
                 "Player3: 800"
         );
         leaderboardList.setItems(scoresList);
-
         backToPause = new Button("Back to Main Menu");
         backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
 
-        // Create a VBox to hold the control description
-        VBox ControlDescription = new VBox();
-        ControlDescription.setPadding(new Insets(10, 10, 10, 10));
-        ControlDescription.setSpacing(10);
-        ControlDescription.setStyle("-fx-background-color: black");
-        Label header=new Label("Description of Controls");
-        header.setTextFill(Color.WHITE);
-        Font myFont=new Font("Arial",30);
-        header.setFont(myFont);
-        header.setUnderline(true);
-        ControlDescription.getChildren().add(header);
-        // Create a label to hold the paragraph
-        Label paragraph = new Label("Find the controls below \n" +
-                "Press the left arrows on your computer to turn left.\n" +
-                " Press the right arrows on your computer to turn right.\n" +
-                " Press the up key to allow the ship to accelerate.\n" +
-                "Press the down key to allow your ship to decelerate.\n " +
-                "Press Z to shoot your bullets \n");
-//       paragraph.setWrapText(true);
-        // Add the label to the VBox
-        paragraph.setTextFill(Color.WHITE);
-       Button BackMain = new Button("Back to Main Menu");
-        ControlDescription.getChildren().addAll(paragraph,BackMain);
-        ControlDescription.setAlignment(Pos.CENTER);
-        // Create a scene and add the VBox to it
-        Scene ControlsScene = new Scene(ControlDescription, 400, 200);
+       VBox leaderboardLayout = new VBox(10);
+       leaderboardLayout.getChildren().addAll(leaderboardTitle, leaderboardList, backToPause);
+       Scene leaderboardScene = new Scene(leaderboardLayout, width, height);
 
-//Setonactions here
-       Backitup.setOnAction(e -> primaryStage.setScene(mainPageScene));
-       BacktoMain.setOnAction(e -> primaryStage.setScene(mainPageScene));
-       BackMain.setOnAction(e -> primaryStage.setScene(mainPageScene));
-
+       r.getChildren().addAll(buttons);
 
        playGame.setOnAction(e -> {
             primaryStage.setScene(gameScene);
@@ -126,11 +94,6 @@ public class MainMenu {
             //The game starts with BGM
             new AePlayWave("src/BGM.wav").start();
         });
-        controls.setOnAction(e -> primaryStage.setScene(ControlsScene));
-        playGame.setOnAction(e ->
-                primaryStage.setScene(gameScene));
-
-
 
        highScores.setOnAction(e -> {
            primaryStage.setScene(leaderboardScene);
@@ -193,19 +156,14 @@ public class MainMenu {
         // create a button
         Button playGame = new Button("Play Game");
         Button highScores = new Button("High Scores");
-        Button inputNames=new Button("Your player");
-        Button Controls=new Button("Control Description");
-
 
        playGame.setTextFill(Color.WHITE);
        highScores.setTextFill(Color.WHITE);
-       inputNames.setTextFill(Color.WHITE);
-       Controls.setTextFill(Color.WHITE);
 
        playGame.setStyle("-fx-focus-color: transparent; -fx-background-color: #000000; -fx-font-size:40");
        highScores.setStyle("-fx-focus-color: transparent; -fx-background-color: #000000; -fx-font-size:40");
-       inputNames.setStyle("-fx-focus-color: transparent; -fx-background-color: #000000; -fx-font-size:40");
-       Controls.setStyle("-fx-focus-color: transparent; -fx-background-color: #000000; -fx-font-size:40");
+
+
        playGame.setOnMouseEntered(new EventHandler() {
            @Override
            public void handle(Event event) {
@@ -235,7 +193,7 @@ public class MainMenu {
        });
 
 
-       return new Button[]{playGame, highScores,inputNames,Controls};
+       return new Button[]{playGame, highScores};
    }
 }
 

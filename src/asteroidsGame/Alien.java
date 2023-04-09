@@ -8,11 +8,11 @@ import javafx.scene.shape.Shape;
 
 import java.util.Random;
 
-public class Alien extends Ship {
+public class Alien extends BaseShip {
 
     private Player player;
-    private Point2D alien;
-
+    private long lastBulletTime; // Add a field to store the last bullet time for alien
+    private static final long SHOOT_CD = 2500L * 1000000; // 2500 ms
     private Point2D movement = new Point2D(1, 1);
 
     public Alien(int x, int y) {
@@ -68,6 +68,33 @@ public class Alien extends Ship {
 
     public boolean collide(Bullet bullet) {
         Shape collisionArea = Shape.intersect(this.ship, bullet.getHitbox());
+        return collisionArea.getBoundsInLocal().getWidth() != -1;
+    }
+    //how the alien shoots the player
+    public Bullet shoot() {
+        long currentTime = System.nanoTime();
+        if (currentTime - lastBulletTime < SHOOT_CD) {
+            return null; // If the CD is not enough, don't create a bullet
+        }
+
+        lastBulletTime = currentTime;
+
+        //    Get the position and direction of the bullet
+        //    Adjusting the position of bullets fired from the tip of the ship
+        double bulletX = this.ship.getTranslateX() + 50d;
+        double bulletY = this.ship.getTranslateY() + 50d;
+
+        // calculate the direction vector from the alien to the player
+        Point2D direction = player.getPosition().subtract(getPosition()).normalize();
+        // set the movement vector to the direction vector
+        double bulletDirection = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
+
+        Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection);
+        return bullet;
+    }
+    //defines how a collision between an alien and an asteroid
+    public boolean crash(Asteroid asteroid) {
+        Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
         return collisionArea.getBoundsInLocal().getWidth() != -1;
     }
 }
