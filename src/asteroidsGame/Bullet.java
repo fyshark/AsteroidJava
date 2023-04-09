@@ -24,7 +24,7 @@ public class Bullet extends Rectangle {
         initY = y;
 
 
-        double speed = 2; // Bullet speed
+        double speed = 9; // Bullet speed
         double changeX = Math.cos(Math.toRadians(direction)) * speed;
         double changeY = Math.sin(Math.toRadians(direction)) * speed;
         velocity = new Point2D(changeX, changeY);
@@ -95,7 +95,6 @@ public class Bullet extends Rectangle {
     }
 
     public Rectangle getHitbox() {
-
         return new Rectangle(getTranslateX(), getTranslateY(), getWidth(), getHeight());
     }
 
