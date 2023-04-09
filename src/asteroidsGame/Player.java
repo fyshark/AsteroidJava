@@ -28,7 +28,11 @@ public class Player extends BaseShip {
 
     //defines a collision between a player and a bullet
     public boolean collide(Bullet bullet) {
-        Shape collisionArea = Shape.intersect(this.ship, bullet.getHitbox());
-        return collisionArea.getBoundsInLocal().getWidth() != -1;
+        if (bullet.stringFlag != "playerBullet") {
+            Shape collisionArea = Shape.intersect(this.ship, bullet.getHitbox());
+            return collisionArea.getBoundsInLocal().getWidth() != -1;
+        } else {
+            return true;
+        }
     }
 }

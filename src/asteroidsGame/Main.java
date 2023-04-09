@@ -164,9 +164,9 @@ public class Main extends Application {
                     }
 
                     // WIP if a player collides with a bullet the game is stopped
-                    //if (player.collide(bullet)) {
-                    //    stop();
-                    //}
+                    if (player.collide(bullet)) {
+                        stop();
+                    }
 
                 }
 
@@ -208,7 +208,7 @@ public class Main extends Application {
                     player.decelerate();
                     break;
                 case Z: // Update case for z key
-                    Bullet bullet = player.shoot();
+                    Bullet bullet = player.shoot("playerBullet");
                     if (bullet != null) {
                         bullets.add(bullet);
                         gamePane.getChildren().add(bullet);

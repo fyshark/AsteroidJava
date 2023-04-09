@@ -12,13 +12,15 @@ public class Bullet extends Rectangle {
     private double initX, initY;
     private Double crossX, crossY;
     private Float remindingDistance;
+    String stringFlag;
 
-    public Bullet(double x, double y, double direction) {
+    public Bullet(double x, double y, double direction, String stringFlag) {
         setWidth(BULLET_WIDTH); // Bullet width
         setHeight(5); // Bullet height
         setTranslateX(x); // x-coordinate of the bullet
         setTranslateY(y); // y-coordinate of the bullet
         setFill(Color.WHITE);
+        this.stringFlag = stringFlag;
 
         initX = x;
         initY = y;
