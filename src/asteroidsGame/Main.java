@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Stage;
@@ -12,7 +13,9 @@ import javafx.stage.Screen;
 import javafx.animation.AnimationTimer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main extends Application {
 
@@ -121,9 +124,23 @@ public class Main extends Application {
 
         new MainMenu(primaryStage, gameScene);
 
+
+        Map <KeyCode, Boolean> pressedKeys = new HashMap<>();
+
+        // When a key is hit carry out the action
+        // When a key is released, stop an action if it can be executed sequentially (such as rotation).
+
+        gameScene.setOnKeyPressed(event -> {
+            pressedKeys.put(event.getCode(), Boolean.TRUE);
+        });
+        gameScene.setOnKeyReleased(event -> {
+            pressedKeys.put(event.getCode(), Boolean.FALSE);
+        });
+
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+
                 player.move();
                 alien.move();
 

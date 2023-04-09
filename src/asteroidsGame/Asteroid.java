@@ -30,7 +30,8 @@ public class Asteroid extends Rectangle{
         this.rotation = rnd.nextDouble() * 360; // assign a random rotation angle between 0 and 360 degrees
         RandomAsteroidGenerator generator = new RandomAsteroidGenerator();
         this.asteroid = generator.createAsteroid(size);
-        this.asteroid.setFill(Color.WHITE);
+        this.asteroid.setFill(Color.TRANSPARENT);
+        this.asteroid.setStroke(Color.WHITE);
         this.asteroid.setTranslateX(x);
         this.asteroid.setTranslateY(y);
     }
