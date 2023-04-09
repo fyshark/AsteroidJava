@@ -37,6 +37,9 @@ public class Main extends Application {
     static double stageWidth, stageHeight;
     // Add a list of bullets
     private final List<Bullet> bullets = new ArrayList<>();
+    private final List<Asteroid> asteroids = new ArrayList<>();
+    //flag for an alien on the screen
+    Boolean alienAdded = true;
 
 
     @Override
@@ -46,7 +49,6 @@ public class Main extends Application {
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         stageWidth = screenSize.getWidth();
         stageHeight = screenSize.getHeight();
-        System.out.println(stageWidth/2);
         primaryStage.setWidth(stageWidth);
         primaryStage.setHeight(stageHeight);
 
@@ -89,12 +91,22 @@ public class Main extends Application {
         Player player = new Player(playerX,playerY);
         gamePane.getChildren().add(player.getCharacter());
 
-        int alienX, alienY;
-        alienX = (int)(stageWidth/4);
-        alienY = (int)(stageHeight/4);
-        BaseShip alien = new Alien(alienX, alienY);
+        //instantiating an Alien called alien that is added to the game scene
+        int alienX = 0;
+        int alienY = 0;
+        Alien alien = new Alien(alienX, alienY);
         gamePane.getChildren().add(alien.getCharacter());
 
+        // create an instance of Asteroid class
+        for (int i = 0; i < 10; i++) {
+            double size = Math.random() * 20 + 60; // random size between 60 and 80
+            double speed = Math.random() * 1; // random speed between 1
+            int x = (int) (Math.random() * stageWidth + playerX/2);
+            int y = (int) (Math.random() * stageHeight + playerY/2);
+            Asteroid asteroid = new Asteroid(size, speed, x, y);
+            gamePane.getChildren().add(asteroid.getAsteroid());
+            asteroids.add(asteroid); // add asteroid to the asteroids array
+        }
         // Create the VBox layout container just to center everything
         VBox buttonContainer = new VBox();
         //Pause Scene
@@ -157,8 +169,6 @@ public class Main extends Application {
             primaryStage.show();
         });
 
-        pause.setOnAction(e -> primaryStage.setScene(pauseScene));
-
         //Potential option for scene
 //        GridPane gridPauseScene = new GridPane();
 //        GridPane.setConstraints(pauseSceneTitle, 0, 0);
@@ -172,20 +182,61 @@ public class Main extends Application {
 
         mainMenu.setOnAction(e -> new MainMenu(primaryStage,gameScene));
 
-        //Will have to be changed to main menu when implemented
-//        primaryStage.setScene(gameScene);
-
         new MainMenu(primaryStage, gameScene);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 player.move();
-                alien.move();
+                //alien follows the player around the screen at a slow pace
+                alien.followPlayer(player);
 
-                // Add bullet movement handling
-                //move method is called on each Bullet object in the bullets list
-                bullets.forEach(Bullet::move);
+                asteroids.forEach(asteroid -> {
+                    asteroid.move();
+                    if (player.crash(asteroid)) {
+                        stop();
+                    }
+
+                    //if alien is on screen and it crashes into an asteroid, it's removed
+                    if (alienAdded && alien.crash(asteroid)) {
+                        gamePane.getChildren().remove(alien.getCharacter());
+                        alienAdded = false;
+                    }
+                });
+
+                // Getting null pointers if we remove the items from the array completely
+                // these are temporary arrays used to detect whether a bullet has collided
+                // with an asteroid
+
+                List<Asteroid> asteroidsToRemove = new ArrayList<>();
+                List<Bullet> bulletsToRemove = new ArrayList<>();
+
+                for (Bullet bullet : bullets) {
+                    bullet.move();
+                    for (Asteroid asteroid : asteroids) {
+                        if (asteroid.collide(bullet)) {
+                            gamePane.getChildren().removeAll(asteroid.getAsteroid(), bullet);
+                            asteroidsToRemove.add(asteroid);
+                            bulletsToRemove.add(bullet);
+                        }
+                    }
+
+                    //if an alien is on screen and it collides with a bullet it is removed
+                    if (alienAdded && alien.collide(bullet)) {
+                        gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
+                        bulletsToRemove.add(bullet);
+                        alienAdded = false;
+                    }
+
+                    //if a player collides with a bullet the game is stopped
+                    if (player.collide(bullet)) {
+                        stop();
+                    }
+
+                }
+
+                asteroids.removeAll(asteroidsToRemove);
+
                 bullets.removeIf(bullet -> {
                     if (!bullet.isAlive()) {
                         gamePane.getChildren().remove(bullet);
@@ -193,9 +244,18 @@ public class Main extends Application {
                     }
                     return false;
                 });
-                // update screen to reflect new position
+
+                //if there is an alien on screen it will shoot the player
+                if (alienAdded) {
+                    Bullet bullet = alien.shoot();
+                    if (bullet != null) {
+                        bullets.add(bullet);
+                        gamePane.getChildren().add(bullet);
+                    }
+                }
             }
         };
+
         timer.start();
 
         gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {

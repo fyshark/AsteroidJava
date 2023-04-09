@@ -2,11 +2,12 @@ package asteroidsGame;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-
+import javafx.scene.shape.Shape;
 
 
 public class Player extends BaseShip {
 
+    public Polygon player;
     public Player(int x, int y) {
 
         super(createPlayerPolygon(), x, y);
@@ -20,4 +21,14 @@ public class Player extends BaseShip {
         return polygon;
     }
 
+    public boolean crash(Asteroid asteroid) {
+        Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
+        return collisionArea.getBoundsInLocal().getWidth() != -1;
+    }
+
+    //defines a collision between a player and a bullet
+    public boolean collide(Bullet bullet) {
+        Shape collisionArea = Shape.intersect(this.ship, bullet.getHitbox());
+        return collisionArea.getBoundsInLocal().getWidth() != -1;
+    }
 }

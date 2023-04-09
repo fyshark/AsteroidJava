@@ -1,6 +1,7 @@
 package asteroidsGame;
 
 
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.collections.FXCollections;
@@ -45,6 +46,7 @@ public class MainMenu {
        Button backToPause = new Button("Back to Main Menu");
        backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
 
+        playGamePane.getChildren().addAll(backToPause);
 
        playGamePane.getChildren().addAll(new Label("playGame"), backToPause);
        highScoresPane.getChildren().add(new Label("highScores"));
@@ -59,100 +61,31 @@ public class MainMenu {
        gameName.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 150));
        gameName.setTextFill(Color.WHITE);
 
-// create buttons
-       Button[] buttons = generateButtons(mainPageScene);
-       Button playGame = buttons[0];
-       Button highScores = buttons[1];
-       Button inputName = buttons[2];
-       Button controls = buttons[3];
+        r.getChildren().add(gameName);
+        r.setStyle("-fx-background-color: black");
 
-// add nodes to the VBox
-       OpeningPage.getChildren().addAll(gameName, playGame, highScores, inputName, controls);
+        // create scenes
+        mainPageScene = new Scene(r, width, height);
+        Scene palyGameScene = new Scene(playGamePane, width, height);
+        Scene highScoresScene = new Scene(highScoresPane, width, height);
 
-// set the alignment of the VBox and the buttons
+        // create buttons
+        Button[] buttons = generateButtons(mainPageScene);
+        Button playGame = buttons[0];
+        Button highScores = buttons[1];
 
-       for (Node node : OpeningPage.getChildren()) {
-           if (node instanceof Button) {
-               ((Button)node).setAlignment(Pos.CENTER);
-           }
-       }
-       OpeningPage.setAlignment(Pos.CENTER);
-// add the VBox to the root node and create the scene
-       r.setStyle("-fx-background-color: black");
-       r.getChildren().add(OpeningPage);
+        // Leaderboard Scene
+        Label leaderboardTitle = new Label("Leaderboard");
+        ListView<String> leaderboardList = new ListView<>();
+        ObservableList<String> scoresList = FXCollections.observableArrayList(
+                "Player1: 1000",
+                "Player2: 900",
+                "Player3: 800"
+        );
+        leaderboardList.setItems(scoresList);
 
-       OpeningPage.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
-           double x = (r.getWidth() - newVal.getWidth()) / 2;
-           double y = (r.getHeight() - newVal.getHeight()) / 2;
-           OpeningPage.relocate(x, y);
-       });
-//This is for it to be resizable
-       r.widthProperty().addListener((obs, oldVal, newVal) -> {
-           double x = (r.getWidth() - OpeningPage.getLayoutBounds().getWidth()) / 2;
-           double y = (r.getHeight() - OpeningPage.getLayoutBounds().getHeight()) / 2;
-           OpeningPage.relocate(x, y);
-       });
-       //This is for resizable to get height
-       r.heightProperty().addListener((obs, oldVal, newVal) -> {
-           double x = (r.getWidth() - OpeningPage.getLayoutBounds().getWidth()) / 2;
-           double y = (r.getHeight() - OpeningPage.getLayoutBounds().getHeight()) / 2;
-           OpeningPage.relocate(x, y);
-       });
-
-       mainPageScene = new Scene(r, width, height);
-
-
-        // Create the VBox layout container just to center everything
-       VBox InputNames = new VBox(10);
-
-       //Cannot use Scanner as they don't work with JavaFx.So this is the javafx type of scanner object
-       TextField name = new TextField();
-       name.setText("Players name");
-       name.setPrefHeight(25);
-       name.setPrefWidth(30);
-       name.setEditable(true);
-       //This creates a button to submit the name to the leaderboard
-       Button submitbutton=new Button("Submit");
-       Button Backitup = new Button("Back to Main Menu");
-       InputNames.getChildren().addAll(name,submitbutton,Backitup);
-       InputNames.setAlignment(Pos.CENTER); // Center the VBox
-       InputNames.setStyle("-fx-background-color: black");
-       Scene inputname = new Scene(InputNames, width, height);
-
-       // Button leaderboardButton
-       //Button leaderboardButton = new Button("Leaderboard");
-
-       VBox leaderContainer = new VBox(10);
-       leaderContainer.setSpacing(10); // Set the spacing between buttons
-
-       // Leaderboard Scene
-       Label leaderboardTitle = new Label("Leaderboard");
-       ListView<String> leaderboardList = new ListView<>();
-
-       ObservableList<String> scoresList = FXCollections.observableArrayList(
-               "Player1: 1000",
-               "Player2: 900",
-               "Player3: 800"
-       );
-       Button BacktoMain = new Button("Back to Main Menu");
-       leaderContainer.getChildren().addAll(leaderboardTitle, leaderboardList,BacktoMain);
-       leaderContainer.setAlignment(Pos.CENTER); // Center the VBox
-
-       //This just adds the name to the leaderboard here
-       //if submit button after name is pressed than input it into list.
-       leaderboardList.setItems(scoresList);
-//So this is when someone types their name in the textfield. It will add it to scoreslist
-       name.textProperty().addListener((observable, oldValue, newValue) -> {
-           if (!newValue.trim().isEmpty()) {
-               scoresList.add(newValue);
-           }
-       });
-       inputName.setOnAction(e->{
-           primaryStage.setScene(inputname);
-       });
-
-       Scene leaderboardScene = new Scene(leaderContainer, width, height);
-
+        backToPause = new Button("Back to Main Menu");
+        backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
 
         // Create a VBox to hold the control description
         VBox ControlDescription = new VBox();
@@ -189,6 +122,9 @@ public class MainMenu {
 
        playGame.setOnAction(e -> {
             primaryStage.setScene(gameScene);
+
+            //The game starts with BGM
+            new AePlayWave("src/BGM.wav").start();
         });
         controls.setOnAction(e -> primaryStage.setScene(ControlsScene));
         playGame.setOnAction(e ->
@@ -202,11 +138,56 @@ public class MainMenu {
 
 // set the scene
         primaryStage.setScene(mainPageScene);
+
+        playGame.setLayoutY(height / 2f + 100);
+        highScores.setLayoutY(height / 2f + 180);
+        gameName.setLayoutY(height / 2f - 100);
+
+        centerElements(width, gameName, playGame, highScores);
+
+
+        mainPageScene.widthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            playGame.setLayoutX(newValue.doubleValue() / 2 - (playGame.widthProperty().getValue() / 2));
+            highScores.setLayoutX(newValue.doubleValue() / 2 - (highScores.widthProperty().getValue() / 2));
+            gameName.setLayoutX(newValue.doubleValue() / 2 - (gameName.widthProperty().getValue() / 2));
+        });
+        mainPageScene.heightProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            playGame.setLayoutY(newValue.doubleValue() / 2 - (playGame.heightProperty().getValue() / 2 - 100));
+            highScores.setLayoutY(newValue.doubleValue() / 2 - (highScores.heightProperty().getValue() / 2 - 180));
+            gameName.setLayoutY(newValue.doubleValue() / 2 - (gameName.heightProperty().getValue() / 2 + 100));
+        });
+
         primaryStage.show();
     }
 
 
 
+
+    private static void centerElements(int width, Label gameName, Button playGame, Button highScores) {
+        gameName.widthProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                                Object newVal) {
+                gameName.setLayoutX(width / 2d - (double) newVal / 2d);
+            }
+        });
+
+        playGame.widthProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                                Object newVal) {
+                playGame.setLayoutX(width / 2d - (double) newVal / 2d);
+            }
+        });
+
+        highScores.widthProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                                Object newVal) {
+                highScores.setLayoutX(width / 2d - (double) newVal / 2d);
+            }
+        });
+    }
 
     private Button[] generateButtons(Scene sc) {
         // create a button

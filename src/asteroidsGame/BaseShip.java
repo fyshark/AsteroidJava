@@ -9,7 +9,7 @@ public abstract class BaseShip {
 
     Point2D defaultShipSpeed; // the default speed of the player's ship
 
-    private Polygon ship;
+    public Polygon ship; // make ship public so that Player class can access the shape -> required for detecting collision.
     private Point2D movement; // the current movement vector of the player's ship
 
     private long lastBulletTime; // Add a field to store the last bullet time
@@ -122,6 +122,10 @@ public abstract class BaseShip {
 
         Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection);
         return bullet;
+    }
+
+    public Point2D getPosition() {
+        return new Point2D(this.ship.getTranslateX(), this.ship.getTranslateY());
     }
 
 }
