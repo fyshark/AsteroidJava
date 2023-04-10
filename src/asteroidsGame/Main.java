@@ -22,6 +22,7 @@ import javafx.animation.AnimationTimer;
 //import javafx.scene.control.ListView;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.control.TextField;
 
 //import java.awt.*;
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class Main extends Application {
         //So this method is used to handle the pause button will call the scene change object
        //This is for the points
         Label pointsLabel = new Label("Points: 0");
-        pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 50));
+        pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
         pointsLabel.setTextFill(Color.WHITE);
 
         VBox pointcard=new VBox();
@@ -89,13 +90,23 @@ public class Main extends Application {
         pointcard.getChildren().add(hBox);
         pointcard.setAlignment(Pos.CENTER_LEFT);
 
-        Label livesLabel = new Label("Lives: " + lives);
-        livesLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 50));
-        livesLabel.setTextFill(Color.WHITE);
-        livesLabel.setLayoutX(50);
-        livesLabel.setLayoutY(50);
+        VBox Livescard=new VBox();
+        Region region1=new Region();
+        HBox.setHgrow(region1, javafx.scene.layout.Priority.ALWAYS);
 
-        gamePane.getChildren().addAll(pause,pointcard,livesLabel);
+        Label livesLabel = new Label("Lives: " + lives);
+        livesLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
+        livesLabel.setTextFill(Color.WHITE);
+        livesLabel.setLayoutX(100);
+        livesLabel.setLayoutY(20);
+        HBox hBox1 = new HBox(livesLabel, region1);
+        Livescard.getChildren().add(hBox1);
+        Livescard.setAlignment(Pos.CENTER_LEFT);
+        BorderPane borderPane = new BorderPane();
+        borderPane.setTop(pointcard);
+        borderPane.setBottom(Livescard);
+
+        gamePane.getChildren().addAll(pause,borderPane);
         gameScene = new Scene(gamePane, stageWidth, stageHeight);
         pause.setLayoutX(gamePane.getWidth() - 100);
         pause.setLayoutY(20);
@@ -137,12 +148,13 @@ public class Main extends Application {
         Button resume = new Button("Resume");
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
+        Button restartName=new Button("Restart with Name");
         Button restartGame = new Button("Restart Game");
         Button controls=new Button("Controls");
 
         buttonContainer.setSpacing(10); // Set the spacing between buttons
         buttonContainer.setAlignment(Pos.CENTER);
-        buttonContainer.getChildren().addAll(pauseSceneTit,mainMenu,resume,closeGame,restartGame,controls);
+        buttonContainer.getChildren().addAll(pauseSceneTit,mainMenu,resume,closeGame,restartName,controls);
 
 // set the alignment of the VBox and the buttons
         //Center it within the VBbox
@@ -182,9 +194,33 @@ public class Main extends Application {
         // closeGame will close the application/stage for the game
         // restartGame will restart the application ... not yet built
         // mainMenu will bring you back to the starting screen... not yet built
+        VBox InputNames = new VBox(10);
+
+
+        //Cannot use Scanner as they don't work with JavaFx.So this is the javafx type of scanner object
+        TextField name = new TextField();
+        name.setText("Players name");
+        name.setPrefHeight(25);
+        name.setPrefWidth(50);
+        name.setEditable(true);
+        //This creates a button to submit the name to the leaderboard
+        Button submitbutton=new Button("Submit");
+
+
+        InputNames.getChildren().addAll(name,submitbutton, restartGame);
+        InputNames.setAlignment(Pos.CENTER); // Center the VBox
+        InputNames.setStyle("-fx-background-color: black");
+        Scene Inputname = new Scene(InputNames,stageWidth, stageHeight);
 
         resume.setOnAction(e -> primaryStage.setScene(gameScene));
         closeGame.setOnAction(event -> primaryStage.close());
+        //This is for restarting with name
+        restartName.setOnAction(event->{
+            String playerName = name.getText();
+            //scoresList.add(playerName);
+            primaryStage.setScene(Inputname);
+    });
+        //This will just restart the game
         restartGame.setOnAction(event ->   {
             player.resetPosition();
             primaryStage.setScene(gameScene);

@@ -96,8 +96,7 @@ public class Asteroid extends Rectangle{
     }
     public boolean collide(Bullet bullet) {
         Shape collisionArea = Shape.intersect(this.asteroid, bullet.getHitbox());
-        //return collisionArea.getBoundsInLocal().getWidth() != -1;
-        return true;
+        return collisionArea.getBoundsInLocal().getWidth() != -1;
     }
 
 }
