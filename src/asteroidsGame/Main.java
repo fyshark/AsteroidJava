@@ -37,6 +37,7 @@ public class Main extends Application {
 
     //This gets the stagewidth and height. Change according to screen size
     static double stageWidth, stageHeight;
+    static Pane gamePane;
     // Add a list of bullets
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Asteroid> asteroids = new ArrayList<>();
@@ -71,7 +72,7 @@ public class Main extends Application {
         Button pause = new Button("Pause");
         pause.setStyle("-fx-background-color: white;");
          //So we are setting it to have a black colour
-        Pane gamePane = new Pane();
+        gamePane = new Pane();
         gamePane.setStyle("-fx-background-color: black;");
         // Should Set the position of the pause button!
 //        pause.setTranslateX(stageWidth - pause.getWidth() - 50); // 20 is the margin from the right edge
@@ -130,15 +131,7 @@ public class Main extends Application {
         gamePane.getChildren().add(alien.getCharacter());
 
         // create an instance of Asteroid class
-        for (int i = 0; i < 10; i++) {
-            double size = Math.random() * 20 + 60; // random size between 60 and 80
-            double speed = Math.random() * 1; // random speed between 1
-            int x = (int) (Math.random() * stageWidth + playerX/2);
-            int y = (int) (Math.random() * stageHeight + playerY/2);
-            Asteroid asteroid = new Asteroid(size, speed, x, y);
-            gamePane.getChildren().add(asteroid.getAsteroid());
-            asteroids.add(asteroid); // add asteroid to the asteroids array
-        }
+        initAstroids(playerX, playerY);
         // Create the VBox layout container just to center everything
         VBox buttonContainer = new VBox();
         //Pause Scene
@@ -274,18 +267,22 @@ public class Main extends Application {
                 //alien follows the player around the screen at a slow pace
                 alien.followPlayer(player);
 
-                asteroids.forEach(asteroid -> {
-                    asteroid.move();
-                    if (player.crash(asteroid)) {
-                        stop();
-                    }
+                if (player.isAlive) {
+                    asteroids.forEach(asteroid -> {
+                        asteroid.move();
+                        if (player.crash(asteroid)) {
 
-                    //if alien is on screen and it crashes into an asteroid, it's removed
-                    if (alienAdded && alien.crash(asteroid)) {
-                        gamePane.getChildren().remove(alien.getCharacter());
-                        alienAdded = false;
-                    }
-                });
+                            gamePane.getChildren().remove(player.getCharacter());
+                            gamePane.getChildren().addAll(player.splitPlayerPolygon());
+                        }
+
+                        //if alien is on screen and it crashes into an asteroid, it's removed
+                        if (alienAdded && alien.crash(asteroid)) {
+                            gamePane.getChildren().remove(alien.getCharacter());
+                            alienAdded = false;
+                        }
+                    });
+                }
 
                 // Getting null pointers if we remove the items from the array completely
                 // these are temporary arrays used to detect whether a bullet has collided
@@ -353,6 +350,7 @@ public class Main extends Application {
                 livesLabel.setText("Lives: " + lives);
             }
         };
+
         timer.start();
 
         gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -382,22 +380,19 @@ public class Main extends Application {
         primaryStage.show();
 
     }
-//    public void Restarting(){
-//        // reset the game state
-//        bullets.clear();
-//        asteroids.clear();
-//        lives = 3;
-//        points.set(0);
-//        gameScene.getRoot().requestFocus();
-//        Label Over=new Label("Game over");
-//        AnimationTimer timer = new AnimationTimer();
-//        timer.start();
-//
-//    }
-//    public void Stoping(){
-//        AnimationTimer timer = new AnimationTimer();
-//        timer.stop();
-//    }
+
+    private void initAstroids(int playerX, int playerY) {
+        for (int i = 0; i < 10; i++) {
+            double size = Math.random() * 20 + 60; // random size between 60 and 80
+            double speed = Math.random() * 1; // random speed between 1
+            int x = (int) (Math.random() * stageWidth + playerX /2);
+            int y = (int) (Math.random() * stageHeight + playerY /2);
+            Asteroid asteroid = new Asteroid(size, speed, x, y);
+            gamePane.getChildren().add(asteroid.getAsteroid());
+            asteroids.add(asteroid); // add asteroid to the asteroids array
+        }
+    }
+
     public static void main(String[] args) {
         launch(args);
     }

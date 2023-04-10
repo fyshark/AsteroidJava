@@ -91,8 +91,7 @@ public class Alien extends BaseShip {
         // set the movement vector to the direction vector
         double bulletDirection = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
 
-        Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection);
-        return bullet;
+        return new Bullet(bulletX, bulletY, bulletDirection);
     }
 
     //defines how a collision between an alien and an asteroid

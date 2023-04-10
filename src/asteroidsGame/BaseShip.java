@@ -120,7 +120,7 @@ public abstract class BaseShip {
 
         double bulletDirection = ship.getRotate();
 
-        Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection);
+        Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection, this.movement);
         return bullet;
     }
 

@@ -30,6 +30,29 @@ public class Bullet extends Rectangle {
         velocity = new Point2D(changeX, changeY);
     }
 
+    public Bullet(double x, double y, double direction, Point2D baseSpeed) {
+        setWidth(BULLET_WIDTH); // Bullet width
+        setHeight(5); // Bullet height
+        setTranslateX(x); // x-coordinate of the bullet
+        setTranslateY(y); // y-coordinate of the bullet
+        setFill(Color.WHITE);
+
+        initX = x;
+        initY = y;
+
+        double speedFactor = 2;
+        // When the bullet does not move along the x or y axis direction
+        if (baseSpeed.getX() != 0 || baseSpeed.getY() != 0) {
+            double speed = baseSpeed.magnitude();
+            speedFactor = Math.max(speedFactor, speed);
+        }
+
+        double radians = Math.toRadians(direction);
+        double changeX = Math.cos(radians);
+        double changeY = Math.sin(radians);
+        velocity = new Point2D(changeX, changeY).multiply(speedFactor * 3);
+    }
+
     public void move() {
         if (isAlive) {
             // Update bullet position
