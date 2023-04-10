@@ -55,6 +55,11 @@ public class Asteroid extends Rectangle{
         return this.speed;
     }
 
+    public double increaseRotationOnDestruction(){
+        this.rotation *= 3;
+        return this.rotation;
+    }
+
     public void move() {
         // calculate x and y components of movement vector based on current rotation angle
         double dx = Math.cos(Math.toRadians(this.rotation)) * this.speed;

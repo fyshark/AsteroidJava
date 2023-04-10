@@ -284,19 +284,22 @@ public class Main extends Application {
                 if (player.isAlive) {
                     asteroids.forEach(asteroid -> {
                         asteroid.move();
-                        if (player.crash(asteroid)) {
+                        if (player.crash(asteroid) && asteroid.getSize() >= 30) {
 
                             gamePane.getChildren().remove(player.getCharacter());
                             gamePane.getChildren().addAll(player.splitPlayerPolygon());
                         }
-
-                        //if alien is on screen & it crashes into an asteroid, it's removed
+                        if (player.crash(asteroid) && asteroid.getSize() < 30) {
+                            gamePane.getChildren().remove(asteroid.getAsteroid());
+                        }
+                        //if alien is on screen and it crashes into an asteroid, it's removed
                         if (alienAdded && alien.crash(asteroid)) {
                             gamePane.getChildren().remove(alien.getCharacter());
                             alienAdded = false;
                         }
                     });
                 }
+
 
                 // Getting null pointers if we remove the items from the array completely
                 // these are temporary arrays used to detect whether a bullet has collided
