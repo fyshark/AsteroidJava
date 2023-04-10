@@ -331,11 +331,6 @@ public class Main extends Application {
                     lives=5;
                 }
                 }
-
-//                if (asteroids.collide(bullets)==((true)){
-//                    asteroids.remove(this.Asteroid);
-//                    this.split();
-//                }
                 asteroids.removeAll(asteroidsToRemove);
 
                 bullets.removeIf(bullet -> {

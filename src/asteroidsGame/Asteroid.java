@@ -44,24 +44,6 @@ public class Asteroid extends Rectangle{
 
         return this.size;
     }
-    public void split() {
-        if (this.size > 10) { // only split if the asteroid is large enough
-            Random rnd = new Random();
-            double newSize = this.size / 3;
-            double newX1 = this.asteroid.getTranslateX() + rnd.nextDouble() * newSize;
-            double newY1 = this.asteroid.getTranslateY() + rnd.nextDouble() * newSize;
-            double newX2 = this.asteroid.getTranslateX() - rnd.nextDouble() * newSize;
-            double newY2 = this.asteroid.getTranslateY() - rnd.nextDouble() * newSize;
-
-            Asteroid asteroid1 = new Asteroid(newSize, this.speed, (int) newX1, (int) newY1);
-            Asteroid asteroid2 = new Asteroid(newSize, this.speed, (int) newX2, (int) newY2);
-
-            asteroid1.getAsteroid().setRotate(rnd.nextDouble() * 360);
-            asteroid2.getAsteroid().setRotate(rnd.nextDouble() * 360);
-
-            // add the new asteroids to the game's list of asteroids
-        }
-    }
 
     public double increaseSpeedOnDestruction() {
         this.speed += 0.25;
