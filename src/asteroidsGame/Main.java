@@ -272,8 +272,8 @@ public class Main extends Application {
             public void handle(long now) {
                 player.move();
                 //alien follows the player around the screen at a slow pace
-                alien.followPlayer(player);
-
+                alien.move();
+/*
                 asteroids.forEach(asteroid -> {
                     asteroid.move();
                     if (player.crash(asteroid)) {
@@ -286,7 +286,7 @@ public class Main extends Application {
                         alienAdded = false;
                     }
                 });
-
+*/
                 // Getting null pointers if we remove the items from the array completely
                 // these are temporary arrays used to detect whether a bullet has collided
                 // with an asteroid
@@ -304,7 +304,7 @@ public class Main extends Application {
                             points.addAndGet(100);
                         }
                     }
-
+/*
                     //if an alien is on screen and it collides with a bullet it is removed
                     if (alienAdded && alien.collide(bullet)) {
                         gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
@@ -316,7 +316,7 @@ public class Main extends Application {
                     // WIP if a player collides with a bullet the game is stopped
                     if (player.collide(bullet)) {
                         stop();
-                    }
+                    } */
 
                 }
 //
@@ -343,7 +343,7 @@ public class Main extends Application {
 
                 //if there is an alien on screen it will shoot the player
                 if (alienAdded) {
-                    Bullet bullet = alien.shoot();
+                    Bullet bullet = alien.shoot(player);
                     if (bullet != null) {
                         bullets.add(bullet);
                         gamePane.getChildren().add(bullet);

@@ -4,6 +4,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+import static java.lang.System.currentTimeMillis;
+
 
 public class Alien extends BaseShip {
 
@@ -11,6 +13,9 @@ public class Alien extends BaseShip {
 
     private long lastBulletTime; // Add a field to store the last bullet time for alien
     private static final long SHOOT_CD = 2500L * 1000000; // 2500 ms
+
+    private long lastRotate = System.nanoTime();
+
 
     public Alien(int x, int y) {
         super(createAlienPolygon(), x, y);
@@ -28,14 +33,23 @@ public class Alien extends BaseShip {
     }
 
     //alien moves differently than the player, defined here
-    public void move(double angle) {
-        int ALIEN_SPEED = 1;
-        // moves the alien based on its current movement vector
-        double dx = Math.cos(Math.toRadians(angle)) * ALIEN_SPEED;
-        double dy = Math.sin(Math.toRadians(angle)) * ALIEN_SPEED;
+    public void move() {
 
-        this.ship.setTranslateX(this.ship.getTranslateX() + dx);
-        this.ship.setTranslateY(this.ship.getTranslateY() + dy);
+        int ALIEN_SPEED = 1;
+
+        long currentTime = System.nanoTime();
+
+        if(currentTime - lastRotate > 3000L * 1000000) {
+            this.ship.setRotate(Math.random() * 360);
+            lastRotate = System.nanoTime();
+        }
+
+        // moves the alien based on its current movement vector
+        double dx = Math.cos(Math.toRadians(this.ship.getRotate())) * ALIEN_SPEED;
+        double dy = Math.sin(Math.toRadians(this.ship.getRotate())) * ALIEN_SPEED;
+
+        this.ship.setTranslateX(this.ship.getTranslateX() + dx * -1);
+        this.ship.setTranslateY(this.ship.getTranslateY() + dy * 0.5);
 
         // The conditions below checks that the ship stays on screen.
         if (this.ship.getTranslateX() < 0) {
@@ -55,17 +69,6 @@ public class Alien extends BaseShip {
         }
     }
 
-    //alien gets the player's position and follows it around the screen
-    public void followPlayer(Player player) {
-
-        this.player = player;
-        // calculate the direction vector from the alien to the player
-        Point2D direction = player.getPosition().subtract(getPosition()).normalize();
-        // set the movement vector to the direction vector
-        double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
-        move(angle);
-    }
-
     //defines what a collision is for the alien
     public boolean collide(Bullet bullet) {
         Shape collisionArea = Shape.intersect(this.ship, bullet.getHitbox());
@@ -73,7 +76,9 @@ public class Alien extends BaseShip {
     }
 
     //how the alien shoots the player
-    public Bullet shoot() {
+    public Bullet shoot(Player player) {
+        this.player = player;
+
         long currentTime = System.nanoTime();
         if (currentTime - lastBulletTime < SHOOT_CD) {
             return null; // If the CD is not enough, don't create a bullet
