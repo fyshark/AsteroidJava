@@ -8,10 +8,11 @@ import javafx.scene.shape.Shape;
 public class Player extends BaseShip {
 
     public Polygon player;
-    public Player(int x, int y) {
 
+    public Player(int x, int y) {
         super(createPlayerPolygon(), x, y);
     }
+
 
     private static Polygon createPlayerPolygon() {
         // create the polygon shape for the player's ship
