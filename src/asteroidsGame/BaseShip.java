@@ -105,7 +105,7 @@ public abstract class BaseShip {
         }
     }
 
-    public Bullet shoot(String stringFlag) {
+    public Bullet shoot(String shooter) {
         long currentTime = System.nanoTime();
         if (currentTime - lastBulletTime < SHOOT_CD) {
             return null; // If the CD is not enough, don't create a bullet
@@ -118,12 +118,9 @@ public abstract class BaseShip {
         double bulletX = this.ship.getTranslateX() + Bullet.BULLET_WIDTH / 2d;
         double bulletY = this.ship.getTranslateY();
 
-        System.out.println(bulletX);
-        System.out.println(bulletY);
-
         double bulletDirection = ship.getRotate();
 
-        Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection, this.movement, stringFlag);
+        Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection, this.movement, shooter);
         return bullet;
     }
 

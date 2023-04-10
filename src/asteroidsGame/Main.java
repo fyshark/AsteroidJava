@@ -28,6 +28,7 @@ import javafx.scene.control.TextField;
 import java.util.ArrayList;
 import java.util.List;
 //This is for the points
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main extends Application {
@@ -41,8 +42,15 @@ public class Main extends Application {
     // Add a list of bullets
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Asteroid> asteroids = new ArrayList<>();
+    //keeps track of when the last alien was spawned
+    private long lastAlienBirth;
+
+    //instantiating an Alien called alien that is added to the game scene
+    Alien alien;
+
     //flag for an alien on the screen
-    Boolean alienAdded = true;
+    Boolean alienAdded = false;
+
 //lives
     private int lives=3;
 
@@ -123,12 +131,6 @@ public class Main extends Application {
         // Instantiating a Player called player that we can manipulate and adding it to the game scene.
         Player player = new Player(playerX,playerY);
         gamePane.getChildren().add(player.getCharacter());
-
-        //instantiating an Alien called alien that is added to the game scene
-        int alienX = 0;
-        int alienY = 0;
-        Alien alien = new Alien(alienX, alienY);
-        gamePane.getChildren().add(alien.getCharacter());
 
         // create an instance of Asteroid class
         initAstroids(playerX, playerY);
@@ -238,8 +240,8 @@ public class Main extends Application {
         // Create a label to hold the paragraph
         Label paragraph = new Label("Find the controls below \n" +
                 "Press the left arrows on your computer to turn left.\n" +
-                " Press the right arrows on your computer to turn right.\n" +
-                " Press the up key to allow the ship to accelerate.\n" +
+                "Press the right arrows on your computer to turn right.\n" +
+                "Press the up key to allow the ship to accelerate.\n" +
                 "Press the down key to allow your ship to decelerate.\n " +
                 "Press Z to shoot your bullets \n");
 //       paragraph.setWrapText(true);
@@ -263,9 +265,21 @@ public class Main extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+
+                //creates an alien every 8 seconds
+                long currentTime = System.nanoTime();
+                if(currentTime - lastAlienBirth > 8000L * 1000000 && !alienAdded) {
+                    Random random_pos = new Random();
+                    alien = initAliens(random_pos.nextInt((int)stageWidth), random_pos.nextInt((int)stageHeight));
+                    lastAlienBirth = System.nanoTime();
+                    alienAdded = true;
+                }
+
                 player.move();
-                //alien follows the player around the screen at a slow pace
-                alien.move();
+                //alien follows a random path around the scene
+                if (alienAdded) {
+                    alien.move();
+                }
 
                 if (player.isAlive) {
                     asteroids.forEach(asteroid -> {
@@ -276,7 +290,7 @@ public class Main extends Application {
                             gamePane.getChildren().addAll(player.splitPlayerPolygon());
                         }
 
-                        //if alien is on screen and it crashes into an asteroid, it's removed
+                        //if alien is on screen & it crashes into an asteroid, it's removed
                         if (alienAdded && alien.crash(asteroid)) {
                             gamePane.getChildren().remove(alien.getCharacter());
                             alienAdded = false;
@@ -301,21 +315,21 @@ public class Main extends Application {
                             points.addAndGet(100);
                         }
                     }
-/*
-                    //if an alien is on screen and it collides with a bullet it is removed
-                    if (alienAdded && alien.collide(bullet)) {
-                        gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
-                        bulletsToRemove.add(bullet);
-                        points.addAndGet(500);
-                        alienAdded = false;
+                        //if there is an alien on screen & it collides with a player's bullet
+                        if (alienAdded && alien.collide(bullet) && bullet.shooter == "playerBullet") {
+                            gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
+                            bulletsToRemove.add(bullet);
+                            points.addAndGet(500);
+                            alienAdded = false;
+                        }
+
+                        // WIP if a player collides with a bullet player is declared dead -- for testing
+                        if (player.collide(bullet) && bullet.shooter == "alienBullet") {
+                            System.out.println("Player Dead");
+                        }
                     }
 
-                    // WIP if a player collides with a bullet the game is stopped
-                    if (player.collide(bullet)) {
-                        stop();
-                    } */
 
-                }
 //
 //                if (lives<0){
 //                    gameScene.Stoping();
@@ -338,9 +352,9 @@ public class Main extends Application {
                     return false;
                 });
 
-                //if there is an alien on screen it will shoot the player
+                //if there is an alien on screen it will shoot the player, alien bullet flag
                 if (alienAdded) {
-                    Bullet bullet = alien.shoot(player);
+                    Bullet bullet = alien.shoot(player, "alienBullet");
                     if (bullet != null) {
                         bullets.add(bullet);
                         gamePane.getChildren().add(bullet);
@@ -367,7 +381,7 @@ public class Main extends Application {
                 case DOWN:
                     player.decelerate();
                     break;
-                case Z: // Update case for z key
+                case Z: // Update case for z key with player bullet flag
                     Bullet bullet = player.shoot("playerBullet");
                     if (bullet != null) {
                         bullets.add(bullet);
@@ -391,6 +405,13 @@ public class Main extends Application {
             gamePane.getChildren().add(asteroid.getAsteroid());
             asteroids.add(asteroid); // add asteroid to the asteroids array
         }
+    }
+
+    //factory function for creating aliens
+    private Alien initAliens(int alienX, int alienY) {
+        Alien alien = new Alien(alienX, alienY);
+        gamePane.getChildren().add(alien.getCharacter());
+        return alien;
     }
 
     public static void main(String[] args) {

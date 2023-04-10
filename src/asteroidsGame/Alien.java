@@ -14,8 +14,9 @@ public class Alien extends BaseShip {
     private long lastBulletTime; // Add a field to store the last bullet time for alien
     private static final long SHOOT_CD = 2500L * 1000000; // 2500 ms
 
+    //tracks last rotation of the alien
     private long lastRotate = System.nanoTime();
-
+    private Point2D alienMovement;
 
     public Alien(int x, int y) {
         super(createAlienPolygon(), x, y);
@@ -24,9 +25,14 @@ public class Alien extends BaseShip {
         //design of the alien
     private static Polygon createAlienPolygon() {
         Polygon polygon = new Polygon(
-                5.0d, 70.0d, 15.0d, 55.0d, 20.0d,
-                25.0d, 25.0d, 20.0d, 55.0d, 15.0d, 70.0d, 5.0d
+                23.4, 0, 32.4, 32.4,
+                0, 23.4, 32.4, 41.1, 0, 41.1,
+                32.4, 48.8, 0, 56.5, 32.4, 56.5,
+                23.4, 81, 41.1, 56.5, 48.8, 56.5,
+                41.1, 48.8, 48.8, 41.1, 41.1, 41.1,
+                48.8, 23.4, 41.1, 32.4
         );
+
         polygon.setRotate(45);
         polygon.setFill(Color.WHITE);
         return polygon;
@@ -38,8 +44,8 @@ public class Alien extends BaseShip {
         int ALIEN_SPEED = 1;
 
         long currentTime = System.nanoTime();
-
-        if(currentTime - lastRotate > 3000L * 1000000) {
+        //alien changes direction every 8 seconds
+        if(currentTime - lastRotate > 8000L * 1000000) {
             this.ship.setRotate(Math.random() * 360);
             lastRotate = System.nanoTime();
         }
@@ -48,8 +54,10 @@ public class Alien extends BaseShip {
         double dx = Math.cos(Math.toRadians(this.ship.getRotate())) * ALIEN_SPEED;
         double dy = Math.sin(Math.toRadians(this.ship.getRotate())) * ALIEN_SPEED;
 
-        this.ship.setTranslateX(this.ship.getTranslateX() + dx * -1);
-        this.ship.setTranslateY(this.ship.getTranslateY() + dy * 0.5);
+        this.alienMovement = new Point2D(dx, dy);
+
+        this.ship.setTranslateX(this.ship.getTranslateX() + dx);
+        this.ship.setTranslateY(this.ship.getTranslateY() + dy);
 
         // The conditions below checks that the ship stays on screen.
         if (this.ship.getTranslateX() < 0) {
@@ -76,7 +84,7 @@ public class Alien extends BaseShip {
     }
 
     //how the alien shoots the player
-    public Bullet shoot(Player player) {
+    public Bullet shoot(Player player, String shooter) {
         this.player = player;
 
         long currentTime = System.nanoTime();
@@ -88,15 +96,16 @@ public class Alien extends BaseShip {
 
         //    Get the position and direction of the bullet
         //    Adjusting the position of bullets fired from the tip of the ship
-        double bulletX = this.ship.getTranslateX() + 50d;
-        double bulletY = this.ship.getTranslateY() + 50d;
+        double bulletX = this.ship.getTranslateX() + 20d;
+        double bulletY = this.ship.getTranslateY() + 20d;
 
         // calculate the direction vector from the alien to the player
         Point2D direction = player.getPosition().subtract(getPosition()).normalize();
         // set the movement vector to the direction vector
         double bulletDirection = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
 
-        return new Bullet(bulletX, bulletY, bulletDirection, "alienBullet");
+        System.out.println(bulletDirection);
+        return new Bullet(bulletX, bulletY, bulletDirection, alienMovement, shooter);
     }
 
     //defines how a collision between an alien and an asteroid
