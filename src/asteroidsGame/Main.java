@@ -13,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
-//import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
@@ -354,30 +353,40 @@ public class Main extends Application {
             }
         };
         timer.start();
-
+//This is to get rid of the error lamba final . thats why its like this
+        boolean[] actionHappening = {false};
         gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            switch (event.getCode()) {
-                case LEFT:
-                    player.turnLeft();
-                    break;
-                case RIGHT:
-                    player.turnRight();
-                    break;
-                case UP:
-                    player.accelerate();
-                    break;
-                case DOWN:
-                    player.decelerate();
-                    break;
-                case Z: // Update case for z key
-                    Bullet bullet = player.shoot();
-                    if (bullet != null) {
-                        bullets.add(bullet);
-                        gamePane.getChildren().add(bullet);
-                    }
-                    break;
+            if (!actionHappening[0]) {
+                actionHappening[0] = true;
+                switch (event.getCode()) {
+                    case LEFT:
+                        player.turnLeft();
+                        break;
+                    case RIGHT:
+                        player.turnRight();
+                        break;
+                    case UP:
+                        player.accelerate();
+                        break;
+                    case DOWN:
+                        player.decelerate();
+                        break;
+                    case Z: // Update case for z key
+                        Bullet bullet = player.shoot();
+                        if (bullet != null) {
+                            bullets.add(bullet);
+                            gamePane.getChildren().add(bullet);
+                        }
+                        break;
+                    case S:
+                        lives+=5;
+                        break;
+                }
+
+                actionHappening[0] = false;
             }
         });
+
 
         primaryStage.show();
 
