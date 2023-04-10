@@ -304,18 +304,59 @@ public class Main extends Application {
 
                 List<Asteroid> asteroidsToRemove = new ArrayList<>();
                 List<Bullet> bulletsToRemove = new ArrayList<>();
+                List<Asteroid> asteroidsToAdd = new ArrayList<>();
 
                 for (Bullet bullet : bullets) {
                     bullet.move();
                     for (Asteroid asteroid : asteroids) {
                         if (asteroid.collide(bullet)) {
-                            gamePane.getChildren().removeAll(asteroid.getAsteroid(), bullet);
-                            asteroidsToRemove.add(asteroid);
+
+                            // increase the player's points
                             bulletsToRemove.add(bullet);
-                            points.addAndGet(100);
+                            gamePane.getChildren().removeAll(bulletsToRemove);
+
+                            // remove the hit asteroid from the asteroids list
+                            asteroidsToRemove.add(asteroid);
+
+                            // remove the hit asteroid and bullet from the gamePane
+                            gamePane.getChildren().removeAll(asteroid.getAsteroid(), bullet);
+
+                            // create two new asteroids
+                            double newSize = asteroid.getSize() / 2;
+
+                            // split the hit asteroid into two smaller asteroids if it's big or medium
+                            if (asteroid.getSize() >= 30) {
+
+                                if(asteroid.getSize() >=60){
+                                    points.addAndGet(100);
+                                }
+
+                                else if(asteroid.getSize() >30 && asteroid.getSize() < 60){
+                                    points.addAndGet(50);
+                                }
+                                Asteroid asteroid1 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX(), asteroid.getCurrentAsteroidY());
+                                Asteroid asteroid2 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX(), asteroid.getCurrentAsteroidY());
+
+                                asteroidsToAdd.add(asteroid1);
+                                asteroidsToAdd.add(asteroid2);
+
+                                // add the new asteroids to the gamePane
+                                gamePane.getChildren().addAll(asteroid1.getAsteroid(), asteroid2.getAsteroid());
+                            } else {
+                                points.addAndGet(50);
+                                asteroidsToRemove.add(asteroid);
+                            }
+                            break;
                         }
                     }
-                        //if there is an alien on screen & it collides with a player's bullet
+
+                    // add the new asteroids created from splitting to the main list
+                    asteroids.addAll(asteroidsToAdd);
+
+                    // remove the asteroids that were hit by a bullet
+                    asteroids.removeAll(asteroidsToRemove);
+
+                    //if there is an alien on screen & it collides with a player's bullet
                         if (alienAdded && alien.collide(bullet) && bullet.shooter == "playerBullet") {
                             gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
                             bulletsToRemove.add(bullet);
@@ -390,17 +431,25 @@ public class Main extends Application {
                     break;
             }
         });
-
         primaryStage.show();
-
     }
 
     private void initAstroids(int playerX, int playerY) {
         for (int i = 0; i < 10; i++) {
             double size = Math.random() * 20 + 60; // random size between 60 and 80
             double speed = Math.random() * 1; // random speed between 1
-            int x = (int) (Math.random() * stageWidth + playerX /2);
-            int y = (int) (Math.random() * stageHeight + playerY /2);
+            int x = (int) (Math.random() * stageWidth);
+            int y = (int) (Math.random() * stageHeight);
+            if (x < playerX) {
+                x -= 150;
+            } else {
+                x += 150;
+            }
+            if (y < playerY) {
+                y -= 150;
+            } else {
+                y += 150;
+            }
             Asteroid asteroid = new Asteroid(size, speed, x, y);
             gamePane.getChildren().add(asteroid.getAsteroid());
             asteroids.add(asteroid); // add asteroid to the asteroids array
