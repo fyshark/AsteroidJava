@@ -283,12 +283,23 @@ public class Main extends Application {
                     //}
 
                 }
-               // if (lives<0){
-//                    Stoping();
-//                    Restarting();
 //
+//                if (lives<0){
+//                    gameScene.Stoping();
+//                    gameScene.Restarting();
 //                }
 
+                if (points.get()>10000) {
+                lives+=1;
+                if (lives>5){
+                    lives=5;
+                }
+                }
+
+//                if (asteroids.collide(bullets)==((true)){
+//                    asteroids.remove(this.Asteroid);
+//                    this.split();
+//                }
                 asteroids.removeAll(asteroidsToRemove);
 
                 bullets.removeIf(bullet -> {
@@ -310,18 +321,6 @@ public class Main extends Application {
                 pointsLabel.setText("Points: " + points.get());
                 livesLabel.setText("Lives: " + lives);
             }
-//            public void Restarting(){
-//                // reset the game state
-//                bullets.clear();
-//                asteroids.clear();
-//                lives = 3;
-//                points.set(0);
-//                timer.start();
-//
-//            }
-//            public void Stoping(){
-//                timer.stop();
-//            }
         };
         timer.start();
 
@@ -352,7 +351,22 @@ public class Main extends Application {
         primaryStage.show();
 
     }
-
+//    public void Restarting(){
+//        // reset the game state
+//        bullets.clear();
+//        asteroids.clear();
+//        lives = 3;
+//        points.set(0);
+//        gameScene.getRoot().requestFocus();
+//        Label Over=new Label("Game over");
+//        AnimationTimer timer = new AnimationTimer();
+//        timer.start();
+//
+//    }
+//    public void Stoping(){
+//        AnimationTimer timer = new AnimationTimer();
+//        timer.stop();
+//    }
     public static void main(String[] args) {
         launch(args);
     }
