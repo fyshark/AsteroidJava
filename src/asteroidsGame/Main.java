@@ -43,7 +43,7 @@ public class Main extends Application {
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Asteroid> asteroids = new ArrayList<>();
     //keeps track of when the last alien was spawned
-    private long lastAlienBirth;
+    private long lastAlienBirth = System.nanoTime() + 8000L * 1000000;
 
     //instantiating an Alien called alien that is added to the game scene
     Alien alien;
@@ -268,16 +268,20 @@ public class Main extends Application {
 
                 //creates an alien every 8 seconds
                 long currentTime = System.nanoTime();
-                if(currentTime - lastAlienBirth > 8000L * 1000000 && !alienAdded) {
+                if(!alienAdded && currentTime - lastAlienBirth > 8000L * 1000000 && player.isAlive) {
                     Random random_pos = new Random();
-                    alien = initAliens(random_pos.nextInt((int)stageWidth), random_pos.nextInt((int)stageHeight));
+                    int appearWidth = (int)stageWidth;
+                    int appearHeight = (int)stageHeight;
+                    System.out.println(appearWidth);
+                    System.out.println(appearHeight);
+                    alien = initAliens(random_pos.nextInt(appearWidth), random_pos.nextInt(appearHeight));
                     lastAlienBirth = System.nanoTime();
                     alienAdded = true;
                 }
 
                 player.move();
                 //alien follows a random path around the scene
-                if (alienAdded) {
+                if (alienAdded && player.isAlive) {
                     alien.move();
                 }
 
@@ -287,7 +291,7 @@ public class Main extends Application {
                         if (player.crash(asteroid) && asteroid.getSize() >= 30) {
 
                             gamePane.getChildren().remove(player.getCharacter());
-                            gamePane.getChildren().addAll(player.splitPlayerPolygon());
+                            gamePane.getChildren().addAll(player.splitBaseShipPolygon());
                         }
                         if (player.crash(asteroid) && asteroid.getSize() < 30) {
                             gamePane.getChildren().remove(asteroid.getAsteroid());
@@ -295,6 +299,7 @@ public class Main extends Application {
                         //if alien is on screen and it crashes into an asteroid, it's removed
                         if (alienAdded && alien.crash(asteroid)) {
                             gamePane.getChildren().remove(alien.getCharacter());
+                            gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
                             alienAdded = false;
                         }
                     });
@@ -360,15 +365,17 @@ public class Main extends Application {
                     asteroids.removeAll(asteroidsToRemove);
 
                     //if there is an alien on screen & it collides with a player's bullet
-                        if (alienAdded && alien.collide(bullet) && bullet.shooter == "playerBullet") {
+                        if (alienAdded && alien.collide(bullet) && bullet.shooter == "playerBullet" && player.isAlive) {
                             gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
+                            gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
                             bulletsToRemove.add(bullet);
                             points.addAndGet(500);
                             alienAdded = false;
                         }
 
                         // WIP if a player collides with a bullet player is declared dead -- for testing
-                        if (player.collide(bullet) && bullet.shooter == "alienBullet") {
+                        if (player.collide(bullet) && bullet.shooter == "alienBullet" && player.isAlive) {
+                            gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
                             System.out.println("Player Dead");
                             lives-=1;
                         }
@@ -398,7 +405,7 @@ public class Main extends Application {
                 });
 
                 //if there is an alien on screen it will shoot the player, alien bullet flag
-                if (alienAdded) {
+                if (alienAdded && player.isAlive) {
                     Bullet bullet = alien.shoot(player, "alienBullet");
                     if (bullet != null) {
                         bullets.add(bullet);
