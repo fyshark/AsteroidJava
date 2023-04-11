@@ -322,16 +322,15 @@ public class Main extends Application {
         // create an instance of Asteroid class
         initAstroids(playerX, playerY);
         new MainMenu(primaryStage, gameScene);
-        AnimationTimer timer = new AnimationTimer(){
-
-//    public void games(long currentNanoTime) {
-        //createGameScene();{
+        new AnimationTimer() {
             @Override
             public void handle(long now) {
-game(now);
-
+                // Your implementation of the handle method goes here
+                game(now);
+            }
+        }.start();
     }
-    public void game(long now){
+        public void game(long now){
         //creates an alien every 8 seconds
 //                long currentTime = System.nanoTime();
         if (!alienAdded && now - lastAlienBirth > 8000L * 1000000 && player.isAlive) {
@@ -440,6 +439,7 @@ game(now);
                 gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
                 System.out.println("Player Dead");
                 lives -= 1;
+                stop();
             }
         }
 //                if (lives<0){
