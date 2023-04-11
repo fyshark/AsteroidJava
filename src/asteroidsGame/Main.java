@@ -370,6 +370,7 @@ public class Main extends Application {
                         // WIP if a player collides with a bullet player is declared dead -- for testing
                         if (player.collide(bullet) && bullet.shooter == "alienBullet") {
                             System.out.println("Player Dead");
+                            lives-=1;
                         }
                     }
 
@@ -429,15 +430,15 @@ public class Main extends Application {
                         player.decelerate();
                         break;
                     case Z: // Update case for z key
-                        Bullet bullet = player.shoot();
+                        Bullet bullet = player.shoot("playerBullet");
                         if (bullet != null) {
                             bullets.add(bullet);
                             gamePane.getChildren().add(bullet);
                         }
                         break;
-                    case S:
-                        lives+=5;
-                        break;
+//                    case S:
+//                        lives+=5;
+//                        break;
                 }
 
                 actionHappening[0] = false;

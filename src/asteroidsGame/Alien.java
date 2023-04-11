@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import static java.lang.System.currentTimeMillis;
 
-
 public class Alien extends BaseShip {
 
     private Player player;
