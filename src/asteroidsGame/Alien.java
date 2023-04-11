@@ -11,7 +11,7 @@ public class Alien extends BaseShip {
 
     private Player player;
 
-    private long lastBulletTime; // Add a field to store the last bullet time for alien
+    private long lastBulletTime = System.nanoTime() + 1000L * 1000000; // Add a field to store the last bullet time for alien
     private static final long SHOOT_CD = 2500L * 1000000; // 2500 ms
 
     //tracks last rotation of the alien
