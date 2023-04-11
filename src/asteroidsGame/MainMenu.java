@@ -47,8 +47,6 @@ public class MainMenu {
        playGamePane.getChildren().addAll(new Label("playGame"), backToPause);
 //       highScoresPane.getChildren().add(new Label("highScores"));
 
-
-
        // create scenes
        mainPageScene = new Scene(r, width, height);
        Scene palyGameScene = new Scene(playGamePane, width, height);
@@ -56,8 +54,8 @@ public class MainMenu {
 
        VBox OpeningPage = new VBox();
        OpeningPage.setSpacing(10);
-      // OpeningPage.setStyle("-fx-background-color: black");
-// create a label
+       // OpeningPage.setStyle("-fx-background-color: black");
+       // create a label
        Label gameName = new Label("ASTROIDS");
        gameName.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 150));
        gameName.setTextFill(Color.WHITE);

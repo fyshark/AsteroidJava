@@ -105,7 +105,7 @@ public abstract class BaseShip {
         }
     }
 
-    public Bullet shoot() {
+    public Bullet shoot(String shooter) {
         long currentTime = System.nanoTime();
         if (currentTime - lastBulletTime < SHOOT_CD) {
             return null; // If the CD is not enough, don't create a bullet
@@ -115,12 +115,12 @@ public abstract class BaseShip {
 
         //    Get the position and direction of the bullet
         //    Adjusting the position of bullets fired from the tip of the ship
-        double bulletX = ship.getTranslateX() + Bullet.BULLET_WIDTH / 2d;
-        double bulletY = ship.getTranslateY();
+        double bulletX = this.ship.getTranslateX() + Bullet.BULLET_WIDTH / 2d;
+        double bulletY = this.ship.getTranslateY();
 
         double bulletDirection = ship.getRotate();
 
-        Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection);
+        Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection, this.movement, shooter);
         return bullet;
     }
 
