@@ -30,24 +30,34 @@ public class Asteroid extends Rectangle{
         this.rotation = rnd.nextDouble() * 360; // assign a random rotation angle between 0 and 360 degrees
         RandomAsteroidGenerator generator = new RandomAsteroidGenerator();
         this.asteroid = generator.createAsteroid(size);
-        this.asteroid.setFill(Color.WHITE);
+        this.asteroid.setFill(Color.TRANSPARENT);
+        this.asteroid.setStroke(Color.WHITE);
         this.asteroid.setTranslateX(x);
         this.asteroid.setTranslateY(y);
     }
 
     public Polygon getAsteroid() {
-
         return asteroid; // returns the shape of the asteroid to the scene we call it on
     }
 
     public double getSize() {
-
         return this.size;
     }
 
+    public int getCurrentAsteroidX() {
+        return (int) asteroid.getTranslateX();
+    }
+    public int getCurrentAsteroidY() {
+        return (int) asteroid.getTranslateY();
+    }
     public double increaseSpeedOnDestruction() {
-        this.speed += 0.25;
+        this.speed += 0.15;
         return this.speed;
+    }
+
+    public double increaseRotationOnDestruction(){
+        this.rotation *= 3;
+        return this.rotation;
     }
 
     public void move() {
@@ -80,5 +90,4 @@ public class Asteroid extends Rectangle{
         Shape collisionArea = Shape.intersect(this.asteroid, bullet.getHitbox());
         return collisionArea.getBoundsInLocal().getWidth() != -1;
     }
-
 }
