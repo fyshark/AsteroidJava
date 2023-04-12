@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Recorder {
     private static List<HighScoreEntry> highScores = new ArrayList<>();
-    private static final String recordFile = "src\\highScores.txt";
+    private static final String recordFile = "src/highScores.txt";
 
     // Method to load high scores from file
     public static void loadHighScores() {
