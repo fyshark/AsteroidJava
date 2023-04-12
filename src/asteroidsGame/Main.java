@@ -214,6 +214,11 @@ public class Main extends Application {
             String playerName = name.getText();
             //scoresList.add(playerName);
             primaryStage.setScene(Inputname);
+
+            //Record and save player scores
+            Recorder.addHighScore(playerName, points);
+            Recorder.saveHighScores();
+
     });
         //This will just restart the game
         restartGame.setOnAction(event ->   {

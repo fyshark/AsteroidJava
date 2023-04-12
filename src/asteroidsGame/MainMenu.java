@@ -27,6 +27,9 @@ import javafx.scene.control.Button;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class MainMenu {
    Scene mainPageScene;
@@ -68,14 +71,18 @@ public class MainMenu {
         Button playGame = buttons[0];
         Button highScores = buttons[1];
 
+       // Load high scores
+       Recorder.loadHighScores();
+
         // Leaderboard Scene
         Label leaderboardTitle = new Label("Leaderboard");
         ListView<String> leaderboardList = new ListView<>();
-        ObservableList<String> scoresList = FXCollections.observableArrayList(
-                "Player1: 1000",
-                "Player2: 900",
-                "Player3: 800"
-        );
+        //Convert high scores to strings and add them to the ObservableList
+       List<String> highScoreStrings = Recorder.getHighScores().stream()
+               .map(entry -> entry.getName() + ": " + entry.getScore())
+               .collect(Collectors.toList());
+       ObservableList<String> scoresList = FXCollections.observableArrayList(highScoreStrings);
+
         leaderboardList.setItems(scoresList);
         backToPause = new Button("Back to Main Menu");
         backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
