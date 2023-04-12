@@ -98,7 +98,7 @@ public class MainMenu {
 
             //The game starts with BGM
             //new AePlayWave("src/BGM.wav").start();
-            new AePlayWave("src/take-off.wav").start();
+            new AePlayWave("src/start.wav").start();
         });
 
        highScores.setOnAction(e -> {
