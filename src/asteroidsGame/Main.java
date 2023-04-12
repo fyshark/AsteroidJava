@@ -55,7 +55,7 @@ public class Main extends Application {
     Player player;
 
     //lives
-    private int lives=3;
+    private final  AtomicInteger lives=new AtomicInteger(3);
     private final AtomicInteger points = new AtomicInteger(0);
 
     @Override
@@ -67,9 +67,9 @@ public class Main extends Application {
         addStageDimnesionListeners(primaryStage);
         createPauseScene(primaryStage);
         // Create the game scene
-        createGameScene(primaryStage);
+       createGameScene(primaryStage);
 
-       //primaryStage.show();
+       primaryStage.show();
 
     }
     public void SetstagesDimension(){
@@ -103,16 +103,7 @@ public class Main extends Application {
         //Game Scene
         Button pause = new Button("Pause");
         pause.setStyle("-fx-background-color: white;");
-        //So we are setting it to have a black colour
-        // Should Set the position of the pause button!
-//        pause.setTranslateX(stageWidth - pause.getWidth() - 50); // 20 is the margin from the right edge
-//        pause.setTranslateY(20); // 20 is the margin from the top edge
         pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the minimum size of the button
-        //So this method is used to handle the pause button will call the scene change object
-        //This is for the points
-//        Label pointsLabel = new Label("Points: 0");
-//        pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
-//        pointsLabel.setTextFill(Color.WHITE);
 
         pointsLabel=creatingPoints();
         VBox pointcard = new VBox();
@@ -126,11 +117,6 @@ public class Main extends Application {
         Region region1 = new Region();
         HBox.setHgrow(region1, javafx.scene.layout.Priority.ALWAYS);
 
-//        Label livesLabel = new Label("Lives: " + lives);
-//        livesLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
-//        livesLabel.setTextFill(Color.WHITE);
-//        livesLabel.setLayoutX(100);
-//        livesLabel.setLayoutY(20);
         Label livesLabel=creatingLives();
         HBox hBox1 = new HBox(livesLabel, region1);
         Livescard.getChildren().add(hBox1);
@@ -196,21 +182,14 @@ public class Main extends Application {
             double y = (pausePane.getHeight() - buttonContainer.getLayoutBounds().getHeight()) / 2;
             buttonContainer.relocate(x, y);
         });
-        // Some simple functionality for the buttons
-        // resume will return back to the primary scene (gameScene)
-        // closeGame will close the application/stage for the game
-        // restartGame will restart the application ... not yet built
-        // mainMenu will bring you back to the starting screen... not yet built
         VBox InputNames = new VBox(10);
 
-
-        //Cannot use Scanner as they don't work with JavaFx.So this is the javafx type of scanner object
         TextField name = new TextField();
         name.setText("Players name");
         name.setPrefHeight(25);
         name.setPrefWidth(50);
         name.setEditable(true);
-        //This creates a button to submit the name to the leaderboard
+
         Button submitbutton = new Button("Submit");
 
 
@@ -294,7 +273,8 @@ public class Main extends Application {
         gamePane=paneforGame();
         pointsLabel = creatingPoints();
         livesLabel = creatingLives();
-        SetstagesDimension();
+//        addStageDimnesionListeners(primaryStage);
+//        SetstagesDimension();
 
         // we create int positions X and Y that we will use to create our ship.
         // when we create a class for ship we call in an x and y position,
@@ -310,7 +290,31 @@ public class Main extends Application {
 
         // create an instance of Asteroid class
         initAstroids(playerX, playerY);
+        gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            switch (event.getCode()) {
+                case LEFT:
+                    player.turnLeft();
+                    break;
+                case RIGHT:
+                    player.turnRight();
+                    break;
+                case UP:
+                    player.accelerate();
+                    break;
+                case DOWN:
+                    player.decelerate();
+                    break;
+                case Z: // Update case for z key with player bullet flag
+                    Bullet bullet = player.shoot("playerBullet");
+                    if (bullet != null) {
+                        bullets.add(bullet);
+                        gamePane.getChildren().add(bullet);
+                    }
+                    break;
+            }
+        });
         new MainMenu(primaryStage, gameScene);
+
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -423,19 +427,21 @@ public class Main extends Application {
             if (player.collide(bullet) && bullet.shooter == "alienBullet" && player.isAlive) {
                 gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
                 System.out.println("Player Dead");
-                lives -= 1;
-                stop();
+                lives.decrementAndGet();
             }
         }
-//                if (lives<0){
-//                    gameScene.Stoping();
-//                    gameScene.Restarting();
-//                }
+                if (lives.get()<0){
+                    Label gameOver=new Label("Game Over");
+                    gameOver.setStyle("-fx-font-size: 16pt; -fx-pref-width: 200px;");
+                    gamePane.getChildren().add(gameOver);
+                    stop();
+                }
         if (points.get() > 10000) {
-            lives += 1;
-            if (lives > 5) {
-                lives = 5;
-            }
+            lives.incrementAndGet();
+//            if (lives.get() > 5) {
+//                int lives1=lives.get() ;
+//                lives1=5;
+//            }
         }
         asteroids.removeAll(asteroidsToRemove);
 
@@ -456,33 +462,10 @@ public class Main extends Application {
             }
         }
         pointsLabel.setText("Points: " + points.get());
-        livesLabel.setText("Lives: " + lives);
+        livesLabel.setText("Lives: " + lives.get());
     }
         };
         timer.start();
-        gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            switch (event.getCode()) {
-                case LEFT:
-                    player.turnLeft();
-                    break;
-                case RIGHT:
-                    player.turnRight();
-                    break;
-                case UP:
-                    player.accelerate();
-                    break;
-                case DOWN:
-                    player.decelerate();
-                    break;
-                case Z: // Update case for z key with player bullet flag
-                    Bullet bullet = player.shoot("playerBullet");
-                    if (bullet != null) {
-                        bullets.add(bullet);
-                        gamePane.getChildren().add(bullet);
-                    }
-                    break;
-            }
-        });
         primaryStage.show();
     }
 
