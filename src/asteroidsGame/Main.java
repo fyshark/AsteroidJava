@@ -113,7 +113,7 @@ public class Main extends Application {
 //        Label pointsLabel = new Label("Points: 0");
 //        pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
 //        pointsLabel.setTextFill(Color.WHITE);
-        Label pointslabel=
+
         pointsLabel=creatingPoints();
         VBox pointcard = new VBox();
         Region region = new Region();
