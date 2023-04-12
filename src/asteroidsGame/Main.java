@@ -62,30 +62,14 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Group 10 Asteroids Game");
-//        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-//        stageWidth = screenSize.getWidth();
-//        stageHeight = screenSize.getHeight();
-//        primaryStage.setWidth(stageWidth);
-//        primaryStage.setHeight(stageHeight);
-//
-//        //These are listeners. Depend on if its resized of not
-//        primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-//            stageWidth = (double) newVal;
-//            primaryStage.setWidth(stageWidth);
-//        });
-//
-//        primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-//            stageHeight = (double) newVal;
-//            primaryStage.setHeight(stageHeight);
-//        });
+
         SetstagesDimension();
         addStageDimnesionListeners(primaryStage);
-        // Create the pause scene
         createPauseScene(primaryStage);
         // Create the game scene
         createGameScene(primaryStage);
 
-       // primaryStage.show();
+       //primaryStage.show();
 
     }
     public void SetstagesDimension(){
@@ -94,6 +78,7 @@ public class Main extends Application {
         stageHeight = screenSize.getHeight();
     }
     public void addStageDimnesionListeners(Stage primaryStage) {
+
         primaryStage.setWidth(stageWidth);
         primaryStage.setHeight(stageHeight);
 
@@ -119,7 +104,6 @@ public class Main extends Application {
         Button pause = new Button("Pause");
         pause.setStyle("-fx-background-color: white;");
         //So we are setting it to have a black colour
-        paneforGame();
         // Should Set the position of the pause button!
 //        pause.setTranslateX(stageWidth - pause.getWidth() - 50); // 20 is the margin from the right edge
 //        pause.setTranslateY(20); // 20 is the margin from the top edge
@@ -155,8 +139,10 @@ public class Main extends Application {
         borderPane.setTop(pointcard);
         borderPane.setBottom(Livescard);
 
+        gamePane=paneforGame();
         gamePane.getChildren().addAll(pause, borderPane);
         gameScene = new Scene(gamePane, stageWidth, stageHeight);
+
         pause.setLayoutX(gamePane.getWidth() - 100);
         pause.setLayoutY(20);
 
@@ -233,20 +219,6 @@ public class Main extends Application {
         InputNames.setStyle("-fx-background-color: black");
         Scene Inputname = new Scene(InputNames, stageWidth, stageHeight);
 
-        resume.setOnAction(e -> primaryStage.setScene(gameScene));
-        closeGame.setOnAction(event -> primaryStage.close());
-        //This is for restarting with name
-        restartName.setOnAction(event -> {
-            String playerName = name.getText();
-            //scoresList.add(playerName);
-            primaryStage.setScene(Inputname);
-        });
-        //This will just restart the game
-        restartGame.setOnAction(event -> {
-            player.resetPosition();
-            primaryStage.setScene(gameScene);
-            primaryStage.show();
-        });
 
         Pane InputnamePane = new Pane();
         Pane ControlsPane = new Pane();
@@ -276,6 +248,21 @@ public class Main extends Application {
         Button BackGame = new Button("Back to Game");
         ControlDescription.getChildren().addAll(paragraph, BackGame);
         ControlDescription.setAlignment(Pos.CENTER);
+
+        resume.setOnAction(e -> primaryStage.setScene(gameScene));
+        closeGame.setOnAction(event -> primaryStage.close());
+        //This is for restarting with name
+        restartName.setOnAction(event->{
+            String playerName = name.getText();
+            //scoresList.add(playerName);
+            primaryStage.setScene(Inputname);
+        });
+        //This will just restart the game
+        restartGame.setOnAction(event ->   {
+            player.resetPosition();
+            primaryStage.setScene(gameScene);
+            primaryStage.show();
+        });
         // Create a scene and add the VBox to it
         Scene ControlsScene = new Scene(ControlDescription, 400, 200);
 
@@ -286,6 +273,7 @@ public class Main extends Application {
 
         mainMenu.setOnAction(e -> new MainMenu(primaryStage, gameScene));
     }
+
     public Label creatingPoints(){
         Label pointsLabel = new Label("Points: 0");
         pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
@@ -302,7 +290,8 @@ public class Main extends Application {
     }
 
     public void createGameScene(Stage primaryStage) {
-        paneforGame();
+
+        gamePane=paneforGame();
         pointsLabel = creatingPoints();
         livesLabel = creatingLives();
         SetstagesDimension();
@@ -322,15 +311,11 @@ public class Main extends Application {
         // create an instance of Asteroid class
         initAstroids(playerX, playerY);
         new MainMenu(primaryStage, gameScene);
-        new AnimationTimer() {
+        AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 // Your implementation of the handle method goes here
-                game(now);
-            }
-        }.start();
-    }
-        public void game(long now){
+
         //creates an alien every 8 seconds
 //                long currentTime = System.nanoTime();
         if (!alienAdded && now - lastAlienBirth > 8000L * 1000000 && player.isAlive) {
@@ -474,6 +459,31 @@ public class Main extends Application {
         livesLabel.setText("Lives: " + lives);
     }
         };
+        timer.start();
+        gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            switch (event.getCode()) {
+                case LEFT:
+                    player.turnLeft();
+                    break;
+                case RIGHT:
+                    player.turnRight();
+                    break;
+                case UP:
+                    player.accelerate();
+                    break;
+                case DOWN:
+                    player.decelerate();
+                    break;
+                case Z: // Update case for z key with player bullet flag
+                    Bullet bullet = player.shoot("playerBullet");
+                    if (bullet != null) {
+                        bullets.add(bullet);
+                        gamePane.getChildren().add(bullet);
+                    }
+                    break;
+            }
+        });
+        primaryStage.show();
     }
 
     private void initAstroids(int playerX, int playerY) {
