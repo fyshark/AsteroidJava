@@ -3,6 +3,10 @@
 .DS_store
 Group10_AsteroidsGame.iml
 out/
+/highScores.txt/
+highScores.txt
+src/highScores.txt
+
 
 ### Eclipse ###
 .apt_generated
