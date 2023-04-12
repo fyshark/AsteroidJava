@@ -169,7 +169,7 @@ public class Main extends Application {
         for (Node node : buttonContainer.getChildren()) {
             if (node instanceof Button) {
                 ((Button) node).setAlignment(Pos.CENTER);
-                ((Button) node).setStyle("-fx-font-size: 16pt; -fx-pref-width: 200px;");
+                (node).setStyle("-fx-font-size: 16pt; -fx-pref-width: 200px;");
             }
         }
 
