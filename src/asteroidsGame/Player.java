@@ -8,15 +8,25 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Map;
+import java.util.HashMap;
+
+import static asteroidsGame.Main.stageHeight;
+import static asteroidsGame.Main.stageWidth;
 
 public class Player extends BaseShip {
 
     public Polygon player;
 
     private static Polygon playerPolygon;
+
+    private double hyperspaceCoolDown = 250 * 1000000;
+    private long lastHyperspaceTime = System.nanoTime();
     boolean isAlive;
     Main gamepane;
+
     public Player(int x, int y) {
         super(createPlayerPolygon(), x, y);
         isAlive = true;
@@ -60,6 +70,71 @@ public class Player extends BaseShip {
             return collisionArea.getBoundsInLocal().getWidth() != -1;
     }
 
+    public void hyperspace(List<Asteroid> asteroids, List<Bullet> bullets) {
+
+        double tempClosest;
+        Map<Integer, Integer> entityPos = new HashMap<>();
+        for (Asteroid asteroid : asteroids) {
+            entityPos.put(asteroid.getCurrentAsteroidX(), asteroid.getCurrentAsteroidY());
+        }
+
+        for (Bullet bullet : bullets) {
+            entityPos.put((int)bullet.getX(), (int)bullet.getY());
+        }
+
+        int closestX = (int)(Math.random() * stageWidth);
+        int closestY = (int)(Math.random() * stageHeight);
+        for (Integer entityKey : entityPos.keySet()) {
+            double ac = Math.abs(entityKey - closestX);
+            double cb = Math.abs(entityPos.get(entityKey) - closestY);
+            tempClosest = Math.hypot(ac, cb);
+            if (tempClosest < 150) {
+                closestX = (int) (Math.random() * stageWidth);
+                closestY = (int) (Math.random() * stageHeight);
+            }
+        }
+
+
+        while(asteroidsPos.get(closestX) == closestY || bulletsPos.get(closestX) == closestY) {
+            closestX = (int) (Math.random() * stageWidth);
+            closestY = (int) (Math.random() * stageHeight);
+        }
+
+        for (Integer asteroidKey : asteroidsPos.keySet()) {
+            for (Double bulletKey : bulletsPos.keySet()) {
+                if (asteroidsPos.get(asteroidKey) == closestY || bulletsPos.get(bulletKey) == closestY) {
+                    closestX = (int) (Math.random() * stageWidth);
+                    closestY = (int) (Math.random() * stageHeight);
+                }
+            }
+        }
+
+        for (Bullet bullet : bullets) {
+            double ac = Math.abs(bullet.getX() - closestX);
+            double cb = Math.abs(bullet.getY() - closestY);
+            tempClosest = Math.hypot(ac, cb);
+            if (tempClosest < 150) {
+                closestX = (int)(Math.random() * stageWidth);
+                closestY = (int)(Math.random() * stageHeight);
+                positions.put(closestX, closestY);
+            }
+        }
+
+        while(positions.containsKey(closestX)) {
+            for (Integer key : positions.keySet()) {
+                if (positions.get(key) == closestY) {
+                    closestX = (int)(Math.random() * stageWidth);
+                    closestY = (int)(Math.random() * stageHeight);
+                }
+            }
+        }
+        double tempClosest;
+        int closestX = (int)(Math.random() * stageWidth);
+        int closestY = (int)(Math.random() * stageHeight);
+
+        this.ship.setTranslateX(closestX);
+        this.ship.setTranslateY(closestY);
+    }
 }
 
 

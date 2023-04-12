@@ -439,6 +439,9 @@ public class Main extends Application {
                         gamePane.getChildren().add(bullet);
                     }
                     break;
+                case SHIFT:
+                    player.hyperspace(asteroids, bullets);
+                    break;
             }
         });
         primaryStage.show();
