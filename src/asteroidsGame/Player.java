@@ -89,11 +89,10 @@ public class Player extends BaseShip {
             double cb = Math.abs(entityPos.get(entityKey) - closestY);
             tempClosest = Math.hypot(ac, cb);
             if (tempClosest < 150) {
-                closestX = (int) (Math.random() * stageWidth);
-                closestY = (int) (Math.random() * stageHeight);
+                closestX = (int)(Math.random() * stageWidth);
+                closestY = (int)(Math.random() * stageHeight);
             }
         }
-
 
         while(asteroidsPos.get(closestX) == closestY || bulletsPos.get(closestX) == closestY) {
             closestX = (int) (Math.random() * stageWidth);
