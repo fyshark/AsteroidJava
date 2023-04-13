@@ -3,7 +3,6 @@ package asteroidsGame;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
@@ -149,9 +148,9 @@ public abstract class BaseShip {
         Line line3 = new Line(x3, y3, x1, y1);
 
         // Set the color and stroke width of the lines
-        line1.setStroke(Color.WHITE);
-        line2.setStroke(Color.WHITE);
-        line3.setStroke(Color.WHITE);
+        line1.setStroke(AppConstants.AppColor.SHAPE.getColor());
+        line2.setStroke(AppConstants.AppColor.SHAPE.getColor());
+        line3.setStroke(AppConstants.AppColor.SHAPE.getColor());
         line1.setStrokeWidth(2);
         line2.setStrokeWidth(2);
         line3.setStrokeWidth(2);
