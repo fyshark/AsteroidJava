@@ -1,7 +1,6 @@
 package asteroidsGame;
 
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -30,8 +29,8 @@ public class Asteroid extends Rectangle{
         this.rotation = rnd.nextDouble() * 360; // assign a random rotation angle between 0 and 360 degrees
         RandomAsteroidGenerator generator = new RandomAsteroidGenerator();
         this.asteroid = generator.createAsteroid(size);
-        this.asteroid.setFill(Color.TRANSPARENT);
-        this.asteroid.setStroke(Color.WHITE);
+        this.asteroid.setFill(AppConstants.AppColor.FILL.getColor());
+        this.asteroid.setStroke(AppConstants.AppColor.SHAPE.getColor());
         this.asteroid.setTranslateX(x);
         this.asteroid.setTranslateY(y);
     }

@@ -3,29 +3,24 @@ package asteroidsGame;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
-import javafx.scene.Node;
-import javafx.scene.layout.Region;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class MainMenu {
@@ -58,24 +53,28 @@ public class MainMenu {
        // create a label
        Label gameName = new Label("ASTROIDS");
        gameName.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 150));
-       gameName.setTextFill(Color.WHITE);
+       gameName.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
         r.getChildren().add(gameName);
-        r.setStyle("-fx-background-color: black");
+        r.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
 
         // create buttons
         Button[] buttons = generateButtons(mainPageScene);
         Button playGame = buttons[0];
         Button highScores = buttons[1];
 
+       // Load high scores
+       Recorder.loadHighScores();
+
         // Leaderboard Scene
         Label leaderboardTitle = new Label("Leaderboard");
         ListView<String> leaderboardList = new ListView<>();
-        ObservableList<String> scoresList = FXCollections.observableArrayList(
-                "Player1: 1000",
-                "Player2: 900",
-                "Player3: 800"
-        );
+        //Convert high scores to strings and add them to the ObservableList
+       List<String> highScoreStrings = Recorder.getHighScores().stream()
+               .map(entry -> entry.getName() + ": " + entry.getScore())
+               .collect(Collectors.toList());
+       ObservableList<String> scoresList = FXCollections.observableArrayList(highScoreStrings);
+
         leaderboardList.setItems(scoresList);
         backToPause = new Button("Back to Main Menu");
         backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
@@ -155,11 +154,11 @@ public class MainMenu {
         Button playGame = new Button("Play Game");
         Button highScores = new Button("High Scores");
 
-       playGame.setTextFill(Color.WHITE);
-       highScores.setTextFill(Color.WHITE);
+       playGame.setTextFill(AppConstants.AppColor.SHAPE.getColor());
+       highScores.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
-       playGame.setStyle("-fx-focus-color: transparent; -fx-background-color: #000000; -fx-font-size:40");
-       highScores.setStyle("-fx-focus-color: transparent; -fx-background-color: #000000; -fx-font-size:40");
+       playGame.setStyle(AppConstants.ButtonStyle.BUTTON_STYLE.getStyle());
+       highScores.setStyle(AppConstants.ButtonStyle.BUTTON_STYLE.getStyle());
 
 
        playGame.setOnMouseEntered(new EventHandler() {

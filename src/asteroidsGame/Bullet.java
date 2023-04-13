@@ -1,7 +1,6 @@
 package asteroidsGame;
 
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Bullet extends Rectangle {
@@ -13,13 +12,13 @@ public class Bullet extends Rectangle {
     private Double crossX, crossY;
     private Float remindingDistance;
     String shooter;
-
+/*
     public Bullet(double x, double y, double direction, String shooter) {
         setWidth(BULLET_WIDTH); // Bullet width
         setHeight(5); // Bullet height
         setTranslateX(x); // x-coordinate of the bullet
         setTranslateY(y); // y-coordinate of the bullet
-        setFill(Color.WHITE);
+        setFill(AppConstants.AppColor.SHAPE.getColor());
         //flag for shooter, alien/player can't shoot themselves
         this.shooter = shooter;
 
@@ -31,13 +30,13 @@ public class Bullet extends Rectangle {
         double changeY = Math.sin(Math.toRadians(direction)) * speed;
         velocity = new Point2D(changeX, changeY);
     }
-
+*/
     public Bullet(double x, double y, double direction, Point2D baseSpeed, String shooter) {
         setWidth(BULLET_WIDTH); // Bullet width
         setHeight(5); // Bullet height
         setTranslateX(x); // x-coordinate of the bullet
         setTranslateY(y); // y-coordinate of the bullet
-        setFill(Color.WHITE);
+        setFill(AppConstants.AppColor.SHAPE.getColor());
         //flag for shooter, alien/player can't shoot themselves
         this.shooter = shooter;
 
@@ -123,6 +122,13 @@ public class Bullet extends Rectangle {
 
     public Rectangle getHitbox() {
         return new Rectangle(getTranslateX(), getTranslateY(), getWidth(), getHeight());
+    }
+
+    public int getCurrentBulletX() {
+        return (int) velocity.getX();
+    }
+    public int getCurrentBulletY() {
+        return (int) velocity.getY();
     }
 
 }
