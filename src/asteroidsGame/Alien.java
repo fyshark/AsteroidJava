@@ -1,10 +1,10 @@
 package asteroidsGame;
 
 import javafx.geometry.Point2D;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Polygon;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
-import static java.lang.System.currentTimeMillis;
 
 
 public class Alien extends BaseShip {
@@ -24,17 +24,27 @@ public class Alien extends BaseShip {
 
         //design of the alien
     private static Polygon createAlienPolygon() {
-        Polygon polygon = new Polygon(
-                23.4, 0, 32.4, 32.4,
-                0, 23.4, 32.4, 41.1, 0, 41.1,
-                32.4, 48.8, 0, 56.5, 32.4, 56.5,
-                23.4, 81, 41.1, 56.5, 48.8, 56.5,
-                41.1, 48.8, 48.8, 41.1, 41.1, 41.1,
-                48.8, 23.4, 41.1, 32.4
+        Polygon polygon = new Polygon();
+        polygon.getPoints().addAll(
+                30.0, 10.0,
+                40.0, 10.0,
+                45.0, 20.0,
+                65.0, 30.0,
+                45.0, 40.0,
+                25.0, 40.0,
+                5.0, 30.0,
+                25.0, 20.0,
+                30.0, 10.0,
+                40.0, 10.0,
+                45.0, 20.0,
+                30.0, 20.0,
+                5.0, 30.0,
+                65.0, 30.0
         );
-
-        polygon.setRotate(45);
-        polygon.setFill(Color.WHITE);
+//        polygon.setRotate(45);
+        polygon.setFill(AppConstants.AppColor.BACKGROUND.getColor());
+        polygon.setStroke(AppConstants.AppColor.SHAPE.getColor());
+        polygon.setStrokeWidth(2);
         return polygon;
     }
 
@@ -104,7 +114,6 @@ public class Alien extends BaseShip {
         // set the movement vector to the direction vector
         double bulletDirection = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
 
-        System.out.println(bulletDirection);
         return new Bullet(bulletX, bulletY, bulletDirection, alienMovement, shooter);
     }
 

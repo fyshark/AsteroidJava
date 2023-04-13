@@ -1,7 +1,6 @@
 package asteroidsGame;
 
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Bullet extends Rectangle {
@@ -19,7 +18,7 @@ public class Bullet extends Rectangle {
         setHeight(5); // Bullet height
         setTranslateX(x); // x-coordinate of the bullet
         setTranslateY(y); // y-coordinate of the bullet
-        setFill(Color.WHITE);
+        setFill(AppConstants.AppColor.SHAPE.getColor());
         //flag for shooter, alien/player can't shoot themselves
         this.shooter = shooter;
 
@@ -37,7 +36,7 @@ public class Bullet extends Rectangle {
         setHeight(5); // Bullet height
         setTranslateX(x); // x-coordinate of the bullet
         setTranslateY(y); // y-coordinate of the bullet
-        setFill(Color.WHITE);
+        setFill(AppConstants.AppColor.SHAPE.getColor());
         //flag for shooter, alien/player can't shoot themselves
         this.shooter = shooter;
 

@@ -6,10 +6,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.nio.file.FileSystems;
+
 
 public class Recorder {
     private static List<HighScoreEntry> highScores = new ArrayList<>();
-    private static final String recordFile = "src/highScores.txt";
+    static String separator = FileSystems.getDefault().getSeparator();
+    private static final String recordFile = "src"+ separator +"highScores.txt";
 
     // Method to load high scores from file
     public static void loadHighScores() {
