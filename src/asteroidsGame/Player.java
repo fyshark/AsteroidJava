@@ -76,7 +76,17 @@ public class Player extends BaseShip {
     //defines a collision between a player and a bullet
     public boolean collide(Bullet bullet) {
         Shape collisionArea = Shape.intersect(this.ship, bullet.getHitbox());
-        return collisionArea.getBoundsInLocal().getWidth() != -1;
+        boolean isCollide = collisionArea.getBoundsInLocal().getWidth() != -1;
+
+        if (isCollide && !isInvincible && bullet.shooter == "alienBullet") {
+            isAlive = false;
+            lives -= 1;
+            setInvincibilityTimer(2); // Make the player invincible and flash for 3 seconds
+            if (lives < 0) {
+                lives = 0;
+            }
+        }
+        return isCollide;
     }
 
     public void setInvincibilityTimer(double duration) {
@@ -143,6 +153,23 @@ public class Player extends BaseShip {
         this.ship.setTranslateX(closestX);
         this.ship.setTranslateY(closestY);
     }
+
+    //defines a collision between a player and a bullet
+    public boolean crashAlien(Alien other) {
+        Shape collisionArea = Shape.intersect(this.ship, other.ship);
+        boolean isCollide = collisionArea.getBoundsInLocal().getWidth() != -1;
+
+        if (isCollide && !isInvincible) {
+            isAlive = false;
+            lives -= 1;
+            setInvincibilityTimer(2); // Make the player invincible and flash for 3 seconds
+            if (lives < 0) {
+                lives = 0;
+            }
+        }
+        return isCollide;
+    }
+
 }
 
 

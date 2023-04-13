@@ -114,7 +114,6 @@ public class Alien extends BaseShip {
         // set the movement vector to the direction vector
         double bulletDirection = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
 
-        System.out.println(bulletDirection);
         return new Bullet(bulletX, bulletY, bulletDirection, alienMovement, shooter);
     }
 
