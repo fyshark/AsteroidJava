@@ -25,6 +25,11 @@ public class Player extends BaseShip {
     public int getLives() {
         return lives;
     }
+    public String getHearts() {
+        String hearts = "\u2764"; // Unicode value for the heart emoji
+        String livesHearts = hearts.repeat(lives); // Repeat the heart emoji for the number of lives
+        return livesHearts; // Return the String value of hearts
+    }
 
     public void setLives(int lives) {
         this.lives = lives;

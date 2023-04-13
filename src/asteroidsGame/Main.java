@@ -23,7 +23,8 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextField;
-
+import javafx.application.Platform;
+import javafx.scene.control.ToggleButton;
 //import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,19 +77,24 @@ public class Main extends Application {
             stageHeight = (double) newVal;
             primaryStage.setHeight(stageHeight);
         });
-
-        //Game Scene
-        Button pause = new Button("Pause");
-        pause.setStyle(AppConstants.ButtonStyle.BUTTON_BG.getStyle());
         //So we are setting it to have a black colour
         gamePane = new Pane();
         gamePane.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
-        // Should Set the position of the pause button!
-//        pause.setTranslateX(stageWidth - pause.getWidth() - 50); // 20 is the margin from the right edge
-//        pause.setTranslateY(20); // 20 is the margin from the top edge
-        pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE); //Creates the minimum size of the button
-        //So this method is used to handle the pause button will call the scene change object
-        //This is for the points
+
+        int playerX, playerY;
+        playerX = (int) (stageWidth / 2);
+        playerY = (int) (stageHeight / 2);
+
+        // Instantiating a Player called player that we can manipulate and adding it to the game scene.
+        Player player = new Player(playerX, playerY);
+        gamePane.getChildren().add(player.getCharacter());
+
+//Game Scene
+        ToggleButton pause = new ToggleButton("Pause");
+        pause.setStyle(AppConstants.ButtonStyle.BUTTON_BG.getStyle());
+        gamePane.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
+       // pause.setSelected(false);
+        //pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         Label pointsLabel = new Label("Points: 0");
         pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
         pointsLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
@@ -104,18 +110,6 @@ public class Main extends Application {
         Region region1 = new Region();
         HBox.setHgrow(region1, javafx.scene.layout.Priority.ALWAYS);
 
-        // we create int positions X and Y that we will use to create our ship.
-        // when we create a class for ship we call in an x and y position,
-        // by default these positions are going to be dead in the center.
-
-        int playerX, playerY;
-        playerX = (int) (stageWidth / 2);
-        playerY = (int) (stageHeight / 2);
-
-        // Instantiating a Player called player that we can manipulate and adding it to the game scene.
-        Player player = new Player(playerX, playerY);
-        gamePane.getChildren().addAll(player.getCharacter());
-
         Label livesLabel = new Label("Lives: " + player.getLives());
         livesLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
         livesLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
@@ -128,10 +122,26 @@ public class Main extends Application {
         borderPane.setTop(pointcard);
         borderPane.setBottom(Livescard);
 
-        gamePane.getChildren().addAll(pause, borderPane);
+
+// Timer label in VBox
+        Label timerLabel = new Label();
+        timerLabel.setText("Time: 0s");
+        timerLabel.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
+        timerLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
+        int middlex;
+        middlex = (int) (stageWidth / 3);
+        timerLabel.setLayoutX(middlex);
+        timerLabel.setLayoutY(10);
+
+        gamePane.getChildren().addAll(borderPane,pause,timerLabel);
+      primaryStage.setOnShown(event -> {
+          pause.toFront();
+            pause.setLayoutX(gamePane.getWidth() - 100);
+            pause.setLayoutY(20);
+        });
+
+
         gameScene = new Scene(gamePane, stageWidth, stageHeight);
-        pause.setLayoutX(gamePane.getWidth() - 100);
-        pause.setLayoutY(20);
 
         // create an instance of Asteroid class
         initAstroids(playerX, playerY);
@@ -140,7 +150,7 @@ public class Main extends Application {
         VBox buttonContainer = new VBox();
         //Pause Scene
         Label pauseSceneTit = new Label("Pause Menu");
-        pauseSceneTit.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 100));
+        pauseSceneTit.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
         //Will have to make each of these scenes
         Button resume = new Button("Resume");
         Button mainMenu = new Button("Main Menu");
@@ -186,6 +196,7 @@ public class Main extends Application {
             double y = (pausePane.getHeight() - buttonContainer.getLayoutBounds().getHeight()) / 2;
             buttonContainer.relocate(x, y);
         });
+
         // Some simple functionality for the buttons
         // resume will return back to the primary scene (gameScene)
         // closeGame will close the application/stage for the game
@@ -209,8 +220,11 @@ public class Main extends Application {
         InputNames.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
         Scene Inputname = new Scene(InputNames, stageWidth, stageHeight);
 
-        resume.setOnAction(e -> primaryStage.setScene(gameScene));
-        closeGame.setOnAction(event -> primaryStage.close());
+        closeGame.setOnAction(event -> {
+            //This closes the whole game!!! As in like exits the whole javafx
+            Platform.exit();
+            System.exit(0);
+        });
         //This is for restarting with name
         restartName.setOnAction(event -> {
             String playerName = name.getText();
@@ -230,7 +244,6 @@ public class Main extends Application {
             primaryStage.setScene(gameScene);
             primaryStage.show();
         });
-
         Pane InputnamePane = new Pane();
         Pane ControlsPane = new Pane();
         InputnamePane.getChildren().add(new Label("Player"));
@@ -265,12 +278,11 @@ public class Main extends Application {
         BackGame.setOnAction(e -> primaryStage.setScene(gameScene));
 
         controls.setOnAction(e -> primaryStage.setScene(ControlsScene));
-        pause.setOnAction(e -> primaryStage.setScene(pauseScene));
 
         mainMenu.setOnAction(e -> new MainMenu(primaryStage, gameScene));
+        long startTime = System.nanoTime();
 
         new MainMenu(primaryStage, gameScene);
-
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -292,8 +304,12 @@ public class Main extends Application {
                     });
 
                 }
+                long elapsedTime = (now - startTime) / 1_000_000_000;
 
-                //creates an alien 10s after alien dies
+                // update the text of the timerLabel
+                timerLabel.setText("Time: " + elapsedTime + "s");
+
+                //creates an alien every 8 seconds
                 long currentTime = System.nanoTime();
                 if (!alienAdded && ((currentTime - lastAlienDeath) > (10000L * 1000000)) && player.getLives() != 0) {
                     Random random_pos = new Random();
@@ -407,12 +423,6 @@ public class Main extends Application {
                         gamePane.getChildren().addAll(player.getCharacter());
                     }
                 }
-//
-//                if (lives<0){
-//                    gameScene.Stoping();
-//                    gameScene.Restarting();
-//                }
-
                 if (points.get() > 10000) {
                     int playerAddLives = player.getLives();
                     playerAddLives += 1;
@@ -450,7 +460,7 @@ public class Main extends Application {
                     }
                 }
                 pointsLabel.setText("Points: " + points.get());
-                livesLabel.setText("Lives: " + player.getLives());
+                livesLabel.setText(player.getHearts());
             }
         };
 
@@ -480,6 +490,18 @@ public class Main extends Application {
                 case SHIFT:
                     player.hyperspace(asteroids, bullets, alien, alienAdded);
                     break;
+            }
+        });
+        resume.setOnAction(e -> {timer.start();primaryStage.setScene(gameScene);});
+        pause.setOnAction(event -> {
+            if (pause.isSelected()) {
+                timer.stop();
+                primaryStage.setScene(pauseScene);
+                // stop animation timer or freeze game state
+            } else {
+                timer.start();
+                primaryStage.setScene(gameScene);
+                // start animation timer or unfreeze game state
             }
         });
         primaryStage.show();

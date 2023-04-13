@@ -1,14 +1,32 @@
 package asteroidsGame;
 
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class AppConstants {
+    public enum AppFont {
+        LABEL_FONT("Lucida Sans Unicode", FontWeight.BOLD, 45);
+
+        private final String family;
+        private final FontWeight weight;
+        private final double size;
+
+        AppFont(String family, FontWeight weight, double size) {
+            this.family = family;
+            this.weight = weight;
+            this.size = size;
+        }
+
+        public Font getFont() {
+            return Font.font(family, weight, size);
+        }
+    }
 
     public enum AppColor {
         BACKGROUND(Color.BLACK),
         SHAPE(Color.WHITE),
         FILL(Color.TRANSPARENT);
-
         private final Color color;
 
         AppColor(Color color) {
