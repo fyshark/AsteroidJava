@@ -219,6 +219,11 @@ public class Main extends Application {
         InputNames.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
         Scene Inputname = new Scene(InputNames, stageWidth, stageHeight);
 
+        primaryStage.setOnCloseRequest(event -> {
+            Platform.exit(); // Stop the JavaFX application
+            System.exit(0); // Stop the entire application
+        });
+
         closeGame.setOnAction(event -> {
             //This closes the whole game!!! As in like exits the whole javafx
             Platform.exit();
