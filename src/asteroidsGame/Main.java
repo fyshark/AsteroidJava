@@ -265,7 +265,8 @@ public class Main extends Application {
                 "Press the right arrows on your computer to turn right.\n" +
                 "Press the up key to allow the ship to accelerate.\n" +
                 "Press the down key to allow your ship to decelerate.\n " +
-                "Press Z to shoot your bullets \n");
+                "Press Z to shoot your bullets \n"+
+                "Press shift to use hyperspace. \n");
 //       paragraph.setWrapText(true);
         // Add the label to the VBox
         paragraph.setTextFill(AppConstants.AppColor.SHAPE.getColor());
