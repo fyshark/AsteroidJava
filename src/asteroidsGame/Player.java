@@ -19,9 +19,6 @@ public class Player extends BaseShip {
 
     private static Polygon playerPolygon;
     private boolean isInvincible = false;
-
-    private double hyperspaceCoolDown = 250 * 1000000;
-    private long lastHyperspaceTime = System.nanoTime();
     boolean isAlive;
     Main gamepane;
 
@@ -39,7 +36,6 @@ public class Player extends BaseShip {
         super(createPlayerPolygon(), x, y);
         isAlive = true;
     }
-
 
     private static Polygon createPlayerPolygon() {
         // create the polygon shape for the player's ship
@@ -113,35 +109,37 @@ public class Player extends BaseShip {
         invincibilityTimer.play();
     }
 
-    public void hyperspace(List<Asteroid> asteroids, List<Bullet> bullets) {
+    public void hyperspace(List<Asteroid> asteroids, List<Bullet> bullets, Alien alien, Boolean alienAdded) {
 
-        double tempClosest;
+        double distance;
         Map<Integer, Integer> entityPos = new HashMap<>();
         for (Asteroid asteroid : asteroids) {
             entityPos.put(asteroid.getCurrentAsteroidX(), asteroid.getCurrentAsteroidY());
         }
 
         for (Bullet bullet : bullets) {
-            entityPos.put((int)bullet.getX(), (int)bullet.getY());
+            entityPos.put((int) bullet.getX(), (int) bullet.getY());
         }
 
-        int closestX = (int)(Math.random() * stageWidth);
-        int closestY = (int)(Math.random() * stageHeight);
-        System.out.println(entityPos);
-        System.out.println(closestX);
+        if (alienAdded) {
+            entityPos.put((int) alien.getPosition().getX(), (int) alien.getPosition().getY());
+        }
+
+        int closestX = (int) (Math.random() * stageWidth);
+        int closestY = (int) (Math.random() * stageHeight);
         while (entityPos.get(closestX) != null) {
-            System.out.println("test");
             for (Integer entityKey : entityPos.keySet()) {
                 double ac = Math.abs(entityKey - closestX);
                 double cb = Math.abs(entityPos.get(entityKey) - closestY);
-                tempClosest = Math.hypot(ac, cb);
-                if (tempClosest < 150) {
-                    closestX = (int)(Math.random() * stageWidth);
-                    closestY = (int)(Math.random() * stageHeight);
+                distance = Math.hypot(ac, cb);
+                if (distance < 150) {
+                    closestX = (int) (Math.random() * stageWidth);
+                    closestY = (int) (Math.random() * stageHeight);
                 }
             }
         }
 
+        setInvincibilityTimer(1);
         this.ship.setTranslateX(closestX);
         this.ship.setTranslateY(closestY);
     }

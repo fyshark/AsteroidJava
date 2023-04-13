@@ -291,16 +291,14 @@ public class Main extends Application {
                         primaryStage.show();
                     });
 
-//                    });
                 }
+
                 //creates an alien every 8 seconds
                 long currentTime = System.nanoTime();
                 if (!alienAdded && currentTime - lastAlienBirth > 8000L * 1000000 && player.isAlive) {
                     Random random_pos = new Random();
                     int appearWidth = (int) stageWidth;
                     int appearHeight = (int) stageHeight;
-                    System.out.println(appearWidth);
-                    System.out.println(appearHeight);
                     alien = initAliens(random_pos.nextInt(appearWidth), random_pos.nextInt(appearHeight));
                     lastAlienBirth = System.nanoTime();
                     alienAdded = true;
@@ -311,7 +309,6 @@ public class Main extends Application {
                 if (alienAdded && player.isAlive) {
                     alien.move();
                 }
-
 
                 asteroids.forEach(asteroid -> {
                     asteroid.move();
@@ -326,6 +323,7 @@ public class Main extends Application {
                     if (player.crash(asteroid) && asteroid.getSize() < 30) {
                         gamePane.getChildren().remove(asteroid.getAsteroid());
                     }
+
                     //if alien is on screen and it crashes into an asteroid, it's removed
                     if (alienAdded && alien.crash(asteroid)) {
                         gamePane.getChildren().remove(alien.getCharacter());
@@ -400,10 +398,9 @@ public class Main extends Application {
                         alienAdded = false;
                     }
 
-                    // WIP if a player collides with a bullet player is declared dead -- for testing
                     if (player.collide(bullet) && bullet.shooter == "alienBullet" && player.isAlive) {
-                        gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
-                        System.out.println("Player Dead");
+                        gamePane.getChildren().addAll(player.splitBaseShipPolygon());
+                        player.resetPosition();
                     }
                 }
 //
@@ -467,7 +464,7 @@ public class Main extends Application {
                     }
                     break;
                 case SHIFT:
-                    player.hyperspace(asteroids, bullets);
+                    player.hyperspace(asteroids, bullets, alien, alienAdded);
                     break;
             }
         });
