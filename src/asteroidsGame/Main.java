@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -26,10 +27,8 @@ import javafx.scene.control.TextField;
 import javafx.application.Platform;
 import javafx.scene.control.ToggleButton;
 //import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 //This is for the points
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main extends Application {
@@ -467,31 +466,39 @@ public class Main extends Application {
 
         timer.start();
 
+        //Used to store the currently pressed key and is a collection that does not allow duplicate elements
+        Set<KeyCode> pressedKeys = new HashSet<>();
+
+        //Adding event filters to game scenes for handling key press events
         gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            switch (event.getCode()) {
-                case LEFT:
-                    player.turnLeft();
-                    break;
-                case RIGHT:
-                    player.turnRight();
-                    break;
-                case UP:
-                    player.accelerate();
-                    break;
-                case DOWN:
-                    player.decelerate();
-                    break;
-                case Z: // Update case for z key with player bullet flag
-                    Bullet bullet = player.shoot("playerBullet");
-                    if (bullet != null) {
-                        bullets.add(bullet);
-                        gamePane.getChildren().addAll(bullet);
-                    }
-                    break;
-                case SHIFT:
-                    player.hyperspace(asteroids, bullets, alien, alienAdded);
-                    break;
+            KeyCode code = event.getCode();
+            pressedKeys.add(code);
+
+            if (pressedKeys.contains(KeyCode.LEFT)) {
+                player.turnLeft();
             }
+            if (pressedKeys.contains(KeyCode.RIGHT)) {
+                player.turnRight();
+            }
+            if (pressedKeys.contains(KeyCode.UP)) {
+                player.accelerate();
+            }
+            if (pressedKeys.contains(KeyCode.DOWN)) {
+                player.decelerate();
+            }
+            if (pressedKeys.contains(KeyCode.Z)) {
+                Bullet bullet = player.shoot("playerBullet");
+                if (bullet != null) {
+                    bullets.add(bullet);
+                    gamePane.getChildren().add(bullet);
+                }
+            }
+        });
+
+        //When a key is released, it is removed from the pressedKeys collection
+        gameScene.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+            KeyCode code = event.getCode();
+            pressedKeys.remove(code);
         });
         resume.setOnAction(e -> {timer.start();primaryStage.setScene(gameScene);});
         pause.setOnAction(event -> {
@@ -505,6 +512,7 @@ public class Main extends Application {
                 // start animation timer or unfreeze game state
             }
         });
+
         primaryStage.show();
     }
 

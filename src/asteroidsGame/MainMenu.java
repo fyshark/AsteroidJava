@@ -89,7 +89,8 @@ public class MainMenu {
             primaryStage.setScene(gameScene);
 
             //The game starts with BGM
-            new AePlayWave("src/BGM.wav").start();
+            //new AePlayWave("src/BGM.wav").start();
+            new AePlayWave("src/start.wav").start();
         });
 
        highScores.setOnAction(e -> {

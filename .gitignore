@@ -4,6 +4,12 @@
 Group10_AsteroidsGame.iml
 out/
 
+/highScores.txt/
+highScores.txt
+src/highScores.txt
+Recorder.class
+
+
 ### Eclipse ###
 .apt_generated
 .classpath
