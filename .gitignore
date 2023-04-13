@@ -3,9 +3,11 @@
 .DS_store
 Group10_AsteroidsGame.iml
 out/
+
 /highScores.txt/
 highScores.txt
 src/highScores.txt
+Recorder.class
 
 
 ### Eclipse ###
