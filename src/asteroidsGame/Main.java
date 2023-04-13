@@ -503,13 +503,11 @@ public class Main extends Application {
         resume.setOnAction(e -> {timer.start();primaryStage.setScene(gameScene);});
         pause.setOnAction(event -> {
             if (pause.isSelected()) {
-                timer.stop();
                 primaryStage.setScene(pauseScene);
-                // stop animation timer or freeze game state
+                timer.stop();
             } else {
                 timer.start();
                 primaryStage.setScene(gameScene);
-                // start animation timer or unfreeze game state
             }
         });
 
