@@ -296,7 +296,6 @@ public class Main extends Application {
                 //creates an alien 10s after alien dies
                 long currentTime = System.nanoTime();
                 if (!alienAdded && ((currentTime - lastAlienDeath) > (10000L * 1000000)) && player.getLives() != 0) {
-                    System.out.print("test");
                     Random random_pos = new Random();
                     int appearWidth = 0;
                     int appearHeight = (int) stageHeight;
