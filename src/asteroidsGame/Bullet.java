@@ -13,7 +13,7 @@ public class Bullet extends Rectangle {
     private Double crossX, crossY;
     private Float remindingDistance;
     String shooter;
-
+/*
     public Bullet(double x, double y, double direction, String shooter) {
         setWidth(BULLET_WIDTH); // Bullet width
         setHeight(5); // Bullet height
@@ -31,7 +31,7 @@ public class Bullet extends Rectangle {
         double changeY = Math.sin(Math.toRadians(direction)) * speed;
         velocity = new Point2D(changeX, changeY);
     }
-
+*/
     public Bullet(double x, double y, double direction, Point2D baseSpeed, String shooter) {
         setWidth(BULLET_WIDTH); // Bullet width
         setHeight(5); // Bullet height
@@ -123,6 +123,13 @@ public class Bullet extends Rectangle {
 
     public Rectangle getHitbox() {
         return new Rectangle(getTranslateX(), getTranslateY(), getWidth(), getHeight());
+    }
+
+    public int getCurrentBulletX() {
+        return (int) velocity.getX();
+    }
+    public int getCurrentBulletY() {
+        return (int) velocity.getY();
     }
 
 }
