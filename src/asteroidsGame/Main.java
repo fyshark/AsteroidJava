@@ -498,6 +498,9 @@ public class Main extends Application {
                     gamePane.getChildren().add(bullet);
                 }
             }
+            if (pressedKeys.contains(KeyCode.SHIFT)) {
+                player.hyperspace(asteroids, bullets, alien, alienAdded);
+            }
         });
 
         //When a key is released, it is removed from the pressedKeys collection
