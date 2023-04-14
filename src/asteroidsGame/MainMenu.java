@@ -109,22 +109,12 @@ public class MainMenu {
 // set the scene
         primaryStage.setScene(mainPageScene);
 
-        playGame.setLayoutY(height / 2f + 100);
-        highScores.setLayoutY(height / 2f + 180);
-        gameName.setLayoutY(height / 2f - 100);
+        playGame.setLayoutY(height / 3f + 100);
+        highScores.setLayoutY(height / 3f + 180);
+        gameName.setLayoutY(height / 4f - 100);
 
         centerElements(width, gameName, playGame, highScores);
 
-        mainPageScene.widthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            playGame.setLayoutX(newValue.doubleValue() / 2 - (playGame.widthProperty().getValue() / 2));
-            highScores.setLayoutX(newValue.doubleValue() / 2 - (highScores.widthProperty().getValue() / 2));
-            gameName.setLayoutX(newValue.doubleValue() / 2 - (gameName.widthProperty().getValue() / 2));
-        });
-        mainPageScene.heightProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            playGame.setLayoutY(newValue.doubleValue() / 2 - (playGame.heightProperty().getValue() / 2 - 100));
-            highScores.setLayoutY(newValue.doubleValue() / 2 - (highScores.heightProperty().getValue() / 2 - 180));
-            gameName.setLayoutY(newValue.doubleValue() / 2 - (gameName.heightProperty().getValue() / 2 + 100));
-        });
 
         primaryStage.show();
     }

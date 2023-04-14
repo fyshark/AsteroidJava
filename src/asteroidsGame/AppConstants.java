@@ -6,7 +6,7 @@ import javafx.scene.text.FontWeight;
 
 public class AppConstants {
     public enum AppFont {
-        LABEL_FONT("Lucida Sans Unicode", FontWeight.BOLD, 45);
+        LABEL_FONT("Lucida Sans Unicode", FontWeight.BOLD, 50);
 
         private final String family;
         private final FontWeight weight;

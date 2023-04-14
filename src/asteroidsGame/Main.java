@@ -97,43 +97,46 @@ public class Main extends Application {
         gamePane.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
        // pause.setSelected(false);
         //pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        // Create the pointcard object
         Label pointsLabel = new Label("Points: 0");
-        pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
+        pointsLabel.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
         pointsLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
-        VBox pointcard = new VBox();
-        Region region = new Region();
-        HBox.setHgrow(region, javafx.scene.layout.Priority.ALWAYS);
-        HBox hBox = new HBox(pointsLabel, region);
-        pointcard.getChildren().add(hBox);
+        VBox pointcard = new VBox(pointsLabel);
         pointcard.setAlignment(Pos.CENTER_LEFT);
 
-        VBox Livescard = new VBox();
-        Region region1 = new Region();
-        HBox.setHgrow(region1, javafx.scene.layout.Priority.ALWAYS);
-
+// Create the Livescard object
         Label livesLabel = new Label("Lives: " + player.getLives());
-        livesLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
+        livesLabel.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
         livesLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
-        livesLabel.setLayoutX(100);
-        livesLabel.setLayoutY(20);
-        HBox hBox1 = new HBox(livesLabel, region1);
-        Livescard.getChildren().add(hBox1);
-        Livescard.setAlignment(Pos.CENTER_LEFT);
-        BorderPane borderPane = new BorderPane();
-        borderPane.setTop(pointcard);
-        borderPane.setBottom(Livescard);
 
+        VBox Livescard = new VBox(livesLabel);
+        Livescard.setAlignment(Pos.CENTER_LEFT);
+
+// Create the Levels object
+        Label Levels = new Label("Level   " + Level);
+        Levels.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
+        Levels.setTextFill(AppConstants.AppColor.SHAPE.getColor());
+
+        VBox levelsCard = new VBox(Levels);
+        levelsCard.setAlignment(Pos.CENTER_LEFT);
+
+// Stack the objects vertically using a VBox
+        VBox vbox = new VBox(pointcard,levelsCard,Livescard);
+        vbox.setAlignment(Pos.TOP_LEFT);
+        vbox.setSpacing(10);
+
+// Add the VBox to the left-hand side of the screen using a BorderPane
+        BorderPane borderPane = new BorderPane();
+        borderPane.setLeft(vbox);
 
 // Timer label in VBox
         Label timerLabel = new Label();
         timerLabel.setText("Time: 0s");
         timerLabel.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
         timerLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
-        int middlex;
-        middlex = (int) (stageWidth / 3);
-        timerLabel.setLayoutX(middlex);
-        timerLabel.setLayoutY(10);
+        timerLabel.setLayoutX(gamePane.getWidth()+600);
+        timerLabel.setLayoutY(20);
 
         gamePane.getChildren().addAll(borderPane,pause,timerLabel);
       primaryStage.setOnShown(event -> {
@@ -157,7 +160,7 @@ public class Main extends Application {
         Button resume = new Button("Resume");
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
-        Button restartName = new Button("Restart ");
+        Button restartName = new Button("Restart");
         Button restartGame = new Button("Restart Game");
         Button controls = new Button("Controls");
 
@@ -470,6 +473,7 @@ public class Main extends Application {
                 if (asteroids.toArray().length == 0){
                     Level += 1;
                     initAstroids(playerX,playerY,Level);
+                    Levels.setText("Level" + Level);
                 }
             }
         };
