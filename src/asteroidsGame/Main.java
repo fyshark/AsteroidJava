@@ -157,7 +157,7 @@ public class Main extends Application {
         Button resume = new Button("Resume");
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
-        Button restartName = new Button("Restart with Name");
+        Button restartName = new Button("Restart ");
         Button restartGame = new Button("Restart Game");
         Button controls = new Button("Controls");
 
