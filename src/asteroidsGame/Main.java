@@ -335,15 +335,12 @@ public class Main extends Application {
 
                 asteroids.forEach(asteroid -> {
                     asteroid.move();
-                    if (player.crash(asteroid) && asteroid.getSize() >= 30) {
+                    if (player.crash(asteroid)) {
                         gamePane.getChildren().removeAll(player.getCharacter());
                         gamePane.getChildren().addAll(player.splitBaseShipPolygon());
                         player.resetPosition();
                         player.setInvincibilityTimer(2);
                         gamePane.getChildren().addAll(player.getCharacter());
-                    }
-                    if (player.crash(asteroid) && asteroid.getSize() < 30) {
-                        gamePane.getChildren().removeAll(asteroid.getAsteroid());
                     }
 
                     //if alien is on screen and it crashes into an asteroid, it's removed
