@@ -7,12 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
@@ -71,17 +73,24 @@ public class MainMenu {
         ListView<String> leaderboardList = new ListView<>();
         //Convert high scores to strings and add them to the ObservableList
        List<String> highScoreStrings = Recorder.getHighScores().stream()
-               .map(entry -> entry.getName() + ": " + entry.getScore())
+               .map(entry -> String.format("%1$-" + (400 - entry.getName().length()) / 2 + "s%2$s%3$" + (200 - (200 - entry.getName().length()) / 2 - entry.getName().length()) + "s",
+                       "", entry.getName(), entry.getScore()))
                .collect(Collectors.toList());
+
        ObservableList<String> scoresList = FXCollections.observableArrayList(highScoreStrings);
 
+       leaderboardTitle.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
+       leaderboardTitle.setTextFill(AppConstants.AppColor.SHAPE.getColor());
         leaderboardList.setItems(scoresList);
         backToPause = new Button("Back to Main Menu");
         backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
 
        VBox leaderboardLayout = new VBox(10);
        leaderboardLayout.getChildren().addAll(leaderboardTitle, leaderboardList, backToPause);
+       leaderboardLayout.setAlignment(Pos.CENTER);
+       leaderboardLayout.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
        Scene leaderboardScene = new Scene(leaderboardLayout, width, height);
+
 
        r.getChildren().addAll(buttons);
 
@@ -105,7 +114,6 @@ public class MainMenu {
         gameName.setLayoutY(height / 2f - 100);
 
         centerElements(width, gameName, playGame, highScores);
-
 
         mainPageScene.widthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             playGame.setLayoutX(newValue.doubleValue() / 2 - (playGame.widthProperty().getValue() / 2));
