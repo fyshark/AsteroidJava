@@ -56,26 +56,17 @@ public class Player extends BaseShip {
     }
 
     public boolean crash(Asteroid asteroid) {
-        if (asteroid.getSize() < 30) {
-            Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
-            boolean isCrash = collisionArea.getBoundsInLocal().getWidth() != -1;
-            if (isCrash) {
-                isAlive = true;
+        Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
+        boolean isCrash = collisionArea.getBoundsInLocal().getWidth() != -1;
+        if (isCrash && !isInvincible) {
+            isAlive = false;
+            lives -= 1;
+            setInvincibilityTimer(2); // Make the player invincible and flash for 3 seconds
+            if (lives < 0) {
+                lives = 0;
             }
-            return isCrash;
-        } else {
-            Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
-            boolean isCrash = collisionArea.getBoundsInLocal().getWidth() != -1;
-            if (isCrash && !isInvincible) {
-                isAlive = false;
-                lives -= 1;
-                setInvincibilityTimer(2); // Make the player invincible and flash for 3 seconds
-                if (lives < 0) {
-                    lives = 0;
-                }
-            }
-            return isCrash;
         }
+        return isCrash;
     }
 
     //defines a collision between a player and a bullet
