@@ -49,7 +49,7 @@ public class Main extends Application {
     Alien alien;
 
     // initialising the first level
-    public int Level = 1;
+    public int Level = 10;
 
     //flag for an alien on the screen
     Boolean alienAdded = false;
@@ -333,6 +333,9 @@ public class Main extends Application {
                     alien.move();
                 }
 
+                List<Asteroid> crashedAsteroidsToRemove = new ArrayList<>();
+                List<Asteroid> crashedAsteroidsToAdd = new ArrayList<>();
+
                 asteroids.forEach(asteroid -> {
                     asteroid.move();
                     if (player.crash(asteroid)) {
@@ -341,6 +344,24 @@ public class Main extends Application {
                         player.resetPosition();
                         player.setInvincibilityTimer(2);
                         gamePane.getChildren().addAll(player.getCharacter());
+
+                        double newSize = asteroid.getSize() / 2;
+
+                        crashedAsteroidsToRemove.add(asteroid);
+                        gamePane.getChildren().removeAll(asteroid.getAsteroid());
+
+                        // split the hit asteroid into two smaller asteroids if it's big or medium
+                        if (asteroid.getSize() >= 30) {
+
+                            Asteroid asteroid1 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX()+60, asteroid.getCurrentAsteroidY()+60);
+                            Asteroid asteroid2 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX()-60, asteroid.getCurrentAsteroidY()-60);
+
+                            crashedAsteroidsToAdd.add(asteroid1);
+                            crashedAsteroidsToAdd.add(asteroid2);
+
+                            // add the new asteroids to the gamePane
+                            gamePane.getChildren().addAll(asteroid1.getAsteroid(), asteroid2.getAsteroid());
+                        }
                     }
 
                     //if alien is on screen and it crashes into an asteroid, it's removed
@@ -351,6 +372,14 @@ public class Main extends Application {
                         gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
                     }
                 });
+
+                gamePane.getChildren().removeAll((crashedAsteroidsToRemove));
+
+                // add the new asteroids created from splitting to the main list
+                asteroids.addAll(crashedAsteroidsToAdd);
+
+                // remove the asteroids that were hit by a bullet
+                asteroids.removeAll(crashedAsteroidsToRemove);
 
                 // Getting null pointers if we remove the items from the array completely
                 // these are temporary arrays used to detect whether a bullet has collided
