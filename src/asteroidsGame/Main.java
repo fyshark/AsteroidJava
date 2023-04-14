@@ -208,6 +208,10 @@ public class Main extends Application {
         // restartGame will restart the application ... not yet built
         // mainMenu will bring you back to the starting screen... not yet built
         VBox InputNames = new VBox(10);
+        Label Gameover=new Label("Game Over");
+        Font font = Font.font("Lucida Sans Unicode", FontWeight.BOLD, 150);
+        Gameover.setFont(font);
+        Gameover.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
 
         //Cannot use Scanner as they don't work with JavaFx.So this is the javafx type of scanner object
@@ -220,7 +224,7 @@ public class Main extends Application {
         Button submitbutton = new Button("Submit");
 
 
-        InputNames.getChildren().addAll(name, submitbutton, restartGame);
+        InputNames.getChildren().addAll(Gameover,name, submitbutton, restartGame);
         InputNames.setAlignment(Pos.CENTER); // Center the VBox
         InputNames.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
         Scene Inputname = new Scene(InputNames, stageWidth, stageHeight);
