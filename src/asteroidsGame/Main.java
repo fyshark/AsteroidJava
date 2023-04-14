@@ -48,6 +48,9 @@ public class Main extends Application {
     //instantiating an Alien called alien that is added to the game scene
     Alien alien;
 
+    // initialising the first level
+    public int Level = 1;
+
     //flag for an alien on the screen
     Boolean alienAdded = false;
 
@@ -143,7 +146,7 @@ public class Main extends Application {
         gameScene = new Scene(gamePane, stageWidth, stageHeight);
 
         // create an instance of Asteroid class
-        initAstroids(playerX, playerY);
+        initAstroids(playerX, playerY, Level);
 
         // Create the VBox layout container just to center everything
         VBox buttonContainer = new VBox();
@@ -332,15 +335,12 @@ public class Main extends Application {
 
                 asteroids.forEach(asteroid -> {
                     asteroid.move();
-                    if (player.crash(asteroid) && asteroid.getSize() >= 30) {
+                    if (player.crash(asteroid)) {
                         gamePane.getChildren().removeAll(player.getCharacter());
                         gamePane.getChildren().addAll(player.splitBaseShipPolygon());
                         player.resetPosition();
                         player.setInvincibilityTimer(2);
                         gamePane.getChildren().addAll(player.getCharacter());
-                    }
-                    if (player.crash(asteroid) && asteroid.getSize() < 30) {
-                        gamePane.getChildren().removeAll(asteroid.getAsteroid());
                     }
 
                     //if alien is on screen and it crashes into an asteroid, it's removed
@@ -382,12 +382,12 @@ public class Main extends Application {
                             if (asteroid.getSize() >= 30) {
 
                                 if (asteroid.getSize() >= 60) {
-                                    points.addAndGet(100);
+                                    points.addAndGet(20);
                                 } else if (asteroid.getSize() > 30 && asteroid.getSize() < 60) {
                                     points.addAndGet(50);
                                 }
-                                Asteroid asteroid1 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX(), asteroid.getCurrentAsteroidY());
-                                Asteroid asteroid2 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX(), asteroid.getCurrentAsteroidY());
+                                Asteroid asteroid1 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX()+30, asteroid.getCurrentAsteroidY()+30);
+                                Asteroid asteroid2 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX()-30, asteroid.getCurrentAsteroidY()-30);
 
                                 asteroidsToAdd.add(asteroid1);
                                 asteroidsToAdd.add(asteroid2);
@@ -395,7 +395,7 @@ public class Main extends Application {
                                 // add the new asteroids to the gamePane
                                 gamePane.getChildren().addAll(asteroid1.getAsteroid(), asteroid2.getAsteroid());
                             } else {
-                                points.addAndGet(50);
+                                points.addAndGet(100);
                                 asteroidsToRemove.add(asteroid);
                             }
                             break;
@@ -466,6 +466,11 @@ public class Main extends Application {
                 }
                 pointsLabel.setText("Points: " + points.get());
                 livesLabel.setText(player.getHearts());
+
+                if (asteroids.toArray().length == 0){
+                    Level += 1;
+                    initAstroids(playerX,playerY,Level);
+                }
             }
         };
 
@@ -522,8 +527,8 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private void initAstroids(int playerX, int playerY) {
-        for (int i = 0; i < 10; i++) {
+    private void initAstroids(int playerX, int playerY, int level) {
+        for (int i = 0; i < level; i++) {
             double size = Math.random() * 20 + 60; // random size between 60 and 80
             double speed = Math.random() * 1; // random speed between 1
             int x = (int) (Math.random() * stageWidth);
