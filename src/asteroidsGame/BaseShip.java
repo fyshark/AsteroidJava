@@ -12,20 +12,20 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class BaseShip {
-    int defaultShipX; // the default x-coordinate of the player's ship
-    int defaultShipY; // the default y-coordinate of the player's ship
+    int defaultShipX; // the default x-coordinate of the BaseShip
+    int defaultShipY; // the default y-coordinate of the BaseShip
 
-    Point2D defaultShipSpeed; // the default speed of the player's ship
+    Point2D defaultShipSpeed; // the default speed of the BaseShip
 
-    public Polygon ship; // make ship public so that Player class can access the shape -> required for detecting collision.
-    private Point2D movement; // the current movement vector of the player's ship
+    public Polygon ship; // make ship public so that subclass can access the shape -> required for detecting collision.
+    protected Point2D movement; // the current movement vector of the BaseShip
 
     private long lastBulletTime; // Add a field to store the last bullet time
     private static final long SHOOT_CD = 250 * 1000000; // 250 ms
 
     public BaseShip(Polygon polygon, int x, int y) {
 
-        // constructor to create the player's ship
+        // constructor to create the BaseShip
         // takes x and y coordinates as parameters which determines where the ship is loaded into our scene.
         this.ship = polygon;
         this.defaultShipX = x; // we remember the default value for X and Y so that we can reuse these values when restarting the game.
@@ -44,57 +44,10 @@ public abstract class BaseShip {
     }
 
     public Polygon getCharacter() {
-        return this.ship; // returns the shape of the player's ship to the scene we call it on
+        return this.ship; // returns the shape of the BaseShip to the scene we call it on
     }
 
-    public void resetPosition() {
-        // resets the player's ship to its default position and speed
-        this.ship.setTranslateX(defaultShipX);
-        this.ship.setTranslateY(defaultShipY);
-        this.ship.setRotate(-90);
-        this.movement = this.defaultShipSpeed;
-    }
-
-    public void turnLeft() {
-        // turns the player's ship to the left by 30 degrees
-        this.ship.setRotate(this.ship.getRotate() - 30);
-    }
-
-    public void turnRight() {
-        // turns the player's ship to the right by 30 degrees
-        this.ship.setRotate(this.ship.getRotate() + 30);
-    }
-
-    public void accelerate() {
-        // accelerates the player's ship in the direction it is facing
-        double acceleration = 0.18; // the rate of acceleration
-        double maxSpeed = 8.0; // the maximum speed the ship can travel
-        double changeX = Math.cos(Math.toRadians(ship.getRotate())) * acceleration;
-        double changeY = Math.sin(Math.toRadians(ship.getRotate())) * acceleration;
-        movement = movement.add(changeX, changeY); // add the acceleration vector to the movement vector
-        double speed = movement.magnitude(); // calculate the speed of the ship
-        if (speed > maxSpeed) {
-            // normalize() returns a vector with the same direction as movement, but with a magnitude (or length) of 1.0.
-            // This is useful when you want to maintain the direction of a vector but adjust its length.
-            // multiply() is a method on Point2D that multiplies the x and y components of the vector by a value.
-            // In this case, we're multiplying the normalized vector (with a magnitude of 1.0) by maxSpeed, which gives us a vector with the same direction as movement but a magnitude of maxSpeed.
-            // We're then updating the movement vector to be the new vector we just calculated in which has a magnitude of at most maxSpeed.
-            movement = movement.normalize().multiply(maxSpeed);
-        }
-    }
-
-    public void decelerate() {
-        // decelerates the player's ship by a certain amount
-        double deceleration = 0.12; // the rate of deceleration
-        // subtract the deceleration vector from the movement vector to get the ship to 'slow down'
-        movement = movement.subtract(movement.multiply(deceleration));
-    }
-
-    public void move() {
-        // moves the player's ship based on its current movement vector
-        this.ship.setTranslateX(this.ship.getTranslateX() + this.movement.getX());
-        this.ship.setTranslateY(this.ship.getTranslateY() + this.movement.getY());
-
+    public void screenBounds() {
         // The conditions below checks that the ship stays on screen.
         if (this.ship.getTranslateX() < 0) {
             this.ship.setTranslateX(this.ship.getTranslateX() + Main.stageWidth);
@@ -130,6 +83,18 @@ public abstract class BaseShip {
 
         Bullet bullet = new Bullet(bulletX, bulletY, bulletDirection, this.movement, shooter);
         return bullet;
+    }
+
+    //defines how a collision between an a BaseShip and an asteroid
+    public boolean crash(Asteroid asteroid) {
+        Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
+        return collisionArea.getBoundsInLocal().getWidth() != -1;
+    }
+
+    //defines what a collision is for a BaseShip with a bullet
+    public boolean collide(Bullet bullet) {
+        Shape collisionArea = Shape.intersect(this.ship, bullet.getHitbox());
+        return collisionArea.getBoundsInLocal().getWidth() != -1;
     }
 
     public Point2D getPosition() {

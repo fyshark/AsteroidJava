@@ -29,6 +29,7 @@ import javafx.scene.control.ToggleButton;
 //import java.awt.*;
 import java.util.*;
 //This is for the points
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main extends Application {
@@ -97,43 +98,46 @@ public class Main extends Application {
         gamePane.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
        // pause.setSelected(false);
         //pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        // Create the pointcard object
         Label pointsLabel = new Label("Points: 0");
-        pointsLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
+        pointsLabel.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
         pointsLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
-        VBox pointcard = new VBox();
-        Region region = new Region();
-        HBox.setHgrow(region, javafx.scene.layout.Priority.ALWAYS);
-        HBox hBox = new HBox(pointsLabel, region);
-        pointcard.getChildren().add(hBox);
+        VBox pointcard = new VBox(pointsLabel);
         pointcard.setAlignment(Pos.CENTER_LEFT);
 
-        VBox Livescard = new VBox();
-        Region region1 = new Region();
-        HBox.setHgrow(region1, javafx.scene.layout.Priority.ALWAYS);
-
+// Create the Livescard object
         Label livesLabel = new Label("Lives: " + player.getLives());
-        livesLabel.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
+        livesLabel.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
         livesLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
-        livesLabel.setLayoutX(100);
-        livesLabel.setLayoutY(20);
-        HBox hBox1 = new HBox(livesLabel, region1);
-        Livescard.getChildren().add(hBox1);
-        Livescard.setAlignment(Pos.CENTER_LEFT);
-        BorderPane borderPane = new BorderPane();
-        borderPane.setTop(pointcard);
-        borderPane.setBottom(Livescard);
 
+        VBox Livescard = new VBox(livesLabel);
+        Livescard.setAlignment(Pos.CENTER_LEFT);
+
+// Create the Levels object
+        Label Levels = new Label("Level   " + Level);
+        Levels.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
+        Levels.setTextFill(AppConstants.AppColor.SHAPE.getColor());
+
+        VBox levelsCard = new VBox(Levels);
+        levelsCard.setAlignment(Pos.CENTER_LEFT);
+
+// Stack the objects vertically using a VBox
+        VBox vbox = new VBox(pointcard,levelsCard,Livescard);
+        vbox.setAlignment(Pos.TOP_LEFT);
+        vbox.setSpacing(10);
+
+// Add the VBox to the left-hand side of the screen using a BorderPane
+        BorderPane borderPane = new BorderPane();
+        borderPane.setLeft(vbox);
 
 // Timer label in VBox
         Label timerLabel = new Label();
         timerLabel.setText("Time: 0s");
         timerLabel.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
         timerLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
-        int middlex;
-        middlex = (int) (stageWidth / 3);
-        timerLabel.setLayoutX(middlex);
-        timerLabel.setLayoutY(10);
+        timerLabel.setLayoutX(gamePane.getWidth()+600);
+        timerLabel.setLayoutY(20);
 
         gamePane.getChildren().addAll(borderPane,pause,timerLabel);
       primaryStage.setOnShown(event -> {
@@ -157,7 +161,7 @@ public class Main extends Application {
         Button resume = new Button("Resume");
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
-        Button restartName = new Button("Restart with Name");
+        Button restartName = new Button("Restart");
         Button restartGame = new Button("Restart Game");
         Button controls = new Button("Controls");
 
@@ -205,6 +209,10 @@ public class Main extends Application {
         // restartGame will restart the application ... not yet built
         // mainMenu will bring you back to the starting screen... not yet built
         VBox InputNames = new VBox(10);
+        Label Gameover=new Label("Game Over");
+        Font font = Font.font("Lucida Sans Unicode", FontWeight.BOLD, 150);
+        Gameover.setFont(font);
+        Gameover.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
 
         //Cannot use Scanner as they don't work with JavaFx.So this is the javafx type of scanner object
@@ -217,10 +225,11 @@ public class Main extends Application {
         Button submitbutton = new Button("Submit");
 
 
-        InputNames.getChildren().addAll(name, submitbutton, restartGame);
+        InputNames.getChildren().addAll(Gameover,name, submitbutton, restartGame);
         InputNames.setAlignment(Pos.CENTER); // Center the VBox
         InputNames.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
         Scene Inputname = new Scene(InputNames, stageWidth, stageHeight);
+
 
         primaryStage.setOnCloseRequest(event -> {
             Platform.exit(); // Stop the JavaFX application
@@ -287,6 +296,8 @@ public class Main extends Application {
 
         controls.setOnAction(e -> primaryStage.setScene(ControlsScene));
 
+        AtomicBoolean gameOver = new AtomicBoolean(false);
+
         mainMenu.setOnAction(e -> new MainMenu(primaryStage, gameScene));
         long startTime = System.nanoTime();
 
@@ -295,13 +306,14 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
 
-                if(player.getLives() == 0) {
-                        String playerName = name.getText();
-                        primaryStage.setScene(Inputname);
+                if(player.getLives() == 0 && !gameOver.get()) {
+                    gameOver.set(true);
+                    String playerName = name.getText();
+                    primaryStage.setScene(Inputname);
 
-                        //Record and save player scores
-                        Recorder.addHighScore(playerName, points);
-                        Recorder.saveHighScores();
+                    // Record and save player scores
+                    Recorder.addHighScore(playerName, points);
+                    Recorder.saveHighScores();
 
                     restartGame.setOnAction(event -> {
                         player.resetPosition();
@@ -309,6 +321,7 @@ public class Main extends Application {
                         points.set(0);
                         primaryStage.setScene(gameScene);
                         primaryStage.show();
+                        gameOver.set(false);
                     });
 
                 }
@@ -317,7 +330,7 @@ public class Main extends Application {
                 // update the text of the timerLabel
                 timerLabel.setText("Time: " + elapsedTime + "s");
 
-                //creates an alien every 8 seconds
+    //creates an alien every 8 seconds
                 long currentTime = System.nanoTime();
                 if (!alienAdded && ((currentTime - lastAlienDeath) > (10000L * 1000000)) && player.getLives() != 0) {
                     Random random_pos = new Random();
@@ -338,7 +351,7 @@ public class Main extends Application {
 
                 asteroids.forEach(asteroid -> {
                     asteroid.move();
-                    if (player.crash(asteroid)) {
+                    if (player.playerCrash(asteroid)) {
                         gamePane.getChildren().removeAll(player.getCharacter());
                         gamePane.getChildren().addAll(player.splitBaseShipPolygon());
                         player.resetPosition();
@@ -439,16 +452,16 @@ public class Main extends Application {
 
                     //if there is an alien on screen & it collides with a player's bullet
                     if (alienAdded && alien.collide(bullet) && bullet.shooter == "playerBullet" && player.getLives() != 0) {
+                        alienAdded = false;
                         gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
                         gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
                         bulletsToRemove.add(bullet);
                         points.addAndGet(500);
                         lastAlienDeath = System.nanoTime();
-                        alienAdded = false;
                     }
 
                     //if the player collides with an alien's bullet
-                    if (player.collide(bullet) && bullet.shooter == "alienBullet" && player.getLives() != 0) {
+                    if (player.playerCollide(bullet) && bullet.shooter == "alienBullet" && player.getLives() != 0) {
                         lastAlienDeath = System.nanoTime();
                         gamePane.getChildren().removeAll(player.getCharacter());
                         gamePane.getChildren().addAll(player.splitBaseShipPolygon());
@@ -483,6 +496,7 @@ public class Main extends Application {
                         gamePane.getChildren().addAll(bullet);
                     }
                     if (player.crashAlien(alien)) {
+                        alienAdded = false;
                         gamePane.getChildren().removeAll(player.getCharacter());
                         gamePane.getChildren().addAll(player.splitBaseShipPolygon());
                         gamePane.getChildren().removeAll(alien.getCharacter());
@@ -499,6 +513,7 @@ public class Main extends Application {
                 if (asteroids.toArray().length == 0){
                     Level += 1;
                     initAstroids(playerX,playerY,Level);
+                    Levels.setText("Level" + Level);
                 }
             }
         };
@@ -521,9 +536,6 @@ public class Main extends Application {
             }
             if (pressedKeys.contains(KeyCode.UP)) {
                 player.accelerate();
-            }
-            if (pressedKeys.contains(KeyCode.DOWN)) {
-                player.decelerate();
             }
             if (pressedKeys.contains(KeyCode.Z)) {
                 Bullet bullet = player.shoot("playerBullet");

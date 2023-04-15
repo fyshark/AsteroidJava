@@ -1,10 +1,7 @@
 package asteroidsGame;
 
 import javafx.geometry.Point2D;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 
 public class Alien extends BaseShip {
 
@@ -40,14 +37,14 @@ public class Alien extends BaseShip {
                 5.0, 30.0,
                 65.0, 30.0
         );
-//        polygon.setRotate(45);
+
         polygon.setFill(AppConstants.AppColor.BACKGROUND.getColor());
         polygon.setStroke(AppConstants.AppColor.SHAPE.getColor());
         polygon.setStrokeWidth(2);
         return polygon;
     }
 
-    //alien moves differently than the player, defined here
+    //alien moves function
     public void move() {
 
         int ALIEN_SPEED = 1;
@@ -67,29 +64,7 @@ public class Alien extends BaseShip {
 
         this.ship.setTranslateX(this.ship.getTranslateX() + dx);
         this.ship.setTranslateY(this.ship.getTranslateY() + dy);
-
-        // The conditions below checks that the ship stays on screen.
-        if (this.ship.getTranslateX() < 0) {
-            this.ship.setTranslateX(this.ship.getTranslateX() + Main.stageWidth);
-        }
-
-        if (this.ship.getTranslateX() > Main.stageWidth) {
-            this.ship.setTranslateX(this.ship.getTranslateX() % Main.stageWidth);
-        }
-
-        if (this.ship.getTranslateY() < 0) {
-            this.ship.setTranslateY(this.ship.getTranslateY() + Main.stageHeight);
-        }
-
-        if (this.ship.getTranslateY() > Main.stageHeight) {
-            this.ship.setTranslateY(this.ship.getTranslateY() % Main.stageHeight);
-        }
-    }
-
-    //defines what a collision is for the alien
-    public boolean collide(Bullet bullet) {
-        Shape collisionArea = Shape.intersect(this.ship, bullet.getHitbox());
-        return collisionArea.getBoundsInLocal().getWidth() != -1;
+        screenBounds();
     }
 
     //how the alien shoots the player
@@ -116,10 +91,6 @@ public class Alien extends BaseShip {
         return new Bullet(bulletX, bulletY, bulletDirection, alienMovement, shooter);
     }
 
-    //defines how a collision between an alien and an asteroid
-    public boolean crash(Asteroid asteroid) {
-        Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
-        return collisionArea.getBoundsInLocal().getWidth() != -1;
-    }
+
 
 }
