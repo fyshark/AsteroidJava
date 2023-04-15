@@ -343,7 +343,7 @@ public class Main extends Application {
 
                 asteroids.forEach(asteroid -> {
                     asteroid.move();
-                    if (player.crash(asteroid)) {
+                    if (player.playerCrash(asteroid)) {
                         gamePane.getChildren().removeAll(player.getCharacter());
                         gamePane.getChildren().addAll(player.splitBaseShipPolygon());
                         player.resetPosition();
@@ -418,16 +418,16 @@ public class Main extends Application {
 
                     //if there is an alien on screen & it collides with a player's bullet
                     if (alienAdded && alien.collide(bullet) && bullet.shooter == "playerBullet" && player.getLives() != 0) {
+                        alienAdded = false;
                         gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
                         gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
                         bulletsToRemove.add(bullet);
                         points.addAndGet(500);
                         lastAlienDeath = System.nanoTime();
-                        alienAdded = false;
                     }
 
                     //if the player collides with an alien's bullet
-                    if (player.collide(bullet) && bullet.shooter == "alienBullet" && player.getLives() != 0) {
+                    if (player.playerCollide(bullet) && bullet.shooter == "alienBullet" && player.getLives() != 0) {
                         lastAlienDeath = System.nanoTime();
                         gamePane.getChildren().removeAll(player.getCharacter());
                         gamePane.getChildren().addAll(player.splitBaseShipPolygon());
@@ -462,6 +462,7 @@ public class Main extends Application {
                         gamePane.getChildren().addAll(bullet);
                     }
                     if (player.crashAlien(alien)) {
+                        alienAdded = false;
                         gamePane.getChildren().removeAll(player.getCharacter());
                         gamePane.getChildren().addAll(player.splitBaseShipPolygon());
                         gamePane.getChildren().removeAll(alien.getCharacter());
@@ -501,9 +502,6 @@ public class Main extends Application {
             }
             if (pressedKeys.contains(KeyCode.UP)) {
                 player.accelerate();
-            }
-            if (pressedKeys.contains(KeyCode.DOWN)) {
-                player.decelerate();
             }
             if (pressedKeys.contains(KeyCode.Z)) {
                 Bullet bullet = player.shoot("playerBullet");

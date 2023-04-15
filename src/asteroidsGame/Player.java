@@ -6,9 +6,7 @@ import javafx.animation.Timeline;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -20,21 +18,6 @@ public class Player extends BaseShip {
     private static Polygon playerPolygon;
     private boolean isInvincible = false;
     boolean isAlive;
-    Main gamepane;
-
-    public int getLives() {
-        return lives;
-    }
-    public String getHearts() {
-        String hearts = "\u2764"; // Unicode value for the heart emoji
-        String livesHearts = hearts.repeat(lives); // Repeat the heart emoji for the number of lives
-        return livesHearts; // Return the String value of hearts
-    }
-
-    public void setLives(int lives) {
-        this.lives = lives;
-    }
-
     private int lives = 3;
 
     public Player(int x, int y) {
@@ -55,9 +38,65 @@ public class Player extends BaseShip {
         return playerPolygon;
     }
 
-    public boolean crash(Asteroid asteroid) {
-        Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
-        boolean isCrash = collisionArea.getBoundsInLocal().getWidth() != -1;
+    public int getLives() {
+        return lives;
+    }
+
+    public String getHearts() {
+        String hearts = "\u2764"; // Unicode value for the heart emoji
+        String livesHearts = hearts.repeat(lives); // Repeat the heart emoji for the number of lives
+        return livesHearts; // Return the String value of hearts
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void accelerate() {
+        // accelerates the player's ship in the direction it is facing
+        double acceleration = 0.18; // the rate of acceleration
+        double maxSpeed = 8.0; // the maximum speed the ship can travel
+        double changeX = Math.cos(Math.toRadians(ship.getRotate())) * acceleration;
+        double changeY = Math.sin(Math.toRadians(ship.getRotate())) * acceleration;
+        movement = movement.add(changeX, changeY); // add the acceleration vector to the movement vector
+        double speed = movement.magnitude(); // calculate the speed of the ship
+        if (speed > maxSpeed) {
+            // normalize() returns a vector with the same direction as movement, but with a magnitude (or length) of 1.0.
+            // This is useful when you want to maintain the direction of a vector but adjust its length.
+            // multiply() is a method on Point2D that multiplies the x and y components of the vector by a value.
+            // In this case, we're multiplying the normalized vector (with a magnitude of 1.0) by maxSpeed, which gives us a vector with the same direction as movement but a magnitude of maxSpeed.
+            // We're then updating the movement vector to be the new vector we just calculated in which has a magnitude of at most maxSpeed.
+            movement = movement.normalize().multiply(maxSpeed);
+        }
+    }
+
+    public void move() {
+        // moves the player's ship based on its current movement vector
+        this.ship.setTranslateX(this.ship.getTranslateX() + this.movement.getX());
+        this.ship.setTranslateY(this.ship.getTranslateY() + this.movement.getY());
+        screenBounds();
+    }
+
+    public void resetPosition() {
+        // resets the player's ship to its default position and speed
+        this.ship.setTranslateX(defaultShipX);
+        this.ship.setTranslateY(defaultShipY);
+        this.ship.setRotate(-90);
+        this.movement = this.defaultShipSpeed;
+    }
+
+    public void turnLeft() {
+        // turns the player's ship to the left by 30 degrees
+        this.ship.setRotate(this.ship.getRotate() - 30);
+    }
+
+    public void turnRight() {
+        // turns the player's ship to the right by 30 degrees
+        this.ship.setRotate(this.ship.getRotate() + 30);
+    }
+
+    public boolean playerCrash(Asteroid asteroid) {
+        boolean isCrash = crash(asteroid);
         if (isCrash && !isInvincible) {
             isAlive = false;
             lives -= 1;
@@ -70,9 +109,8 @@ public class Player extends BaseShip {
     }
 
     //defines a collision between a player and a bullet
-    public boolean collide(Bullet bullet) {
-        Shape collisionArea = Shape.intersect(this.ship, bullet.getHitbox());
-        boolean isCollide = collisionArea.getBoundsInLocal().getWidth() != -1;
+    public boolean playerCollide(Bullet bullet) {
+        boolean isCollide = collide(bullet);
 
         if (isCollide && !isInvincible && bullet.shooter == "alienBullet") {
             isAlive = false;
@@ -150,7 +188,7 @@ public class Player extends BaseShip {
         this.ship.setTranslateY(closestY);
     }
 
-    //defines a collision between a player and a bullet
+    //defines a collision between a player and an alien
     public boolean crashAlien(Alien other) {
         Shape collisionArea = Shape.intersect(this.ship, other.ship);
         boolean isCollide = collisionArea.getBoundsInLocal().getWidth() != -1;
