@@ -29,6 +29,7 @@ import javafx.scene.control.ToggleButton;
 //import java.awt.*;
 import java.util.*;
 //This is for the points
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main extends Application {
@@ -295,6 +296,8 @@ public class Main extends Application {
 
         controls.setOnAction(e -> primaryStage.setScene(ControlsScene));
 
+        AtomicBoolean gameOver = new AtomicBoolean(false);
+
         mainMenu.setOnAction(e -> new MainMenu(primaryStage, gameScene));
         long startTime = System.nanoTime();
 
@@ -303,13 +306,14 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
 
-                if(player.getLives() == 0) {
-                        String playerName = name.getText();
-                        primaryStage.setScene(Inputname);
+                if(player.getLives() == 0 && !gameOver.get()) {
+                    gameOver.set(true);
+                    String playerName = name.getText();
+                    primaryStage.setScene(Inputname);
 
-                        //Record and save player scores
-                        Recorder.addHighScore(playerName, points);
-                        Recorder.saveHighScores();
+                    // Record and save player scores
+                    Recorder.addHighScore(playerName, points);
+                    Recorder.saveHighScores();
 
                     restartGame.setOnAction(event -> {
                         player.resetPosition();
@@ -317,6 +321,7 @@ public class Main extends Application {
                         points.set(0);
                         primaryStage.setScene(gameScene);
                         primaryStage.show();
+                        gameOver.set(false);
                     });
 
                 }
@@ -325,7 +330,7 @@ public class Main extends Application {
                 // update the text of the timerLabel
                 timerLabel.setText("Time: " + elapsedTime + "s");
 
-                //creates an alien every 8 seconds
+    //creates an alien every 8 seconds
                 long currentTime = System.nanoTime();
                 if (!alienAdded && ((currentTime - lastAlienDeath) > (10000L * 1000000)) && player.getLives() != 0) {
                     Random random_pos = new Random();
