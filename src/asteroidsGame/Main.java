@@ -414,6 +414,9 @@ public class Main extends Application {
                             // remove the hit asteroid from the asteroids list
                             asteroidsToRemove.add(asteroid);
 
+                            //boom sound
+                            new AePlayWave("src/boom.wav").start();
+
                             // remove the hit asteroid and bullet from the gamePane
                             gamePane.getChildren().removeAll(asteroid.getAsteroid(), bullet);
 
@@ -458,6 +461,9 @@ public class Main extends Application {
                         bulletsToRemove.add(bullet);
                         points.addAndGet(500);
                         lastAlienDeath = System.nanoTime();
+
+                        //boom sound
+                        new AePlayWave("src/boom.wav").start();
                     }
 
                     //if the player collides with an alien's bullet
@@ -542,6 +548,9 @@ public class Main extends Application {
                 if (bullet != null) {
                     bullets.add(bullet);
                     gamePane.getChildren().add(bullet);
+
+                    //Shooting sounds
+                    new AePlayWave("src/shoot.wav").start();
                 }
             }
             if (pressedKeys.contains(KeyCode.SHIFT)) {
