@@ -1,5 +1,7 @@
-package asteroidsGame;
+package asteroidsGame.flyingobjects;
 
+import asteroidsGame.constants.AppConstants;
+import asteroidsGame.Main;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 
@@ -11,7 +13,7 @@ public class Bullet extends Rectangle {
     private double initX, initY;
     private Double crossX, crossY;
     private Float remindingDistance;
-    String shooter;
+    public String shooter;
 /*
     public Bullet(double x, double y, double direction, String shooter) {
         setWidth(BULLET_WIDTH); // Bullet width

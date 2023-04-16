@@ -1,6 +1,10 @@
-package asteroidsGame;
+package asteroidsGame.pages;
 
 
+import asteroidsGame.controllers.Recorder;
+import asteroidsGame.constants.AppConstants;
+import asteroidsGame.controllers.AnimationController;
+import asteroidsGame.soundeffets.AePlayWave;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,7 +18,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
@@ -29,7 +32,7 @@ public class MainMenu {
    Scene mainPageScene;
 
 
-   MainMenu(Stage primaryStage, Scene gameScene) {
+   public MainMenu(Stage primaryStage, Scene gameScene, AnimationController timer) {
        int width = (int) Screen.getPrimary().getBounds().getWidth();
        int height = (int) Screen.getPrimary().getBounds().getHeight();
 
@@ -96,7 +99,7 @@ public class MainMenu {
 
        playGame.setOnAction(e -> {
             primaryStage.setScene(gameScene);
-
+            timer.startWithNewTime();
             //The game starts with BGM
             //new AePlayWave("src/BGM.wav").start();
             new AePlayWave("src/start.wav").start();

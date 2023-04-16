@@ -1,4 +1,4 @@
-package asteroidsGame;
+package asteroidsGame.constants;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;

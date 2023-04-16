@@ -1,6 +1,4 @@
-package asteroidsGame;
-
-import javafx.beans.binding.When;
+package asteroidsGame.soundeffets;
 
 import javax.sound.sampled.*;
 import java.io.File;

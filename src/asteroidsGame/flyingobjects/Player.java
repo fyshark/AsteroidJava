@@ -1,5 +1,6 @@
-package asteroidsGame;
+package asteroidsGame.flyingobjects;
 
+import asteroidsGame.constants.AppConstants;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
