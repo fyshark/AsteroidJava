@@ -1,4 +1,4 @@
-package asteroidsGame;
+package asteroidsGame.controllers;
 
 import java.io.*;
 import java.util.ArrayList;

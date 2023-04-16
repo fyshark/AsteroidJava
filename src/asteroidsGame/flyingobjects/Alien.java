@@ -1,5 +1,6 @@
-package asteroidsGame;
+package asteroidsGame.flyingobjects;
 
+import asteroidsGame.constants.AppConstants;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
 

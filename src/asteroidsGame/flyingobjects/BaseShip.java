@@ -1,5 +1,7 @@
-package asteroidsGame;
+package asteroidsGame.flyingobjects;
 
+import asteroidsGame.constants.AppConstants;
+import asteroidsGame.Main;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
