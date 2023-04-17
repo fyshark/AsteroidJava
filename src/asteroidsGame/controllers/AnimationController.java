@@ -4,6 +4,7 @@ import asteroidsGame.flyingobjects.Alien;
 import asteroidsGame.flyingobjects.Asteroid;
 import asteroidsGame.flyingobjects.Bullet;
 import asteroidsGame.flyingobjects.Player;
+import asteroidsGame.soundeffets.AePlayWave;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -180,6 +181,9 @@ public class AnimationController extends AnimationTimer {
             for (Asteroid asteroid : asteroids) {
                 if (asteroid.collide(bullet)) {
 
+                    // add a sound when collide
+                    new AePlayWave("src/boom.wav").start();
+
                     // increase the player's points
                     bulletsToRemove.add(bullet);
                     gamePane.getChildren().removeAll(bulletsToRemove);
@@ -225,6 +229,7 @@ public class AnimationController extends AnimationTimer {
 
             //if there is an alien on screen & it collides with a player's bullet
             if (alienAdded && alien.collide(bullet) && bullet.shooter == "playerBullet" && player.getLives() != 0) {
+                new AePlayWave("src/boom.wav").start();
                 alienAdded = false;
                 gamePane.getChildren().removeAll(alien.getCharacter(), bullet);
                 gamePane.getChildren().addAll(alien.splitBaseShipPolygon());
@@ -235,6 +240,7 @@ public class AnimationController extends AnimationTimer {
 
             //if the player collides with an alien's bullet
             if (player.playerCollide(bullet) && bullet.shooter == "alienBullet" && player.getLives() != 0) {
+                new AePlayWave("src/boom.wav").start();
                 lastAlienDeath = System.nanoTime();
                 gamePane.getChildren().removeAll(player.getCharacter());
                 gamePane.getChildren().addAll(player.splitBaseShipPolygon());
@@ -269,6 +275,7 @@ public class AnimationController extends AnimationTimer {
                 gamePane.getChildren().addAll(bullet);
             }
             if (player.crashAlien(alien)) {
+                new AePlayWave("src/boom.wav").start();
                 alienAdded = false;
                 gamePane.getChildren().removeAll(player.getCharacter());
                 gamePane.getChildren().addAll(player.splitBaseShipPolygon());

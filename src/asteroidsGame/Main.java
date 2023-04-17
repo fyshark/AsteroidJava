@@ -8,6 +8,7 @@ import asteroidsGame.flyingobjects.Asteroid;
 import asteroidsGame.flyingobjects.Bullet;
 import asteroidsGame.flyingobjects.Player;
 import asteroidsGame.pages.MainMenu;
+import asteroidsGame.soundeffets.AePlayWave;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -352,6 +353,9 @@ public class Main extends Application {
                 if (bullet != null) {
                     bullets.add(bullet);
                     gamePane.getChildren().add(bullet);
+
+                    //Shooting sounds
+                    new AePlayWave("src/shoot.wav").start();
                 }
             }
             if (pressedKeys.contains(KeyCode.SHIFT)) {
