@@ -38,7 +38,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Main extends Application {
 
     //two scene objects being used displayed in primary stage
-    Scene gameScene, pauseScene;
+    Scene gameScene;
+    Scene pauseScene;
 
     //This gets the stagewidth and height. Change according to screen size
     public static double STAGEWIDTH, STAGEHEIGHT;
@@ -52,9 +53,6 @@ public class Main extends Application {
 
     private final AtomicInteger levels = new AtomicInteger(1);
 
-
-//lives
-//    private int lives=3;
 
     private final AtomicInteger points = new AtomicInteger(0);
 
@@ -160,11 +158,12 @@ public class Main extends Application {
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
         Button restartGame = new Button("Restart Game");
-        Button controls = new Button("Controls");
+      //  Button controls = new Button("Controls");
+
 
         buttonContainer.setSpacing(10); // Set the spacing between buttons
         buttonContainer.setAlignment(Pos.CENTER);
-        buttonContainer.getChildren().addAll(pauseSceneTit, mainMenu, resume, closeGame, restartGame, controls);
+        buttonContainer.getChildren().addAll(pauseSceneTit, mainMenu, resume, closeGame, restartGame);
 
 // set the alignment of the VBox and the buttons
         //Center it within the VBbox
@@ -175,6 +174,7 @@ public class Main extends Application {
                 ((Button) node).setStyle(AppConstants.ButtonStyle.BUTTON_NODE.getStyle());
             }
         }
+
 
         Pane pausePane = new Pane();
         pausePane.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
@@ -211,8 +211,6 @@ public class Main extends Application {
         Gameover.setFont(font);
         Gameover.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
-
-        //Cannot use Scanner as they don't work with JavaFx.So this is the javafx type of scanner object
         TextField name = new TextField();
         name.setText("Players name");
         name.setPrefHeight(25);
@@ -239,40 +237,9 @@ public class Main extends Application {
         });
 
         Pane InputnamePane = new Pane();
-        Pane ControlsPane = new Pane();
+
         InputnamePane.getChildren().add(new Label("Player"));
-        ControlsPane.getChildren().add(new Label("Controls"));
 
-        VBox ControlDescription = new VBox();
-        ControlDescription.setPadding(new Insets(10, 10, 10, 10));
-        ControlDescription.setSpacing(10);
-        ControlDescription.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
-        Label header = new Label("Description of Controls");
-        header.setTextFill(AppConstants.AppColor.SHAPE.getColor());
-        Font myFont = new Font("Arial", 30);
-        header.setFont(myFont);
-        header.setUnderline(true);
-        ControlDescription.getChildren().add(header);
-        // Create a label to hold the paragraph
-        Label paragraph = new Label("Find the controls below \n" +
-                "Press the left arrows on your computer to turn left.\n" +
-                "Press the right arrows on your computer to turn right.\n" +
-                "Press the up key to allow the ship to accelerate.\n" +
-                "Press the down key to allow your ship to decelerate.\n " +
-                "Press Z to shoot your bullets \n"+
-                "Press shift to use hyperspace. \n");
-//       paragraph.setWrapText(true);
-        // Add the label to the VBox
-        paragraph.setTextFill(AppConstants.AppColor.SHAPE.getColor());
-        Button BackGame = new Button("Back to Game");
-        ControlDescription.getChildren().addAll(paragraph, BackGame);
-        ControlDescription.setAlignment(Pos.CENTER);
-        // Create a scene and add the VBox to it
-        Scene ControlsScene = new Scene(ControlDescription, 400, 200);
-
-        BackGame.setOnAction(e -> primaryStage.setScene(gameScene));
-
-        controls.setOnAction(e -> primaryStage.setScene(ControlsScene));
 
         AtomicBoolean gameOver = new AtomicBoolean(false);
 
@@ -430,6 +397,7 @@ public class Main extends Application {
         gamePane.getChildren().addAll(alien.getCharacter());
         return alien;
     }
+
 
     public static void main(String[] args) {
         launch(args);
