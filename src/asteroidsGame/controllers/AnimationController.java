@@ -140,6 +140,9 @@ public class AnimationController extends AnimationTimer {
                         Asteroid asteroid1 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX() + 60, asteroid.getCurrentAsteroidY() + 60);
                         Asteroid asteroid2 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX() - 60, asteroid.getCurrentAsteroidY() - 60);
 
+                        asteroid1.increaseRotationOnDestruction();
+                        asteroid2.increaseRotationOnDestruction();
+
                         crashedAsteroidsToAdd.add(asteroid1);
                         crashedAsteroidsToAdd.add(asteroid2);
 
@@ -204,6 +207,9 @@ public class AnimationController extends AnimationTimer {
                             }
                             Asteroid asteroid1 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX() + 30, asteroid.getCurrentAsteroidY() + 30);
                             Asteroid asteroid2 = new Asteroid((int) newSize, asteroid.increaseSpeedOnDestruction(), asteroid.getCurrentAsteroidX() - 30, asteroid.getCurrentAsteroidY() - 30);
+
+                            asteroid1.increaseRotationOnDestruction();
+                            asteroid2.increaseRotationOnDestruction();
 
                             asteroidsToAdd.add(asteroid1);
                             asteroidsToAdd.add(asteroid2);
