@@ -14,25 +14,7 @@ public class Bullet extends Rectangle {
     private Double crossX, crossY;
     private Float remindingDistance;
     public String shooter;
-/*
-    public Bullet(double x, double y, double direction, String shooter) {
-        setWidth(BULLET_WIDTH); // Bullet width
-        setHeight(5); // Bullet height
-        setTranslateX(x); // x-coordinate of the bullet
-        setTranslateY(y); // y-coordinate of the bullet
-        setFill(AppConstants.AppColor.SHAPE.getColor());
-        //flag for shooter, alien/player can't shoot themselves
-        this.shooter = shooter;
 
-        initX = x;
-        initY = y;
-
-        double speed = 9; // Bullet speed
-        double changeX = Math.cos(Math.toRadians(direction)) * speed;
-        double changeY = Math.sin(Math.toRadians(direction)) * speed;
-        velocity = new Point2D(changeX, changeY);
-    }
-*/
     public Bullet(double x, double y, double direction, Point2D baseSpeed, String shooter) {
         setWidth(BULLET_WIDTH); // Bullet width
         setHeight(5); // Bullet height

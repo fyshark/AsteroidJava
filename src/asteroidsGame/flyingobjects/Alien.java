@@ -21,22 +21,13 @@ public class Alien extends BaseShip {
 
         //design of the alien
     private static Polygon createAlienPolygon() {
-        Polygon polygon = new Polygon();
-        polygon.getPoints().addAll(
-                30.0, 10.0,
-                40.0, 10.0,
-                45.0, 20.0,
-                65.0, 30.0,
-                45.0, 40.0,
-                25.0, 40.0,
-                5.0, 30.0,
-                25.0, 20.0,
-                30.0, 10.0,
-                40.0, 10.0,
-                45.0, 20.0,
-                30.0, 20.0,
-                5.0, 30.0,
-                65.0, 30.0
+        Polygon polygon = new Polygon(
+                23.4, 0, 32.4, 32.4,
+                0, 23.4, 32.4, 41.1, 0, 41.1,
+                32.4, 48.8, 0, 56.5, 32.4, 56.5,
+                23.4, 81, 41.1, 56.5, 48.8, 56.5,
+                41.1, 48.8, 48.8, 41.1, 41.1, 41.1,
+                48.8, 23.4, 41.1, 32.4
         );
 
         polygon.setFill(AppConstants.AppColor.BACKGROUND.getColor());
