@@ -162,13 +162,12 @@ public class Main extends Application {
         Button resume = new Button("Resume");
         Button mainMenu = new Button("Main Menu");
         Button closeGame = new Button("Close Game");
-        Button restartName = new Button("Restart");
         Button restartGame = new Button("Restart Game");
         Button controls = new Button("Controls");
 
         buttonContainer.setSpacing(10); // Set the spacing between buttons
         buttonContainer.setAlignment(Pos.CENTER);
-        buttonContainer.getChildren().addAll(pauseSceneTit, mainMenu, resume, closeGame, restartName, controls);
+        buttonContainer.getChildren().addAll(pauseSceneTit, mainMenu, resume, closeGame, restartGame, controls);
 
 // set the alignment of the VBox and the buttons
         //Center it within the VBbox
@@ -225,13 +224,7 @@ public class Main extends Application {
         //This creates a button to submit the name to the leaderboard
         Button submitButton = new Button("Submit");
 
-        submitButton.setOnAction(event -> {
-            // Record and save player scores
-            Recorder.addHighScore(name.getText(), points);
-            Recorder.saveHighScores();
-        });
-
-        InputNames.getChildren().addAll(Gameover,name, submitButton, restartGame);
+        InputNames.getChildren().addAll(Gameover, name, submitButton);
         InputNames.setAlignment(Pos.CENTER); // Center the VBox
         InputNames.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
         Scene Inputname = new Scene(InputNames, STAGEWIDTH, STAGEHEIGHT);
@@ -246,18 +239,6 @@ public class Main extends Application {
             //This closes the whole game!!! As in like exits the whole javafx
             Platform.exit();
             System.exit(0);
-        });
-        //This is for restarting with name
-        restartName.setOnAction(event -> {
-            String playerName = name.getText();
-            //scoresList.add(playerName);
-            primaryStage.setScene(Inputname);
-
-            //Record and save player scores
-            Recorder.addHighScore(playerName, points);
-            Recorder.saveHighScores();
-            levels.set(1);
-
         });
 
         Pane InputnamePane = new Pane();
@@ -318,6 +299,12 @@ public class Main extends Application {
                 bullets,
                 levels
         );
+
+        submitButton.setOnAction(event -> {
+            // Record and save player scores
+            Recorder.addHighScore(name.getText(), points);
+            new MainMenu(primaryStage, gameScene, timer);
+        });
 
         mainMenu.setOnAction(e -> new MainMenu(primaryStage, gameScene, timer));
         new MainMenu(primaryStage, gameScene, timer);
@@ -386,8 +373,6 @@ public class Main extends Application {
 
         primaryStage.show();
     }
-
-
 
     public static void initAstroids(int playerX, int playerY, int level) {
         if (!asteroids.isEmpty()) {

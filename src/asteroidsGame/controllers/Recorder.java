@@ -59,7 +59,8 @@ public class Recorder {
     public static void addHighScore(String playerName, AtomicInteger points) {
         HighScoreEntry entry = new HighScoreEntry(playerName, points.get()); // Create a new high score entry
         highScores.add(entry); // Add the new entry to the list
-        Collections.sort(highScores, Collections.reverseOrder()); // Sort the high scores list in descending order
+        Collections.sort(highScores, Collections.reverseOrder());
+        saveHighScores(); // Sort the high scores list in descending order
     }
 
     // Method to get the high scores list
