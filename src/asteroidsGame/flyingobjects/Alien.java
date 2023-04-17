@@ -6,8 +6,6 @@ import javafx.scene.shape.Polygon;
 
 public class Alien extends BaseShip {
 
-    private Player player;
-
     private long lastBulletTime = System.nanoTime() + 1000L * 1000000; // Add a field to store the last bullet time for alien
     private static final long SHOOT_CD = 2500L * 1000000; // 2500 ms
 
@@ -61,7 +59,6 @@ public class Alien extends BaseShip {
 
     //how the alien shoots the player
     public Bullet shoot(Player player, String shooter) {
-        this.player = player;
 
         long currentTime = System.nanoTime();
         if (currentTime - lastBulletTime < SHOOT_CD) {
@@ -82,7 +79,4 @@ public class Alien extends BaseShip {
 
         return new Bullet(bulletX, bulletY, bulletDirection, alienMovement, shooter);
     }
-
-
-
 }

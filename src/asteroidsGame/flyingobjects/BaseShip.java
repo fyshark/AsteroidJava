@@ -45,26 +45,24 @@ public abstract class BaseShip {
         this.lastBulletTime = 0;
     }
 
-    public Polygon getCharacter() {
-        return this.ship; // returns the shape of the BaseShip to the scene we call it on
-    }
+    public Polygon getCharacter() {return this.ship;} // returns the shape of the BaseShip to the scene we call it on
 
     public void screenBounds() {
         // The conditions below checks that the ship stays on screen.
         if (this.ship.getTranslateX() < 0) {
-            this.ship.setTranslateX(this.ship.getTranslateX() + Main.stageWidth);
+            this.ship.setTranslateX(this.ship.getTranslateX() + Main.STAGEWIDTH);
         }
 
-        if (this.ship.getTranslateX() > Main.stageWidth) {
-            this.ship.setTranslateX(this.ship.getTranslateX() % Main.stageWidth);
+        if (this.ship.getTranslateX() > Main.STAGEWIDTH) {
+            this.ship.setTranslateX(this.ship.getTranslateX() % Main.STAGEWIDTH);
         }
 
         if (this.ship.getTranslateY() < 0) {
-            this.ship.setTranslateY(this.ship.getTranslateY() + Main.stageHeight);
+            this.ship.setTranslateY(this.ship.getTranslateY() + Main.STAGEHEIGHT);
         }
 
-        if (this.ship.getTranslateY() > Main.stageHeight) {
-            this.ship.setTranslateY(this.ship.getTranslateY() % Main.stageHeight);
+        if (this.ship.getTranslateY() > Main.STAGEHEIGHT) {
+            this.ship.setTranslateY(this.ship.getTranslateY() % Main.STAGEHEIGHT);
         }
     }
 
@@ -87,7 +85,7 @@ public abstract class BaseShip {
         return bullet;
     }
 
-    //defines how a collision between an a BaseShip and an asteroid
+    //defines how a collision between a BaseShip and an asteroid
     public boolean crash(Asteroid asteroid) {
         Shape collisionArea = Shape.intersect(this.ship, asteroid.getAsteroid());
         return collisionArea.getBoundsInLocal().getWidth() != -1;

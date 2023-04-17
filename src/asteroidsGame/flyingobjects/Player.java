@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import static asteroidsGame.Main.stageHeight;
-import static asteroidsGame.Main.stageWidth;
+import static asteroidsGame.Main.STAGEHEIGHT;
+import static asteroidsGame.Main.STAGEWIDTH;
 
 public class Player extends BaseShip {
 
@@ -170,16 +170,16 @@ public class Player extends BaseShip {
             entityPos.put((int) alien.getPosition().getX(), (int) alien.getPosition().getY());
         }
 
-        int closestX = (int) (Math.random() * stageWidth);
-        int closestY = (int) (Math.random() * stageHeight);
+        int closestX = (int) (Math.random() * STAGEWIDTH);
+        int closestY = (int) (Math.random() * STAGEHEIGHT);
         while (entityPos.get(closestX) != null) {
             for (Integer entityKey : entityPos.keySet()) {
                 double ac = Math.abs(entityKey - closestX);
                 double cb = Math.abs(entityPos.get(entityKey) - closestY);
                 distance = Math.hypot(ac, cb);
                 if (distance < 150) {
-                    closestX = (int) (Math.random() * stageWidth);
-                    closestY = (int) (Math.random() * stageHeight);
+                    closestX = (int) (Math.random() * STAGEWIDTH);
+                    closestY = (int) (Math.random() * STAGEHEIGHT);
                 }
             }
         }

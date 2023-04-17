@@ -9,7 +9,7 @@ public class Bullet extends Rectangle {
     private Point2D velocity; // Bullet velocity
     private boolean isAlive = true; // Are the bullets still alive
     public static int BULLET_WIDTH = 3; // Declare bullet width
-    private static final int DISAPPEAR_DISTANCE = (int) Main.stageHeight / 2;
+    private static final int DISAPPEAR_DISTANCE = (int) Main.STAGEHEIGHT / 2;
     private double initX, initY;
     private Double crossX, crossY;
     private Float remindingDistance;
@@ -50,16 +50,16 @@ public class Bullet extends Rectangle {
             // Condition when bullets go beyond the left side of the x-coordinate system boundary
             if (getTranslateX() < 0) {
                 remindingDistance = DISAPPEAR_DISTANCE - calculateDistanceBetweenPoints(getTranslateX(), getTranslateY() + velocity.getY(), initX, initY);
-                crossX = getTranslateX() + Main.stageWidth;
+                crossX = getTranslateX() + Main.STAGEWIDTH;
                 setTranslateX(crossX);
 
                 crossY = getTranslateY();
             }
 
             // Condition when bullets go beyond the right side of the x-coordinate system boundary
-            if (getTranslateX() > Main.stageWidth) {
+            if (getTranslateX() > Main.STAGEWIDTH) {
                 remindingDistance = DISAPPEAR_DISTANCE - calculateDistanceBetweenPoints(getTranslateX(), getTranslateY() + velocity.getY(), initX, initY);
-                crossX = getTranslateX() % Main.stageWidth;
+                crossX = getTranslateX() % Main.STAGEWIDTH;
                 setTranslateX(crossX);
 
                 crossY = getTranslateY();
@@ -68,15 +68,15 @@ public class Bullet extends Rectangle {
             // Condition when bullets go below the bottom of the y-coordinate system boundary
             if (getTranslateY() < 0) {
                 remindingDistance = DISAPPEAR_DISTANCE - calculateDistanceBetweenPoints(getTranslateX() + velocity.getX(), getTranslateY(), initX, initY);
-                crossY = getTranslateY() + Main.stageHeight;
+                crossY = getTranslateY() + Main.STAGEHEIGHT;
                 setTranslateY(crossY);
                 crossX = getTranslateX();
             }
 
             // Condition when bullets go beyond the top of the y-coordinate system boundary
-            if (getTranslateY() > Main.stageHeight) {
+            if (getTranslateY() > Main.STAGEHEIGHT) {
                 remindingDistance = DISAPPEAR_DISTANCE - calculateDistanceBetweenPoints(getTranslateX() + velocity.getX(), getTranslateY(), initX, initY);
-                crossY = getTranslateY() % Main.stageHeight;
+                crossY = getTranslateY() % Main.STAGEHEIGHT;
                 setTranslateY(crossY);
 
                 crossX = getTranslateX();
