@@ -1,25 +1,22 @@
 package asteroidsGame.flyingobjects;
 
 import asteroidsGame.constants.AppConstants;
-import asteroidsGame.utils.RandomAsteroidGenerator;
-import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-
 import java.util.Random;
-
 import static asteroidsGame.Main.STAGEHEIGHT;
 import static asteroidsGame.Main.STAGEWIDTH;
 
 public class Asteroid extends Rectangle{
     public double speed;
-    private Point2D movement; // the current movement vector of the player's ship
     public double rotation;
-    public int asteroidX;
-    public int asteroidY;
+    private int asteroidX;
+    private int asteroidY;
     public double size;
     public Polygon asteroid; // the shape of the asteroid
+    private final double INCREASE_SPEED = 0.2;
+    private final double INCREASE_ROTATION = 2;
 
     public Asteroid(double size, double speed, int x, int y) {
         Random rnd = new Random();
@@ -29,8 +26,7 @@ public class Asteroid extends Rectangle{
         this.asteroidX = x;
         this.asteroidY = y;
         this.rotation = rnd.nextDouble() * 360; // assign a random rotation angle between 0 and 360 degrees
-        RandomAsteroidGenerator generator = new RandomAsteroidGenerator();
-        this.asteroid = generator.createAsteroid(size);
+        this.asteroid = createAsteroid(size);
         this.asteroid.setFill(AppConstants.AppColor.FILL.getColor());
         this.asteroid.setStroke(AppConstants.AppColor.SHAPE.getColor());
         this.asteroid.setTranslateX(x);
@@ -52,12 +48,12 @@ public class Asteroid extends Rectangle{
         return (int) asteroid.getTranslateY();
     }
     public double increaseSpeedOnDestruction() {
-        this.speed += 0.15;
+        this.speed += INCREASE_SPEED;
         return this.speed;
     }
 
     public double increaseRotationOnDestruction(){
-        this.rotation *= 3;
+        this.rotation *= INCREASE_ROTATION;
         return this.rotation;
     }
 
@@ -90,5 +86,31 @@ public class Asteroid extends Rectangle{
     public boolean collide(Bullet bullet) {
         Shape collisionArea = Shape.intersect(this.asteroid, bullet.getHitbox());
         return collisionArea.getBoundsInLocal().getWidth() != -1;
+    }
+
+    public Polygon createAsteroid(double size) {
+        Random rnd = new Random();
+
+        // Generate a random number of sides between 12-20
+        int sides = rnd.nextInt(5) + 7;
+
+        // Calculate the angle between each side of the polygon
+        double angle = 2 * Math.PI / sides;
+
+        Polygon polygon = new Polygon();
+        for (int i = 0; i < sides; i++) {
+            // Calculate the x and y coordinates for each point
+            double x = size * Math.cos(i * angle);
+            double y = size * Math.sin(i * angle);
+            polygon.getPoints().addAll(x, y);
+        }
+
+        // Randomize the distance of each point from the center of the polygon
+        for (int i = 0; i < polygon.getPoints().size(); i++) {
+            double change = rnd.nextDouble() * size / 3 * 2 - size / 3;
+            polygon.getPoints().set(i, polygon.getPoints().get(i) + change);
+        }
+
+        return polygon;
     }
 }
