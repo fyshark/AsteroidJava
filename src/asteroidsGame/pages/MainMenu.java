@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 
 public class MainMenu {
-   Scene mainPageScene;
+   public static Scene mainPageScene;
 
 
    public MainMenu(Stage primaryStage, Scene gameScene, AnimationController timer) {
@@ -56,7 +56,7 @@ public class MainMenu {
        OpeningPage.setSpacing(10);
        // OpeningPage.setStyle("-fx-background-color: black");
        // create a label
-       Label gameName = new Label("ASTROIDS");
+       Label gameName = new Label("ASTEROIDS");
        gameName.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 150));
        gameName.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
