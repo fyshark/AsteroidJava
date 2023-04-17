@@ -88,10 +88,6 @@ public class AnimationController extends AnimationTimer {
             String playerName = name.getText();
             primaryStage.setScene(inputName);
 
-            // Record and save player scores
-            Recorder.addHighScore(playerName, points);
-            Recorder.saveHighScores();
-
 //                    restartGame.setOnAction(event -> {
 //                        player.resetPosition();
 //                        player.setLives(3);

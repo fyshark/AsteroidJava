@@ -223,10 +223,15 @@ public class Main extends Application {
         name.setPrefWidth(50);
         name.setEditable(true);
         //This creates a button to submit the name to the leaderboard
-        Button submitbutton = new Button("Submit");
+        Button submitButton = new Button("Submit");
 
+        submitButton.setOnAction(event -> {
+            // Record and save player scores
+            Recorder.addHighScore(name.getText(), points);
+            Recorder.saveHighScores();
+        });
 
-        InputNames.getChildren().addAll(Gameover,name, submitbutton, restartGame);
+        InputNames.getChildren().addAll(Gameover,name, submitButton, restartGame);
         InputNames.setAlignment(Pos.CENTER); // Center the VBox
         InputNames.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
         Scene Inputname = new Scene(InputNames, STAGEWIDTH, STAGEHEIGHT);
