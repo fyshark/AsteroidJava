@@ -2,7 +2,7 @@ package asteroidsGame;
 
 import asteroidsGame.constants.AppConstants;
 import asteroidsGame.controllers.AnimationController;
-import asteroidsGame.controllers.Recorder;
+import asteroidsGame.controllers.HighScoreRecorder;
 import asteroidsGame.flyingobjects.Alien;
 import asteroidsGame.flyingobjects.Asteroid;
 import asteroidsGame.flyingobjects.Bullet;
@@ -17,21 +17,16 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
-//import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
-//import javafx.scene.control.ListView;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextField;
 import javafx.application.Platform;
 import javafx.scene.control.ToggleButton;
-//import java.awt.*;
 import java.util.*;
-//This is for the points
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -42,7 +37,7 @@ public class Main extends Application {
     Scene pauseScene;
 
     //This gets the stagewidth and height. Change according to screen size
-    public static double STAGEWIDTH, STAGEHEIGHT;
+    public static double STAGE_WIDTH, STAGE_HEIGHT;
     public static Pane gamePane;
     // Add a list of bullets
     private final List<Bullet> bullets = new ArrayList<>();
@@ -61,28 +56,28 @@ public class Main extends Application {
 
         primaryStage.setTitle("Group 10 Asteroids Game");
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-        STAGEWIDTH = screenSize.getWidth();
-        STAGEHEIGHT = screenSize.getHeight();
-        primaryStage.setWidth(STAGEWIDTH);
-        primaryStage.setHeight(STAGEHEIGHT);
+        STAGE_WIDTH = screenSize.getWidth();
+        STAGE_HEIGHT = screenSize.getHeight();
+        primaryStage.setWidth(STAGE_WIDTH);
+        primaryStage.setHeight(STAGE_HEIGHT);
 
         //These are listeners. Depend on if its resized of not
         primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            STAGEWIDTH = (double) newVal;
-            primaryStage.setWidth(STAGEWIDTH);
+            STAGE_WIDTH = (double) newVal;
+            primaryStage.setWidth(STAGE_WIDTH);
         });
 
         primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            STAGEHEIGHT = (double) newVal;
-            primaryStage.setHeight(STAGEHEIGHT);
+            STAGE_HEIGHT = (double) newVal;
+            primaryStage.setHeight(STAGE_HEIGHT);
         });
         //So we are setting it to have a black colour
         gamePane = new Pane();
         gamePane.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
 
         int playerX, playerY;
-        playerX = (int) (STAGEWIDTH / 2);
-        playerY = (int) (STAGEHEIGHT / 2);
+        playerX = (int) (STAGE_WIDTH / 2);
+        playerY = (int) (STAGE_HEIGHT / 2);
 
         // Instantiating a Player called player that we can manipulate and adding it to the game scene.
         Player player = new Player(playerX, playerY);
@@ -143,7 +138,7 @@ public class Main extends Application {
             pause.setLayoutY(20);
         });
 
-        gameScene = new Scene(gamePane, STAGEWIDTH, STAGEHEIGHT);
+        gameScene = new Scene(gamePane, STAGE_WIDTH, STAGE_HEIGHT);
 
         // create an instance of Asteroid class
         initAstroids(playerX, playerY, levels.get());
@@ -180,7 +175,7 @@ public class Main extends Application {
         pausePane.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
         pausePane.getChildren().addAll(buttonContainer);
         pauseSceneTit.setTextFill(AppConstants.AppColor.SHAPE.getColor());
-        pauseScene = new Scene(pausePane, STAGEWIDTH, STAGEHEIGHT);
+        pauseScene = new Scene(pausePane, STAGE_WIDTH, STAGE_HEIGHT);
 
         buttonContainer.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
             double x = (pausePane.getWidth() - newVal.getWidth()) / 2;
@@ -222,7 +217,7 @@ public class Main extends Application {
         InputNames.getChildren().addAll(Gameover, name, submitButton);
         InputNames.setAlignment(Pos.CENTER); // Center the VBox
         InputNames.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
-        Scene Inputname = new Scene(InputNames, STAGEWIDTH, STAGEHEIGHT);
+        Scene Inputname = new Scene(InputNames, STAGE_WIDTH, STAGE_HEIGHT);
 
 
         primaryStage.setOnCloseRequest(event -> {
@@ -257,7 +252,7 @@ public class Main extends Application {
                 playerX,
                 playerY,
                 points,
-                STAGEHEIGHT,
+                STAGE_HEIGHT,
                 asteroids,
                 gamePane,
                 bullets,
@@ -266,7 +261,7 @@ public class Main extends Application {
 
         submitButton.setOnAction(event -> {
             // Record and save player scores
-            Recorder.addHighScore(name.getText(), points);
+            HighScoreRecorder.getRecorder().addHighScore(name.getText(), points);
             primaryStage.setScene(MainMenu.mainPageScene);
             player.resetPosition();
             points.set(0);
@@ -358,8 +353,8 @@ public class Main extends Application {
         for (int i = 0; i < level; i++) {
             double size = Math.random() * 20 + 60; // random size between 60 and 80
             double speed = Math.random() * 1; // random speed between 1
-            int x = (int) (Math.random() * STAGEWIDTH);
-            int y = (int) (Math.random() * STAGEHEIGHT);
+            int x = (int) (Math.random() * STAGE_WIDTH);
+            int y = (int) (Math.random() * STAGE_HEIGHT);
             if (x < playerX) {
                 x -= 150;
             } else {
@@ -391,7 +386,7 @@ public class Main extends Application {
     public static Alien initAliens() {
         Random random_pos = new Random();
         int alienX = 0;
-        int appearHeight = (int) STAGEHEIGHT;
+        int appearHeight = (int) STAGE_HEIGHT;
         int alienY = random_pos.nextInt(appearHeight);
         Alien alien = new Alien(alienX, alienY);
         gamePane.getChildren().addAll(alien.getCharacter());
