@@ -3,17 +3,28 @@ package asteroidsGame.controllers;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class Recorder {
-    private static List<HighScoreEntry> highScores = new ArrayList<>();
-    private static final String recordFile = "highScores.txt";
+public class HighScoreRecorder {
+    private static HighScoreRecorder INSTANCE;
+    private List<HighScoreEntry> highScores = new ArrayList<>();
+    private final String recordFile = "highScores.txt";
+
+    private HighScoreRecorder() {
+    }
+
+    public static HighScoreRecorder getRecorder() {
+        if (INSTANCE == null) {
+            INSTANCE = new HighScoreRecorder();
+        }
+        INSTANCE.loadHighScores();
+        return INSTANCE;
+    }
 
     // Method to load high scores from file
-    public static void loadHighScores() {
+    private void loadHighScores() {
         // Clear the high scores list
         highScores.clear();
         File highScoresFile = new File(recordFile);
@@ -41,11 +52,12 @@ public class Recorder {
             e.printStackTrace();
         }
 
-        Collections.sort(highScores, Collections.reverseOrder()); // Sort the high scores list in descending order
+        // Sort the high scores list in descending order
+        Collections.sort(highScores, Collections.reverseOrder());
     }
 
     // Method to save high scores to the file
-    public static void saveHighScores() {
+    public void saveHighScores() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(recordFile))) {
             for (HighScoreEntry entry : highScores) {
                 bw.write(entry.toString() + "\n"); // Write each high score entry to the file
@@ -56,7 +68,7 @@ public class Recorder {
     }
 
     // Method to add a new high score to the list
-    public static void addHighScore(String playerName, AtomicInteger points) {
+    public void addHighScore(String playerName, AtomicInteger points) {
         HighScoreEntry entry = new HighScoreEntry(playerName, points.get()); // Create a new high score entry
         highScores.add(entry); // Add the new entry to the list
         Collections.sort(highScores, Collections.reverseOrder());
@@ -64,12 +76,12 @@ public class Recorder {
     }
 
     // Method to get the high scores list
-    public static List<HighScoreEntry> getHighScores() {
+    public List<HighScoreEntry> getHighScores() {
         return highScores;
     }
 
     // Class to represent a high score entry
-    public static class HighScoreEntry implements Comparable<HighScoreEntry> {
+    public class HighScoreEntry implements Comparable<HighScoreEntry> {
         private String name; // Player name
         private int score; // Player score
 
@@ -99,7 +111,8 @@ public class Recorder {
         @Override
         public int compareTo(HighScoreEntry o) {
             return
-                    Integer.compare(this.score, o.score); // Compare scores of the two HighScoreEntry objects
+                    // Compare scores of the two HighScoreEntry objects
+                    Integer.compare(this.score, o.score);
         }
     }
 }

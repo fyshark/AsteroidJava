@@ -5,8 +5,8 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import java.util.Random;
-import static asteroidsGame.Main.STAGEHEIGHT;
-import static asteroidsGame.Main.STAGEWIDTH;
+import static asteroidsGame.Main.STAGE_HEIGHT;
+import static asteroidsGame.Main.STAGE_WIDTH;
 
 public class Asteroid extends Rectangle{
     public double speed;
@@ -71,15 +71,15 @@ public class Asteroid extends Rectangle{
 
         // wrap the asteroid around the screen if it goes off the edges
         if (this.asteroid.getTranslateX() < 0) {
-            this.asteroid.setTranslateX(STAGEWIDTH);
+            this.asteroid.setTranslateX(STAGE_WIDTH);
         }
-        if (this.asteroid.getTranslateX() > STAGEWIDTH) {
+        if (this.asteroid.getTranslateX() > STAGE_WIDTH) {
             this.asteroid.setTranslateX(0);
         }
         if (this.asteroid.getTranslateY() < 0) {
-            this.asteroid.setTranslateY(STAGEHEIGHT);
+            this.asteroid.setTranslateY(STAGE_HEIGHT);
         }
-        if (this.asteroid.getTranslateY() > STAGEHEIGHT) {
+        if (this.asteroid.getTranslateY() > STAGE_HEIGHT) {
             this.asteroid.setTranslateY(0);
         }
     }

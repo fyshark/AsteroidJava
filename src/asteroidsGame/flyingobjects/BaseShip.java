@@ -50,19 +50,19 @@ public abstract class BaseShip {
     public void screenBounds() {
         // The conditions below checks that the ship stays on screen.
         if (this.ship.getTranslateX() < 0) {
-            this.ship.setTranslateX(this.ship.getTranslateX() + Main.STAGEWIDTH);
+            this.ship.setTranslateX(this.ship.getTranslateX() + Main.STAGE_WIDTH);
         }
 
-        if (this.ship.getTranslateX() > Main.STAGEWIDTH) {
-            this.ship.setTranslateX(this.ship.getTranslateX() % Main.STAGEWIDTH);
+        if (this.ship.getTranslateX() > Main.STAGE_WIDTH) {
+            this.ship.setTranslateX(this.ship.getTranslateX() % Main.STAGE_WIDTH);
         }
 
         if (this.ship.getTranslateY() < 0) {
-            this.ship.setTranslateY(this.ship.getTranslateY() + Main.STAGEHEIGHT);
+            this.ship.setTranslateY(this.ship.getTranslateY() + Main.STAGE_HEIGHT);
         }
 
-        if (this.ship.getTranslateY() > Main.STAGEHEIGHT) {
-            this.ship.setTranslateY(this.ship.getTranslateY() % Main.STAGEHEIGHT);
+        if (this.ship.getTranslateY() > Main.STAGE_HEIGHT) {
+            this.ship.setTranslateY(this.ship.getTranslateY() % Main.STAGE_HEIGHT);
         }
     }
 
