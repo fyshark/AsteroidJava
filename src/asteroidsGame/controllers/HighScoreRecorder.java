@@ -52,7 +52,8 @@ public class HighScoreRecorder {
             e.printStackTrace();
         }
 
-        Collections.sort(highScores, Collections.reverseOrder()); // Sort the high scores list in descending order
+        // Sort the high scores list in descending order
+        Collections.sort(highScores, Collections.reverseOrder());
     }
 
     // Method to save high scores to the file
@@ -110,7 +111,8 @@ public class HighScoreRecorder {
         @Override
         public int compareTo(HighScoreEntry o) {
             return
-                    Integer.compare(this.score, o.score); // Compare scores of the two HighScoreEntry objects
+                    // Compare scores of the two HighScoreEntry objects
+                    Integer.compare(this.score, o.score);
         }
     }
 }
