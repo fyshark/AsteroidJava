@@ -269,7 +269,7 @@ public class Main extends Application {
             player.setLives(3);
             removeAliens();
             initAstroids(playerX, playerY, levels.get());
-            timer.startWithNewTime();
+            timer.stop();
             timerLabel.setText("Time: 0s");
             new MainMenu(primaryStage, gameScene, timer);
         });
@@ -284,6 +284,7 @@ public class Main extends Application {
             levels.set(1);
             player.setLives(3);
             removeAliens();
+            AnimationController.lastAlienDeath = System.nanoTime() + (10000L * 1000000);
             initAstroids(playerX, playerY, levels.get());
             primaryStage.setScene(gameScene);
             timer.startWithNewTime();
@@ -372,15 +373,11 @@ public class Main extends Application {
     }
 
     private void removeAliens() {
-        System.out.println(AnimationController.alien);
         if (AnimationController.alien != null) {
-
             gamePane.getChildren().remove(AnimationController.alien.getCharacter());
             AnimationController.alien = null;
             AnimationController.alienAdded = false;
-            AnimationController.lastAlienDeath = System.nanoTime() + (10000L * 1000000);
         }
-
     }
     //factory function for creating aliens
     public static Alien initAliens() {

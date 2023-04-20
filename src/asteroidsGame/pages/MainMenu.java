@@ -37,14 +37,13 @@ public class MainMenu {
         backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
 
         playGamePane.getChildren().addAll(new Label("playGame"), backToPause);
-//       highScoresPane.getChildren().add(new Label("highScores"));
 
         // create scenes
         mainPageScene = new Scene(r, width, height);
 
         VBox OpeningPage = new VBox();
         OpeningPage.setSpacing(10);
-        // OpeningPage.setStyle("-fx-background-color: black");
+
         // create a label
         Label gameName = new Label("ASTEROIDS");
         gameName.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 150));
@@ -103,11 +102,8 @@ public class MainMenu {
         ControlDescription.setAlignment(Pos.CENTER);
         // Create a scene and add the VBox to it
         Scene ControlsScene = new Scene(ControlDescription, 400, 200);
-        BackMain .setOnAction(e -> {
+        BackMain.setOnAction(e -> {
             primaryStage.setScene(mainPageScene);
-            timer.startWithNewTime();
-            //The game starts with BGM
-            new AePlayWave("src/start.wav").start();
         });
 
         Info.setOnAction(e -> primaryStage.setScene(ControlsScene));
@@ -117,6 +113,7 @@ public class MainMenu {
         playGame.setOnAction(e -> {
             primaryStage.setScene(gameScene);
             timer.startWithNewTime();
+            AnimationController.lastAlienDeath = System.nanoTime() + (10000L * 1000000);
             //The game starts with BGM
             new AePlayWave("src/start.wav").start();
         });

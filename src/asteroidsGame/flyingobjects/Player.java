@@ -4,6 +4,7 @@ import asteroidsGame.constants.AppConstants;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
@@ -184,7 +185,8 @@ public class Player extends BaseShip {
             }
         }
 
-        setInvincibilityTimer(1);
+        setInvincibilityTimer(2);
+        this.movement = new Point2D(0, 0);
         this.ship.setTranslateX(closestX);
         this.ship.setTranslateY(closestY);
     }

@@ -88,14 +88,6 @@ public class AnimationController extends AnimationTimer {
             String playerName = name.getText();
             primaryStage.setScene(inputName);
 
-//                    restartGame.setOnAction(event -> {
-//                        player.resetPosition();
-//                        player.setLives(3);
-//                        points.set(0);
-//                        primaryStage.setScene(gameScene);
-//                        primaryStage.show();
-//                        gameOver.set(false);
-//                    });
             this.stop();
 
         } else {
@@ -303,13 +295,8 @@ public class AnimationController extends AnimationTimer {
 
     }
 
-
-
     public void startWithNewTime() {
         startTime = System.nanoTime();
         super.start();
-//        if(player.getLives() == 0) {
-//            super.stop();
-//        }
     }
 }
