@@ -274,7 +274,17 @@ public class Main extends Application {
             new MainMenu(primaryStage, gameScene, timer);
         });
 
-        mainMenu.setOnAction(e -> new MainMenu(primaryStage, gameScene, timer));
+        mainMenu.setOnAction(event -> {
+            player.resetPosition();
+            points.set(0);
+            levels.set(1);
+            player.setLives(3);
+            removeAliens();
+            initAstroids(playerX, playerY, levels.get());
+            timer.stop();
+            timerLabel.setText("Time: 0s");
+            new MainMenu(primaryStage, gameScene, timer);
+        });
         new MainMenu(primaryStage, gameScene, timer);
 
         //This will just restart the game
