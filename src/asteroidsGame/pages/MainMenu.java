@@ -98,13 +98,13 @@ public class MainMenu {
                 "Press shift to use hyperspace. \n");
         // Add the label to the VBox
         paragraph.setTextFill(AppConstants.AppColor.SHAPE.getColor());
-        Button BackGame = new Button("Go to Game");
-        ControlDescription.getChildren().addAll(paragraph, BackGame);
+        Button BackMain = new Button("Back to Main Menu");
+        ControlDescription.getChildren().addAll(paragraph, BackMain );
         ControlDescription.setAlignment(Pos.CENTER);
         // Create a scene and add the VBox to it
         Scene ControlsScene = new Scene(ControlDescription, 400, 200);
-        BackGame.setOnAction(e -> {
-            primaryStage.setScene(gameScene);
+        BackMain .setOnAction(e -> {
+            primaryStage.setScene(mainPageScene);
             timer.startWithNewTime();
             //The game starts with BGM
             new AePlayWave("src/start.wav").start();
