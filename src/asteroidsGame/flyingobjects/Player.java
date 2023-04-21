@@ -12,8 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import static asteroidsGame.Main.STAGE_HEIGHT;
-import static asteroidsGame.Main.STAGE_WIDTH;
+import static asteroidsGame.constants.AppConstants.STAGE_HEIGHT;
+import static asteroidsGame.constants.AppConstants.STAGE_WIDTH;
+
 
 public class Player extends BaseShip {
 
@@ -22,8 +23,8 @@ public class Player extends BaseShip {
     boolean isAlive;
     private int lives = 3;
 
-    public Player(int x, int y) {
-        super(createPlayerPolygon(), x, y);
+    public Player() {
+        super(createPlayerPolygon(), (int) (STAGE_WIDTH / 2), (int) (STAGE_HEIGHT / 2));
         isAlive = true;
     }
 

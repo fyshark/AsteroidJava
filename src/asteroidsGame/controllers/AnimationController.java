@@ -4,90 +4,42 @@ import asteroidsGame.flyingobjects.Alien;
 import asteroidsGame.flyingobjects.Asteroid;
 import asteroidsGame.flyingobjects.Bullet;
 import asteroidsGame.flyingobjects.Player;
+import asteroidsGame.scenes.GameOverScene;
 import asteroidsGame.soundeffets.AePlayWave;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static asteroidsGame.Main.initAliens;
-import static asteroidsGame.Main.initAstroids;
+import static asteroidsGame.flyingobjects.Alien.initAliens;
+import static asteroidsGame.flyingobjects.Asteroid.asteroids;
+import static asteroidsGame.flyingobjects.Bullet.bullets;
+import static asteroidsGame.scenes.GamePlayScene.*;
 
 public class AnimationController extends AnimationTimer {
 
     Player player;
-    AtomicBoolean gameOver;
-    TextField name;
+    GameOverScene gameOverScene;
     Stage primaryStage;
-    Scene inputName;
     long startTime;
-    Label timerLabel;
-    javafx.scene.control.Label pointsLabel;
-    Label levelLabel;
-    Label livesLabel;
-    int playerX;
-    int playerY;
     public static Boolean alienAdded = false;
-    AtomicInteger points;
     public static long lastAlienDeath = System.nanoTime() + (10000L * 1000000);
-    double stageHeight;
     public static Alien alien;
-    private List<Asteroid> asteroids;
-    Pane gamePane;
-    private List<Bullet> bullets;
-    private AtomicInteger levels;
 
     public AnimationController(
             Player player,
-            AtomicBoolean gameOver,
-            TextField name,
             Stage primaryStage,
-            Scene inputName,
-            Label timerLabel,
-            Label pointsLabel,
-            Label levelLabel,
-            Label livesLabel,
-            int playerX,
-            int playerY,
-            AtomicInteger points,
-            double stageHeight,
-            List<Asteroid> asteroids,
-            Pane gamePane,
-            List<Bullet> bullets,
-            AtomicInteger levels) {
+            GameOverScene gameOverScene) {
         this.player = player;
-        this.gameOver = gameOver;
-        this.name = name;
         this.primaryStage = primaryStage;
-        this.inputName = inputName;
-        this.timerLabel = timerLabel;
-        this.pointsLabel = pointsLabel;
-        this.levelLabel = levelLabel;
-        this.livesLabel = livesLabel;
-        this.playerX = playerX;
-        this.playerY = playerY;
-        this.points = points;
-        this.stageHeight = stageHeight;
-        this.asteroids = asteroids;
-        this.gamePane = gamePane;
-        this.bullets = bullets;
-        this.levels = levels;
+        this.gameOverScene = gameOverScene;
     }
 
     @Override
     public void handle(long now) {
         if (player.getLives() == 0) {
-            gameOver.set(true);
-            String playerName = name.getText();
-            primaryStage.setScene(inputName);
-
+            primaryStage.setScene(gameOverScene);
             this.stop();
 
         } else {
@@ -115,6 +67,7 @@ public class AnimationController extends AnimationTimer {
             asteroids.forEach(asteroid -> {
                 asteroid.move();
                 if (player.playerCrash(asteroid)) {
+                    new AePlayWave("src/boom.wav").start();
                     gamePane.getChildren().removeAll(player.getCharacter());
                     gamePane.getChildren().addAll(player.splitBaseShipPolygon());
                     player.resetPosition();
@@ -288,7 +241,7 @@ public class AnimationController extends AnimationTimer {
 
             if (asteroids.toArray().length == 0) {
                 levels.addAndGet(1);
-                initAstroids(playerX, playerY, levels.get());
+                Asteroid.initAsteroids(levels.get());
                 levelLabel.setText("Level: " + levels.get());
             }
         }

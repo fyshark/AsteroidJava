@@ -5,6 +5,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class AppConstants {
+    public static double STAGE_WIDTH, STAGE_HEIGHT;
     public enum AppFont {
         LABEL_FONT("Lucida Sans Unicode", FontWeight.BOLD, 50);
 

@@ -1,7 +1,6 @@
 package asteroidsGame.flyingobjects;
 
 import asteroidsGame.constants.AppConstants;
-import asteroidsGame.Main;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
@@ -12,6 +11,10 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import static asteroidsGame.constants.AppConstants.STAGE_HEIGHT;
+import static asteroidsGame.constants.AppConstants.STAGE_WIDTH;
+import static asteroidsGame.scenes.GamePlayScene.gamePane;
 
 public abstract class BaseShip {
     int defaultShipX; // the default x-coordinate of the BaseShip
@@ -45,24 +48,26 @@ public abstract class BaseShip {
         this.lastBulletTime = 0;
     }
 
-    public Polygon getCharacter() {return this.ship;} // returns the shape of the BaseShip to the scene we call it on
+    public Polygon getCharacter() {
+        return this.ship;
+    } // returns the shape of the BaseShip to the scene we call it on
 
     public void screenBounds() {
         // The conditions below checks that the ship stays on screen.
         if (this.ship.getTranslateX() < 0) {
-            this.ship.setTranslateX(this.ship.getTranslateX() + Main.STAGE_WIDTH);
+            this.ship.setTranslateX(this.ship.getTranslateX() + STAGE_WIDTH);
         }
 
-        if (this.ship.getTranslateX() > Main.STAGE_WIDTH) {
-            this.ship.setTranslateX(this.ship.getTranslateX() % Main.STAGE_WIDTH);
+        if (this.ship.getTranslateX() > STAGE_WIDTH) {
+            this.ship.setTranslateX(this.ship.getTranslateX() % STAGE_WIDTH);
         }
 
         if (this.ship.getTranslateY() < 0) {
-            this.ship.setTranslateY(this.ship.getTranslateY() + Main.STAGE_HEIGHT);
+            this.ship.setTranslateY(this.ship.getTranslateY() + STAGE_HEIGHT);
         }
 
-        if (this.ship.getTranslateY() > Main.STAGE_HEIGHT) {
-            this.ship.setTranslateY(this.ship.getTranslateY() % Main.STAGE_HEIGHT);
+        if (this.ship.getTranslateY() > STAGE_HEIGHT) {
+            this.ship.setTranslateY(this.ship.getTranslateY() % STAGE_HEIGHT);
         }
     }
 
@@ -172,7 +177,7 @@ public abstract class BaseShip {
 
         timeline.play();
         timeline.setOnFinished(event -> {
-            Main.gamePane.getChildren().removeAll(lineslist);
+            gamePane.getChildren().removeAll(lineslist);
         });
 
     }
