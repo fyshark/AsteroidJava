@@ -43,6 +43,7 @@ public class AnimationController extends AnimationTimer {
     Pane gamePane;
     private List<Bullet> bullets;
     private AtomicInteger levels;
+    Label HScore;
 
     public AnimationController(
             Player player,
@@ -61,7 +62,9 @@ public class AnimationController extends AnimationTimer {
             List<Asteroid> asteroids,
             Pane gamePane,
             List<Bullet> bullets,
-            AtomicInteger levels) {
+            AtomicInteger levels,
+            Label HScore
+    ) {
         this.player = player;
         this.gameOver = gameOver;
         this.name = name;
@@ -79,12 +82,14 @@ public class AnimationController extends AnimationTimer {
         this.gamePane = gamePane;
         this.bullets = bullets;
         this.levels = levels;
+        this.HScore=HScore;
     }
 
     @Override
     public void handle(long now) {
         if (player.getLives() == 0) {
             gameOver.set(true);
+            HScore.setText("Your points  "+points);
             String playerName = name.getText();
             primaryStage.setScene(inputName);
 

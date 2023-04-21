@@ -50,6 +50,7 @@ public class Main extends Application {
 
 
     private final AtomicInteger points = new AtomicInteger(0);
+    Label HScore;
 
     @Override
     public void start(Stage primaryStage) {
@@ -90,12 +91,15 @@ public class Main extends Application {
        // pause.setSelected(false);
         //pause.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         // Create the pointcard object
+//        pause.setAlignment(Pos.CENTER_RIGHT);
         Label pointsLabel = new Label("Points: 0");
         pointsLabel.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
         pointsLabel.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
         VBox pointcard = new VBox(pointsLabel);
         pointcard.setAlignment(Pos.CENTER_LEFT);
+
+
 
 // Create the Livescard object
         Label livesLabel = new Label("Lives: " + player.getLives());
@@ -115,13 +119,13 @@ public class Main extends Application {
 
 
 // Stack the objects vertically using a VBox
-        VBox vbox = new VBox(pointcard,levelsCard,Livescard);
-        vbox.setAlignment(Pos.TOP_LEFT);
-        vbox.setSpacing(10);
+        VBox vbox1 = new VBox(pointcard,levelsCard,Livescard);
+        vbox1.setAlignment(Pos.TOP_LEFT);
+        vbox1.setSpacing(10);
 
 // Add the VBox to the left-hand side of the screen using a BorderPane
         BorderPane borderPane = new BorderPane();
-        borderPane.setLeft(vbox);
+        borderPane.setLeft(vbox1);
 
 // Timer label in VBox
         Label timerLabel = new Label();
@@ -134,8 +138,8 @@ public class Main extends Application {
         gamePane.getChildren().addAll(borderPane,pause,timerLabel);
       primaryStage.setOnShown(event -> {
           pause.toFront();
-            pause.setLayoutX(gamePane.getWidth() - 100);
-            pause.setLayoutY(20);
+          pause.setLayoutX(STAGE_WIDTH-60);
+          pause.setLayoutY(10);
         });
 
         gameScene = new Scene(gamePane, STAGE_WIDTH, STAGE_HEIGHT);
@@ -206,6 +210,11 @@ public class Main extends Application {
         Gameover.setFont(font);
         Gameover.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
+        HScore=new Label("Your Points"+points);
+        Font font1 = Font.font("Lucida Sans Unicode", FontWeight.BOLD, 60);
+        HScore.setFont(font1);
+        HScore.setTextFill(AppConstants.AppColor.SHAPE.getColor());
+
         TextField name = new TextField();
         name.setText("Players name");
         name.setPrefHeight(25);
@@ -214,7 +223,7 @@ public class Main extends Application {
         //This creates a button to submit the name to the leaderboard
         Button submitButton = new Button("Submit");
 
-        InputNames.getChildren().addAll(Gameover, name, submitButton);
+        InputNames.getChildren().addAll(Gameover,HScore, name, submitButton);
         InputNames.setAlignment(Pos.CENTER); // Center the VBox
         InputNames.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
         Scene Inputname = new Scene(InputNames, STAGE_WIDTH, STAGE_HEIGHT);
@@ -256,8 +265,8 @@ public class Main extends Application {
                 asteroids,
                 gamePane,
                 bullets,
-                levels
-        );
+                levels,
+                HScore);
 
         submitButton.setOnAction(event -> {
             // Record and save player scores
