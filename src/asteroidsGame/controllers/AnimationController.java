@@ -5,7 +5,6 @@ import asteroidsGame.flyingobjects.Asteroid;
 import asteroidsGame.flyingobjects.Bullet;
 import asteroidsGame.flyingobjects.Player;
 import asteroidsGame.scenes.GameOverScene;
-import asteroidsGame.scenes.GamePlayScene;
 import asteroidsGame.soundeffets.AePlayWave;
 import javafx.animation.AnimationTimer;
 import javafx.stage.Stage;
@@ -27,7 +26,6 @@ public class AnimationController extends AnimationTimer {
     public static Boolean alienAdded = false;
     public static long lastAlienDeath = System.nanoTime() + (10000L * 1000000);
     public static Alien alien;
-    GameOverScene HScores;
 
     public AnimationController(
             Player player,
