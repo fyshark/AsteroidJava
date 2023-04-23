@@ -57,7 +57,7 @@ public class Player extends BaseShip {
 
     public void accelerate() {
         // accelerates the player's ship in the direction it is facing
-        double acceleration = 0.25; // the rate of acceleration
+        double acceleration = 0.5; // the rate of acceleration
         double maxSpeed = 10.0; // the maximum speed the ship can travel
         double changeX = Math.cos(Math.toRadians(ship.getRotate())) * acceleration;
         double changeY = Math.sin(Math.toRadians(ship.getRotate())) * acceleration;
@@ -90,12 +90,12 @@ public class Player extends BaseShip {
 
     public void turnLeft() {
         // turns the player's ship to the left by 30 degrees
-        this.ship.setRotate(this.ship.getRotate() - 12);
+        this.ship.setRotate(this.ship.getRotate() - 30);
     }
 
     public void turnRight() {
         // turns the player's ship to the right by 30 degrees
-        this.ship.setRotate(this.ship.getRotate() + 12);
+        this.ship.setRotate(this.ship.getRotate() + 30);
     }
 
     public boolean playerCrash(Asteroid asteroid) {

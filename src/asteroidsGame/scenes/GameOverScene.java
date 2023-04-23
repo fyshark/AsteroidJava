@@ -54,9 +54,8 @@ public class GameOverScene extends Scene {
         gameOverVbox.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
 
         submitButton.setOnAction(event -> {
-           HScore.setText("Points"+points.get());
+            HScore.setText("Points"+points.get());
             // Record and save player scores
-            System.out.println(name.getText());
             HighScoreRecorder.getRecorder().addHighScore(name.getText(), points);
             primaryStage.setScene(MainMenuScene.mainPageScene);
             player.resetPosition();
