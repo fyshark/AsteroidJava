@@ -23,8 +23,8 @@ public class Asteroid extends Rectangle{
     private int asteroidY;
     public double size;
     public Polygon asteroid; // the shape of the asteroid
-    private final double INCREASE_SPEED = 0.3;
-    private final double INCREASE_ROTATION = 3;
+    private final double INCREASE_SPEED = 0.2;
+    private final double INCREASE_ROTATION = 2;
     public static final List<Asteroid> asteroids = new ArrayList<>();
 
     public Asteroid(double size, double speed, int x, int y) {
