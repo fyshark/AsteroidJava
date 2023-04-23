@@ -1,4 +1,4 @@
-package asteroidsGame.pages;
+package asteroidsGame.scenes;
 
 
 import asteroidsGame.constants.AppConstants;
@@ -19,27 +19,26 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import static asteroidsGame.constants.AppConstants.STAGE_HEIGHT;
+import static asteroidsGame.constants.AppConstants.STAGE_WIDTH;
 
-public class MainMenu {
+public class MainMenuScene {
     public static Scene mainPageScene;
-
-    public MainMenu(Stage primaryStage, Scene gameScene, AnimationController timer) {
-       int width = (int) Screen.getPrimary().getBounds().getWidth();
-       int height = (int) Screen.getPrimary().getBounds().getHeight();
+    Button backToPause;
+    public MainMenuScene(Stage primaryStage, Scene gameScene, AnimationController timer) {
 
         // create a stack pane
-        Pane r = new Pane();
+        Pane mainMenuPane = new Pane();
         Pane playGamePane = new Pane();
-        Button backToPause = new Button("Back to Main Menu");
+        backToPause = new Button("Back to Main Menu");
         backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
 
         playGamePane.getChildren().addAll(new Label("playGame"), backToPause);
 
         // create scenes
-        mainPageScene = new Scene(r, width, height);
+        mainPageScene = new Scene(mainMenuPane, STAGE_WIDTH, STAGE_HEIGHT);
 
         VBox OpeningPage = new VBox();
         OpeningPage.setSpacing(10);
@@ -49,30 +48,17 @@ public class MainMenu {
         gameName.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 150));
         gameName.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
-        r.getChildren().add(gameName);
-        r.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
+        mainMenuPane.getChildren().add(gameName);
+        mainMenuPane.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
 
         // create buttons
         Button[] buttons = generateButtons(mainPageScene);
         Button playGame = buttons[0];
         Button highScores = buttons[1];
-        Button Info = buttons[2];
+        Button info = buttons[2];
 
         // Leaderboard Scene
-        Label leaderboardTitle = new Label("Leaderboard");
-        TableView leaderBoardTableView = generateLeaderBoardTableView();
 
-
-        leaderboardTitle.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
-        leaderboardTitle.setTextFill(AppConstants.AppColor.SHAPE.getColor());
-        backToPause = new Button("Back to Main Menu");
-        backToPause.setOnAction(e -> primaryStage.setScene(mainPageScene));
-
-        VBox leaderboardLayout = new VBox(10);
-        leaderboardLayout.getChildren().addAll(leaderboardTitle, leaderBoardTableView, backToPause);
-        leaderboardLayout.setAlignment(Pos.CENTER);
-        leaderboardLayout.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
-        Scene leaderboardScene = new Scene(leaderboardLayout, width, height);
 
         Pane ControlsPane = new Pane();
         ControlsPane.getChildren().add(new Label("Controls"));
@@ -98,7 +84,7 @@ public class MainMenu {
         // Add the label to the VBox
         paragraph.setTextFill(AppConstants.AppColor.SHAPE.getColor());
         Button BackMain = new Button("Back to Main Menu");
-        ControlDescription.getChildren().addAll(paragraph, BackMain );
+        ControlDescription.getChildren().addAll(paragraph, BackMain);
         ControlDescription.setAlignment(Pos.CENTER);
         // Create a scene and add the VBox to it
         Scene ControlsScene = new Scene(ControlDescription, 400, 200);
@@ -106,34 +92,46 @@ public class MainMenu {
             primaryStage.setScene(mainPageScene);
         });
 
-        Info.setOnAction(e -> primaryStage.setScene(ControlsScene));
+        info.setOnAction(e -> primaryStage.setScene(ControlsScene));
 
-        r.getChildren().addAll(buttons);
+
+        mainMenuPane.getChildren().addAll(buttons);
 
         playGame.setOnAction(e -> {
             primaryStage.setScene(gameScene);
+
             timer.startWithNewTime();
+
             AnimationController.lastAlienDeath = System.nanoTime() + (10000L * 1000000);
             //The game starts with BGM
             new AePlayWave("src/start.wav").start();
         });
 
         highScores.setOnAction(e -> {
-            primaryStage.setScene(leaderboardScene);
+            primaryStage.setScene(generateLeaderBoardScene());
         });
 
-        // set the scene
-        primaryStage.setScene(mainPageScene);
-
-        playGame.setLayoutY(height / 3f + 100);
-        highScores.setLayoutY(height / 3f + 180);
-        gameName.setLayoutY(height / 4f - 100);
-        Info.setLayoutY(height / 3f + 250);
-
-        centerElements(width, gameName, playGame, highScores,Info);
+        initElementsPosition(gameName, playGame, highScores, info);
+        centerElements(gameName, playGame, highScores, info);
 
 
         primaryStage.show();
+    }
+
+    private Scene generateLeaderBoardScene() {
+        Label leaderboardTitle = new Label("Leaderboard");
+        TableView leaderBoardTableView = generateLeaderBoardTableView();
+
+
+        leaderboardTitle.setFont(Font.font("Lucida Sans Unicode", FontWeight.BOLD, 45));
+        leaderboardTitle.setTextFill(AppConstants.AppColor.SHAPE.getColor());
+
+
+        VBox leaderboardLayout = new VBox(10);
+        leaderboardLayout.getChildren().addAll(leaderboardTitle, leaderBoardTableView, backToPause);
+        leaderboardLayout.setAlignment(Pos.CENTER);
+        leaderboardLayout.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
+        return new Scene(leaderboardLayout, STAGE_WIDTH, STAGE_HEIGHT);
     }
 
     private TableView generateLeaderBoardTableView() {
@@ -180,20 +178,17 @@ public class MainMenu {
         return leaderboardTable;
     }
 
-    private static void centerElements(int width, Label gameName, Button playGame, Button highScores, Button Info) {
-        gameName.widthProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue o, Object oldVal,
-                                Object newVal) {
-                gameName.setLayoutX(width / 2d - (double) newVal / 2d);
-            }
-        });
+    private void initElementsPosition(Label gameName, Button playGame, Button highScores, Button info) {
+        playGame.setLayoutY(STAGE_HEIGHT / 3f + 100);
+        highScores.setLayoutY(STAGE_HEIGHT / 3f + 180);
+        gameName.setLayoutY(STAGE_HEIGHT / 3f - 130);
+        info.setLayoutY(STAGE_HEIGHT / 3f + 250);
 
         playGame.widthProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue o, Object oldVal,
                                 Object newVal) {
-                playGame.setLayoutX(width / 2d - (double) newVal / 2d);
+                playGame.setLayoutX(STAGE_WIDTH / 2d - (double) newVal / 2d);
             }
         });
 
@@ -201,14 +196,36 @@ public class MainMenu {
             @Override
             public void changed(ObservableValue o, Object oldVal,
                                 Object newVal) {
-                highScores.setLayoutX(width / 2d - (double) newVal / 2d);
+                highScores.setLayoutX(STAGE_WIDTH / 2d - (double) newVal / 2d);
             }
         });
-        Info.widthProperty().addListener(new ChangeListener() {
+
+        gameName.widthProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue o, Object oldVal,
                                 Object newVal) {
-                Info.setLayoutX(width / 2d - (double) newVal / 2d);
+                gameName.setLayoutX(STAGE_WIDTH / 2d - (double) newVal / 2d);
+            }
+        });
+        info.widthProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                                Object newVal) {
+                info.setLayoutX(STAGE_WIDTH / 2d - (double) newVal / 2d);
+            }
+        });
+    }
+
+    private void centerElements(Label gameName, Button playGame, Button highScores, Button Info) {
+
+        mainPageScene.widthProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                                Object newVal) {
+                gameName.setLayoutX((double) newVal / 2d - gameName.getWidth() / 2);
+                playGame.setLayoutX((double) newVal / 2d - playGame.getWidth() / 2);
+                highScores.setLayoutX((double) newVal / 2d - highScores.getWidth() / 2);
+                Info.setLayoutX((double) newVal / 2d - Info.getWidth() / 2);
             }
         });
     }

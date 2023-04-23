@@ -1,8 +1,14 @@
 package asteroidsGame.flyingobjects;
 
 import asteroidsGame.constants.AppConstants;
+import asteroidsGame.controllers.AnimationController;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
+
+import java.util.Random;
+
+import static asteroidsGame.constants.AppConstants.STAGE_HEIGHT;
+import static asteroidsGame.scenes.GamePlayScene.gamePane;
 
 public class Alien extends BaseShip {
 
@@ -78,5 +84,23 @@ public class Alien extends BaseShip {
         double bulletDirection = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
 
         return new Bullet(bulletX, bulletY, bulletDirection, alienMovement, shooter);
+    }
+
+    public static void removeAliens() {
+        if (AnimationController.alien != null) {
+            gamePane.getChildren().remove(AnimationController.alien.getCharacter());
+            AnimationController.alien = null;
+            AnimationController.alienAdded = false;
+        }
+    }
+    //factory function for creating aliens
+    public static Alien initAliens() {
+        Random random_pos = new Random();
+        int alienX = 0;
+        int appearHeight = (int) STAGE_HEIGHT;
+        int alienY = random_pos.nextInt(appearHeight);
+        Alien alien = new Alien(alienX, alienY);
+        gamePane.getChildren().addAll(alien.getCharacter());
+        return alien;
     }
 }

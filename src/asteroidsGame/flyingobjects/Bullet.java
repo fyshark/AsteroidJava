@@ -1,19 +1,25 @@
 package asteroidsGame.flyingobjects;
 
 import asteroidsGame.constants.AppConstants;
-import asteroidsGame.Main;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static asteroidsGame.constants.AppConstants.STAGE_HEIGHT;
+import static asteroidsGame.constants.AppConstants.STAGE_WIDTH;
 
 public class Bullet extends Rectangle {
     private Point2D velocity; // Bullet velocity
     private boolean isAlive = true; // Are the bullets still alive
     public static int BULLET_WIDTH = 3; // Declare bullet width
-    private static final int DISAPPEAR_DISTANCE = (int) Main.STAGE_HEIGHT / 2;
+    private static final int DISAPPEAR_DISTANCE = (int) STAGE_HEIGHT / 2;
     private double initX, initY;
     private Double crossX, crossY;
     private Float remindingDistance;
     public String shooter;
+    public static List<Bullet> bullets = new ArrayList<>();
 
     public Bullet(double x, double y, double direction, Point2D baseSpeed, String shooter) {
         setWidth(BULLET_WIDTH); // Bullet width
@@ -50,16 +56,16 @@ public class Bullet extends Rectangle {
             // Condition when bullets go beyond the left side of the x-coordinate system boundary
             if (getTranslateX() < 0) {
                 remindingDistance = DISAPPEAR_DISTANCE - calculateDistanceBetweenPoints(getTranslateX(), getTranslateY() + velocity.getY(), initX, initY);
-                crossX = getTranslateX() + Main.STAGE_WIDTH;
+                crossX = getTranslateX() + STAGE_WIDTH;
                 setTranslateX(crossX);
 
                 crossY = getTranslateY();
             }
 
             // Condition when bullets go beyond the right side of the x-coordinate system boundary
-            if (getTranslateX() > Main.STAGE_WIDTH) {
+            if (getTranslateX() > STAGE_WIDTH) {
                 remindingDistance = DISAPPEAR_DISTANCE - calculateDistanceBetweenPoints(getTranslateX(), getTranslateY() + velocity.getY(), initX, initY);
-                crossX = getTranslateX() % Main.STAGE_WIDTH;
+                crossX = getTranslateX() % STAGE_WIDTH;
                 setTranslateX(crossX);
 
                 crossY = getTranslateY();
@@ -68,15 +74,15 @@ public class Bullet extends Rectangle {
             // Condition when bullets go below the bottom of the y-coordinate system boundary
             if (getTranslateY() < 0) {
                 remindingDistance = DISAPPEAR_DISTANCE - calculateDistanceBetweenPoints(getTranslateX() + velocity.getX(), getTranslateY(), initX, initY);
-                crossY = getTranslateY() + Main.STAGE_HEIGHT;
+                crossY = getTranslateY() + STAGE_HEIGHT;
                 setTranslateY(crossY);
                 crossX = getTranslateX();
             }
 
             // Condition when bullets go beyond the top of the y-coordinate system boundary
-            if (getTranslateY() > Main.STAGE_HEIGHT) {
+            if (getTranslateY() > STAGE_HEIGHT) {
                 remindingDistance = DISAPPEAR_DISTANCE - calculateDistanceBetweenPoints(getTranslateX() + velocity.getX(), getTranslateY(), initX, initY);
-                crossY = getTranslateY() % Main.STAGE_HEIGHT;
+                crossY = getTranslateY() % STAGE_HEIGHT;
                 setTranslateY(crossY);
 
                 crossX = getTranslateX();
@@ -111,6 +117,7 @@ public class Bullet extends Rectangle {
     public int getCurrentBulletX() {
         return (int) velocity.getX();
     }
+
     public int getCurrentBulletY() {
         return (int) velocity.getY();
     }
