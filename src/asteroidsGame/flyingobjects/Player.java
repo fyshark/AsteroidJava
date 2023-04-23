@@ -57,8 +57,8 @@ public class Player extends BaseShip {
 
     public void accelerate() {
         // accelerates the player's ship in the direction it is facing
-        double acceleration = 0.18; // the rate of acceleration
-        double maxSpeed = 8.0; // the maximum speed the ship can travel
+        double acceleration = 0.5; // the rate of acceleration
+        double maxSpeed = 10.0; // the maximum speed the ship can travel
         double changeX = Math.cos(Math.toRadians(ship.getRotate())) * acceleration;
         double changeY = Math.sin(Math.toRadians(ship.getRotate())) * acceleration;
         movement = movement.add(changeX, changeY); // add the acceleration vector to the movement vector

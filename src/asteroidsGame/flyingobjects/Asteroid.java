@@ -23,8 +23,8 @@ public class Asteroid extends Rectangle{
     private int asteroidY;
     public double size;
     public Polygon asteroid; // the shape of the asteroid
-    private final double INCREASE_SPEED = 0.2;
-    private final double INCREASE_ROTATION = 2;
+    private final double INCREASE_SPEED = 0.3;
+    private final double INCREASE_ROTATION = 3;
     public static final List<Asteroid> asteroids = new ArrayList<>();
 
     public Asteroid(double size, double speed, int x, int y) {
@@ -100,7 +100,7 @@ public class Asteroid extends Rectangle{
     public Polygon createAsteroid(double size) {
         Random rnd = new Random();
 
-        // Generate a random number of sides between 12-20
+        // Generate a random number of sides between 7-12
         int sides = rnd.nextInt(5) + 7;
 
         // Calculate the angle between each side of the polygon
