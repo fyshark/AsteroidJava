@@ -28,7 +28,7 @@ public class GameOverScene extends Scene {
         gameover.setFont(font);
         gameover.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
-        Label HScore=new Label("Your Points"+points);
+        Label HScore=new Label("Your Points are "+ points.get());
         Font font1 = Font.font("Lucida Sans Unicode", FontWeight.BOLD, 60);
         HScore.setFont(font1);
         HScore.setTextFill(AppConstants.AppColor.SHAPE.getColor());
