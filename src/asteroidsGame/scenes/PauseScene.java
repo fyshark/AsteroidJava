@@ -22,7 +22,7 @@ import static asteroidsGame.scenes.MainMenuScene.mainPageScene;
 public class PauseScene extends Scene {
 
     public static Pane pausePane = new Pane();
-    private Label pauseSceneTit;
+    private static Label pauseSceneTit;
     Button resume = new Button("Resume");
     Button mainMenu = new Button("Main Menu");
     Button closeGame = new Button("Close Game");
@@ -48,6 +48,8 @@ public class PauseScene extends Scene {
         for (Node node : buttonContainer.getChildren()) {
             if (node instanceof Button) {
                 ((Button) node).setAlignment(Pos.CENTER);
+                (node).setStyle(AppConstants.ButtonStyle.BUTTON_NODE.getStyle());
+
             }
         }
         buttonContainer.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
@@ -57,7 +59,7 @@ public class PauseScene extends Scene {
         });
 
         closeGame.setOnAction(event -> {
-            //This closes the whole game!!! As in like exits the whole javafx
+            //This closes the whole game!!! As in exits the whole javafx
             Platform.exit();
             System.exit(0);
         });
