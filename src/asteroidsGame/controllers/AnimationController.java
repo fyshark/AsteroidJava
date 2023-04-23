@@ -38,12 +38,14 @@ public class AnimationController extends AnimationTimer {
 
     @Override
     public void handle(long now) {
+        long elapsedTime = (now - startTime) / 1_000_000_000;
         if (player.getLives() == 0) {
+            gameOverScene.getHScore().setText("You gathered this amount of points "+points.get());
+            gameOverScene.getTimeTook().setText("This is how long you survived "+ elapsedTime + "s");
             primaryStage.setScene(gameOverScene);
             this.stop();
 
         } else {
-            long elapsedTime = (now - startTime) / 1_000_000_000;
 
             // update the text of the timerLabel
             timerLabel.setText("Time: " + elapsedTime + "s");
