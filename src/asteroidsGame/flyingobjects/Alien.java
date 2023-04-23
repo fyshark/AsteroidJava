@@ -86,6 +86,7 @@ public class Alien extends BaseShip {
         return new Bullet(bulletX, bulletY, bulletDirection, alienMovement, shooter);
     }
 
+    // removes alien from pane
     public static void removeAliens() {
         if (AnimationController.alien != null) {
             gamePane.getChildren().remove(AnimationController.alien.getCharacter());
