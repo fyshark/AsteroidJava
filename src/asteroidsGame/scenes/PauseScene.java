@@ -34,6 +34,7 @@ public class PauseScene extends Scene {
         initPane();
         pauseSceneTit = new Label("Pause Menu");
         pauseSceneTit.setFont(AppConstants.AppFont.LABEL_FONT.getFont());
+        pauseSceneTit.setTextFill(AppConstants.AppColor.SHAPE.getColor());
         pausePane.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
         initButtons(player, primaryStage, gamePlayScene);
         pausePane.getChildren().addAll(buttonContainer);
@@ -47,7 +48,6 @@ public class PauseScene extends Scene {
         for (Node node : buttonContainer.getChildren()) {
             if (node instanceof Button) {
                 ((Button) node).setAlignment(Pos.CENTER);
-                ((Button) node).setStyle(AppConstants.ButtonStyle.BUTTON_NODE.getStyle());
             }
         }
         buttonContainer.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
