@@ -28,6 +28,11 @@ public class GameOverScene extends Scene {
         gameover.setFont(font);
         gameover.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
+        Label HScore=new Label("Your Points"+points);
+        Font font1 = Font.font("Lucida Sans Unicode", FontWeight.BOLD, 60);
+        HScore.setFont(font1);
+        HScore.setTextFill(AppConstants.AppColor.SHAPE.getColor());
+
         TextField name = new TextField();
         name.setText("Players name");
         name.setPrefHeight(25);
@@ -36,7 +41,7 @@ public class GameOverScene extends Scene {
         //This creates a button to submit the name to the leaderboard
         Button submitButton = new Button("Submit");
 
-        gameOverVbox.getChildren().addAll(gameover, name, submitButton);
+        gameOverVbox.getChildren().addAll(gameover,HScore, name, submitButton);
         gameOverVbox.setAlignment(Pos.CENTER); // Center the VBox
         gameOverVbox.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
 
