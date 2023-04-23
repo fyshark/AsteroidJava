@@ -12,8 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import static asteroidsGame.Main.STAGE_HEIGHT;
-import static asteroidsGame.Main.STAGE_WIDTH;
+import static asteroidsGame.constants.AppConstants.STAGE_HEIGHT;
+import static asteroidsGame.constants.AppConstants.STAGE_WIDTH;
+
 
 public class Player extends BaseShip {
 
@@ -22,8 +23,8 @@ public class Player extends BaseShip {
     boolean isAlive;
     private int lives = 3;
 
-    public Player(int x, int y) {
-        super(createPlayerPolygon(), x, y);
+    public Player() {
+        super(createPlayerPolygon(), (int) (STAGE_WIDTH / 2), (int) (STAGE_HEIGHT / 2));
         isAlive = true;
     }
 
@@ -56,7 +57,7 @@ public class Player extends BaseShip {
 
     public void accelerate() {
         // accelerates the player's ship in the direction it is facing
-        double acceleration = 0.25; // the rate of acceleration
+        double acceleration = 0.5; // the rate of acceleration
         double maxSpeed = 10.0; // the maximum speed the ship can travel
         double changeX = Math.cos(Math.toRadians(ship.getRotate())) * acceleration;
         double changeY = Math.sin(Math.toRadians(ship.getRotate())) * acceleration;
@@ -89,12 +90,12 @@ public class Player extends BaseShip {
 
     public void turnLeft() {
         // turns the player's ship to the left by 30 degrees
-        this.ship.setRotate(this.ship.getRotate() - 12);
+        this.ship.setRotate(this.ship.getRotate() - 30);
     }
 
     public void turnRight() {
         // turns the player's ship to the right by 30 degrees
-        this.ship.setRotate(this.ship.getRotate() + 12);
+        this.ship.setRotate(this.ship.getRotate() + 30);
     }
 
     public boolean playerCrash(Asteroid asteroid) {

@@ -1,12 +1,20 @@
 package asteroidsGame.flyingobjects;
 
 import asteroidsGame.constants.AppConstants;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.stage.Screen;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import static asteroidsGame.Main.STAGE_HEIGHT;
-import static asteroidsGame.Main.STAGE_WIDTH;
+
+import static asteroidsGame.Main.*;
+import static asteroidsGame.constants.AppConstants.STAGE_HEIGHT;
+import static asteroidsGame.constants.AppConstants.STAGE_WIDTH;
+import static asteroidsGame.scenes.GamePlayScene.gamePane;
 
 public class Asteroid extends Rectangle{
     public double speed;
@@ -15,8 +23,9 @@ public class Asteroid extends Rectangle{
     private int asteroidY;
     public double size;
     public Polygon asteroid; // the shape of the asteroid
-    private final double INCREASE_SPEED = 0.2;
-    private final double INCREASE_ROTATION = 2;
+    private final double INCREASE_SPEED = 0.3;
+    private final double INCREASE_ROTATION = 3;
+    public static final List<Asteroid> asteroids = new ArrayList<>();
 
     public Asteroid(double size, double speed, int x, int y) {
         Random rnd = new Random();
@@ -91,7 +100,7 @@ public class Asteroid extends Rectangle{
     public Polygon createAsteroid(double size) {
         Random rnd = new Random();
 
-        // Generate a random number of sides between 12-20
+        // Generate a random number of sides between 7-12
         int sides = rnd.nextInt(5) + 7;
 
         // Calculate the angle between each side of the polygon
@@ -112,5 +121,38 @@ public class Asteroid extends Rectangle{
         }
 
         return polygon;
+    }
+
+    public static void initAsteroids(int level) {
+        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
+        int playerX = (int) screenSize.getWidth();
+        int playerY = (int) screenSize.getHeight();
+        if (!asteroids.isEmpty()) {
+            for (Asteroid a: asteroids) {
+                gamePane.getChildren().remove(a.getAsteroid());
+            }
+
+            asteroids.clear();
+        }
+
+        for (int i = 0; i < level; i++) {
+            double size = Math.random() * 20 + 60; // random size between 60 and 80
+            double speed = Math.random() * 1; // random speed between 1
+            int x = (int) (Math.random() * STAGE_WIDTH);
+            int y = (int) (Math.random() * STAGE_HEIGHT);
+            if (x < playerX) {
+                x -= 150;
+            } else {
+                x += 150;
+            }
+            if (y < playerY) {
+                y -= 150;
+            } else {
+                y += 150;
+            }
+            Asteroid asteroid = new Asteroid(size, speed, x, y);
+            gamePane.getChildren().addAll(asteroid.getAsteroid());
+            asteroids.add(asteroid); // add asteroid to the asteroids array
+        }
     }
 }
