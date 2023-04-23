@@ -5,6 +5,7 @@ import asteroidsGame.flyingobjects.Asteroid;
 import asteroidsGame.flyingobjects.Bullet;
 import asteroidsGame.flyingobjects.Player;
 import asteroidsGame.scenes.GameOverScene;
+import asteroidsGame.scenes.GamePlayScene;
 import asteroidsGame.soundeffets.AePlayWave;
 import javafx.animation.AnimationTimer;
 import javafx.stage.Stage;
@@ -26,11 +27,13 @@ public class AnimationController extends AnimationTimer {
     public static Boolean alienAdded = false;
     public static long lastAlienDeath = System.nanoTime() + (10000L * 1000000);
     public static Alien alien;
+    GameOverScene HScores;
 
     public AnimationController(
             Player player,
             Stage primaryStage,
-            GameOverScene gameOverScene) {
+            GameOverScene gameOverScene
+    ) {
         this.player = player;
         this.primaryStage = primaryStage;
         this.gameOverScene = gameOverScene;
@@ -39,6 +42,7 @@ public class AnimationController extends AnimationTimer {
     @Override
     public void handle(long now) {
         if (player.getLives() == 0) {
+            gameOverScene.getHScore().setText("Points you died with "+points.get());
             primaryStage.setScene(gameOverScene);
             this.stop();
 

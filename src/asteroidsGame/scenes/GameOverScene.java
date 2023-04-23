@@ -13,13 +13,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
+import asteroidsGame.controllers.AnimationController;
 import static asteroidsGame.Main.timer;
 import static asteroidsGame.flyingobjects.Alien.removeAliens;
 import static asteroidsGame.scenes.GamePlayScene.*;
 
+
 public class GameOverScene extends Scene {
     private static VBox gameOverVbox = new VBox(10);
+    public static  Label HScore;
+
 
     public GameOverScene(Player player, Stage primaryStage) {
         super(gameOverVbox);
@@ -28,10 +31,11 @@ public class GameOverScene extends Scene {
         gameover.setFont(font);
         gameover.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
-        Label HScore=new Label("Your Points are "+ points);
+        HScore=new Label("Your Points are "+points.get());
         Font font1 = Font.font("Lucida Sans Unicode", FontWeight.BOLD, 60);
         HScore.setFont(font1);
         HScore.setTextFill(AppConstants.AppColor.SHAPE.getColor());
+
 
         TextField name = new TextField();
         name.setText("Players name");
@@ -41,24 +45,27 @@ public class GameOverScene extends Scene {
         //This creates a button to submit the name to the leaderboard
         Button submitButton = new Button("Submit");
 
-        gameOverVbox.getChildren().addAll(gameover,HScore, name, submitButton);
+        gameOverVbox.getChildren().addAll(gameover,HScore,name, submitButton);
         gameOverVbox.setAlignment(Pos.CENTER); // Center the VBox
         gameOverVbox.setStyle(AppConstants.ButtonStyle.BACKGROUND.getStyle());
 
         submitButton.setOnAction(event -> {
+           HScore.setText("Points"+points.get());
             // Record and save player scores
-            HScore.setText("Points are "+ points.get());
             System.out.println(name.getText());
             HighScoreRecorder.getRecorder().addHighScore(name.getText(), points);
             primaryStage.setScene(MainMenuScene.mainPageScene);
             player.resetPosition();
-            points.set(0);
             levels.set(1);
             player.setLives(3);
+            points.set(0);
             removeAliens();
             Asteroid.initAsteroids(levels.get());
             timer.stop();
             timerLabel.setText("Time: 0s");
         });
+    }
+    public Label getHScore() {
+        return HScore;
     }
 }
