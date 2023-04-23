@@ -28,7 +28,7 @@ public class GameOverScene extends Scene {
         gameover.setFont(font);
         gameover.setTextFill(AppConstants.AppColor.SHAPE.getColor());
 
-        Label HScore=new Label("Your Points are "+ points.get());
+        Label HScore=new Label("Your Points are "+ points);
         Font font1 = Font.font("Lucida Sans Unicode", FontWeight.BOLD, 60);
         HScore.setFont(font1);
         HScore.setTextFill(AppConstants.AppColor.SHAPE.getColor());
@@ -47,6 +47,7 @@ public class GameOverScene extends Scene {
 
         submitButton.setOnAction(event -> {
             // Record and save player scores
+            HScore.setText("Points are "+ points.get());
             System.out.println(name.getText());
             HighScoreRecorder.getRecorder().addHighScore(name.getText(), points);
             primaryStage.setScene(MainMenuScene.mainPageScene);
