@@ -101,6 +101,7 @@ public class AnimationController extends AnimationTimer {
 
                 //if alien is on screen and it crashes into an asteroid, it's removed
                 if (alienAdded && alien.crash(asteroid)) {
+                    new AePlayWave("src/boom.wav").start();
                     lastAlienDeath = System.nanoTime();
                     alienAdded = false;
                     gamePane.getChildren().removeAll(alien.getCharacter());
