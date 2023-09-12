@@ -22,6 +22,7 @@ public class Main extends Application {
     public static AnimationController timer;
     public static PauseScene pauseScene;
 
+    // entry point of the game
     @Override
     public void start(Stage primaryStage) {
         initPrimaryStage(primaryStage);
@@ -36,6 +37,7 @@ public class Main extends Application {
         primaryStage.setScene(mainPageScene);
     }
 
+    // initialise the primary stage
     private void initPrimaryStage(Stage primaryStage) {
         Rectangle2D screenSize = Screen.getPrimary().getBounds();
         STAGE_WIDTH = screenSize.getWidth();

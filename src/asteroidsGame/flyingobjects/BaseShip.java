@@ -52,6 +52,7 @@ public abstract class BaseShip {
         return this.ship;
     } // returns the shape of the BaseShip to the scene we call it on
 
+    // Reset the position of the ship so that it enters the screen again from the other side of the edge.
     public void screenBounds() {
         // The conditions below checks that the ship stays on screen.
         if (this.ship.getTranslateX() < 0) {
@@ -137,6 +138,7 @@ public abstract class BaseShip {
         return lineslist;
     }
 
+    // animates the movement of three lines representing a triangle, then removes them from a game pane
     private void decomposeTriangle(ArrayList<Line> lineslist) {
         Line line1 = lineslist.get(0);
         Line line2 = lineslist.get(1);

@@ -27,6 +27,9 @@ public class AnimationController extends AnimationTimer {
     public static long lastAlienDeath = System.nanoTime() + (10000L * 1000000);
     public static Alien alien;
 
+    // Handles various game logic during gameplay
+    // such as updating the timer, creating asteroids, handling collisions between objects
+    // and adding points or extra lives
     public AnimationController(
             Player player,
             Stage primaryStage,
@@ -37,6 +40,11 @@ public class AnimationController extends AnimationTimer {
         this.gameOverScene = gameOverScene;
     }
 
+    // The handle method is called by the JavaFX Application thread on each frame
+    // and updates the game state accordingly.
+    // 60 frames per min
+    // The method has to be overridden by class extending.
+    // After that, it will be called in all frame during the time when AnimationTimer is active.
     @Override
     public void handle(long now) {
         long elapsedTime = (now - startTime) / 1_000_000_000;
@@ -252,6 +260,8 @@ public class AnimationController extends AnimationTimer {
 
     }
 
+    // initialize the start time of the game timer and starts the animation when restarting
+    // startTime used to reset the current time as startTime
     public void startWithNewTime() {
         startTime = System.nanoTime();
         super.start();

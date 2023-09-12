@@ -98,6 +98,9 @@ public class Player extends BaseShip {
         this.ship.setRotate(this.ship.getRotate() + 30);
     }
 
+    // Defined as responsible for handling crashes between the player's ship and asteroids
+    // If the ship crashes with an asteroid while not invincible
+    // the player's lives are decremented and invincibility is set for a few seconds to prevent further crashes
     public boolean playerCrash(Asteroid asteroid) {
         boolean isCrash = crash(asteroid);
         if (isCrash && !isInvincible) {
@@ -126,10 +129,14 @@ public class Player extends BaseShip {
         return isCollide;
     }
 
+    // Set a duration for the invincibility timer of a player's ship.
+    // When the timer is active, the ship becomes invincible and flashes for a set duration
+    // after which it becomes vulnerable again.
     public void setInvincibilityTimer(double duration) {
         isInvincible = true;
 
         // Create a Timeline for the flashing effect
+        // The flashing effect is achieved using a Timeline object with alternative visible and invisible states defined by KeyFrames
         final int flashCount = 3;
         Timeline flashTimeline = new Timeline();
         flashTimeline.setCycleCount(flashCount * 2);

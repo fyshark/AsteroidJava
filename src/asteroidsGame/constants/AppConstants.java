@@ -6,6 +6,9 @@ import javafx.scene.text.FontWeight;
 
 public class AppConstants {
     public static double STAGE_WIDTH, STAGE_HEIGHT;
+
+    // contains various constant values used throughout the whole game
+    // define font values
     public enum AppFont {
         LABEL_FONT("Lucida Sans Unicode", FontWeight.BOLD, 50);
 
@@ -24,6 +27,7 @@ public class AppConstants {
         }
     }
 
+    // define color values
     public enum AppColor {
         BACKGROUND(Color.BLACK),
         SHAPE(Color.WHITE),
@@ -39,6 +43,7 @@ public class AppConstants {
         }
     }
 
+    // define style values for buttons in the game interface
     public enum ButtonStyle {
 
         BUTTON_STYLE("-fx-focus-color: transparent; -fx-background-color: #000000; -fx-font-size:40"),

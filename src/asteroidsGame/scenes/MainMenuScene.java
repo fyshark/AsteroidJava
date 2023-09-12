@@ -178,6 +178,7 @@ public class MainMenuScene {
         return leaderboardTable;
     }
 
+    // initialise the position of labels
     private void initElementsPosition(Label gameName, Button playGame, Button highScores, Button info) {
         playGame.setLayoutY(STAGE_HEIGHT / 3f + 100);
         highScores.setLayoutY(STAGE_HEIGHT / 3f + 180);
@@ -216,6 +217,7 @@ public class MainMenuScene {
         });
     }
 
+    // Each element in the scene is positioned using centerElements function to centre and align it
     private void centerElements(Label gameName, Button playGame, Button highScores, Button Info) {
 
         mainPageScene.widthProperty().addListener(new ChangeListener() {
@@ -230,6 +232,8 @@ public class MainMenuScene {
         });
     }
 
+    // generate several buttons
+    // and use event handler to change cursor when hovering over the buttons
     private Button[] generateButtons(Scene sc) {
         // create a button
         Button playGame = new Button("Play Game");

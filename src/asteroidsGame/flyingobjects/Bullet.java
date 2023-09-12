@@ -40,12 +40,16 @@ public class Bullet extends Rectangle {
             speedFactor = Math.max(speedFactor, speed);
         }
 
+        // calculate the velocity vector based on its direction and base speed
+        // and set it as an instance variable
         double radians = Math.toRadians(direction);
         double changeX = Math.cos(radians);
         double changeY = Math.sin(radians);
+        // Keeping the vector in a certain direction, x y increases in the same proportion
         velocity = new Point2D(changeX, changeY).multiply(speedFactor * 3);
     }
 
+    // limit the moving distance and set the bullet moving inside the boundary
     public void move() {
         if (isAlive) {
             // Update bullet position

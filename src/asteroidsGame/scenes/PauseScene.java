@@ -76,6 +76,9 @@ public class PauseScene extends Scene {
             primaryStage.setScene(mainPageScene);
         });
 
+        // Defines an action to be performed when the "restart" button is pressed
+        // The action resets various game elements, such as......
+        // and initializes asteroids for the current level before starting a new game
         restartGame.setOnAction(event -> {
             player.resetPosition();
             points.set(0);
