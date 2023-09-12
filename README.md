@@ -1,6 +1,20 @@
 # Asteroids Game
 
 ## Game Description :
+Main menu:
+<img width="1716" alt="image" src="https://github.com/fyshark/AsteroidJava/assets/123459994/ad818b0c-f3f2-4267-88bb-49207e2a8dcb">
+
+Pause menu:
+<img width="1728" alt="image" src="https://github.com/fyshark/AsteroidJava/assets/123459994/79956185-eb14-425b-ad4c-3c39a8be0068">
+
+Game page:
+<img width="1709" alt="image" src="https://github.com/fyshark/AsteroidJava/assets/123459994/85760127-e981-4787-833a-66caca692d36">
+
+Leaderboard:
+<img width="1725" alt="image" src="https://github.com/fyshark/AsteroidJava/assets/123459994/0bca25b7-a984-4b46-b8a6-4c86266747bf">
+
+Control page:
+<img width="1718" alt="image" src="https://github.com/fyshark/AsteroidJava/assets/123459994/eb0a88c6-0e54-4e47-811a-d3adb9bf5ff8">
 
 Asteroids is a classic arcade game, where a space ship moves through space destroying asteroids and occasional alien ships. The difficulty of the game increases as the levels progress. There are three types of asteroids:
 
